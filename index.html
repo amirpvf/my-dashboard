@@ -239,9 +239,11 @@ html[data-theme="dark"] mark{background:rgba(245,165,36,.3)}
 .ic{font-size:1.05em;width:1.35em;text-align:center;flex:0 0 auto}
 
 .menu{position:fixed;z-index:40;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:4px;
-  min-width:186px;box-shadow:var(--menuShadow);display:none;
-  overflow:visible}          /* must stay visible or the Priority submenu gets clipped */
-.menu.scroll-y{max-height:70vh;overflow-y:auto}
+  min-width:190px;max-width:min(300px,92vw);box-shadow:var(--menuShadow);display:none;
+  max-height:min(72vh,540px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}
+.menu::-webkit-scrollbar{width:6px}
+.menu::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}          /* must stay visible or the Priority submenu gets clipped */
+
 .menu button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:6px 9px;
   border-radius:3px;font-size:.83rem;color:var(--text)}
 .menu button:hover{background:var(--raise)}
@@ -553,6 +555,16 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
   border-radius:var(--r);padding:8px 10px;font-size:.86rem;outline:none;color:var(--text)}
 .dhrow select:focus{border-color:var(--brass);box-shadow:0 0 0 2px var(--accBg)}
 .dharrow{color:var(--faint);flex:0 0 auto}
+.mvlists{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:5px;
+  max-height:150px;overflow-y:auto;border:1px solid var(--line);border-radius:var(--r);
+  padding:5px;background:var(--soft)}
+.mvl{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:var(--r);
+  border:1px solid transparent;background:var(--card);font-size:.78rem;text-align:left}
+.mvl:hover{background:var(--hover)}
+.mvl.on{border-color:var(--brass);background:var(--accBg);font-weight:600}
+.mvl .mvn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mvl .ck{color:var(--brass)}
+.trow.dim{opacity:.5}
 .blklist{display:flex;flex-direction:column;gap:5px;max-height:186px;overflow-y:auto;
   border:1px solid var(--line);border-radius:var(--r);padding:5px;background:var(--soft)}
 .blkopt{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:7px 9px;
@@ -739,17 +751,19 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .menu .sub>button .arr{color:var(--faint)}
 .menu .sub:hover>button{background:var(--hover)}
 .menu .qlab{display:flex;align-items:center}
-.menu .subm{position:absolute;left:100%;top:-6px;padding-left:5px;min-width:225px;
-  display:none;z-index:3;background:none;border:none}
-.menu .subm .inner{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:4px;box-shadow:var(--menuShadow)}
+.menu .subm{display:none;padding:2px 0 4px 8px;min-width:0;background:none;border:none}
+.sub.open>.subm{display:block}
+.sub>button .arr{transition:transform .15s}
+.sub.open>button .arr{transform:rotate(90deg)}
+.menu .subm .inner{background:var(--soft);border:1px solid var(--line);border-radius:var(--r);
+  padding:3px;box-shadow:none}
 .menu .sub:hover>.subm,.menu .sub.open>.subm{display:block}
 .menu .subm button{display:flex;align-items:center;gap:7px;width:100%;text-align:left;
   padding:6px 9px;border-radius:3px;font-size:.8rem;white-space:nowrap}
 .menu .subm hr{border:none;border-top:1px solid var(--line);margin:4px 2px}
 .menu .subm .ck{margin-left:auto;color:var(--brass)}
 /* opens to the left when the menu sits near the right edge */
-.menu.flip .subm{left:auto;right:100%;padding-left:0;padding-right:5px}
+
 @media(max-width:560px){
   /* submenu is inline here, so scrolling can't clip it */
   .menu{max-height:80vh;overflow-y:auto}
@@ -808,6 +822,28 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .mxl{font-size:.66rem;color:var(--faint);max-width:32%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:0 0 auto}
 .mxd{font-size:.68rem;color:var(--dim);flex:0 0 auto}
 .mxd.late{color:var(--rose)}
+.stabs{display:flex;gap:4px;margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:10px;
+  overflow-x:auto}
+.stabs button{flex:1 0 auto;padding:7px 14px;font-size:.8rem;color:var(--dim);border-radius:20px;
+  white-space:nowrap;transition:background .12s,color .12s}
+.stabs button:hover{background:var(--hover);color:var(--text)}
+.stabs button.on{background:var(--brass);color:#fff;font-weight:600}
+html[data-theme="dark"] .stabs button.on{color:#16212C}
+.sbody{max-height:min(62vh,520px);overflow-y:auto;padding-right:2px}
+.sbody::-webkit-scrollbar{width:6px}
+.sbody::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.sf{min-width:0}
+.sf label{display:block;font-size:.68rem;color:var(--faint);text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:6px;font-weight:600}
+.sf .seg{display:flex;gap:4px;flex-wrap:wrap}
+.sf .seg button{flex:1 1 auto;min-width:3.6rem;padding:6px 8px;font-size:.74rem;
+  border:1px solid var(--line);border-radius:var(--r);background:var(--card);color:var(--dim)}
+.sf .seg button:hover{background:var(--hover);color:var(--text)}
+.sf .seg button.on{background:var(--brass);border-color:var(--brass);color:#fff;font-weight:600}
+html[data-theme="dark"] .sf .seg button.on{color:#16212C}
+.sf .dnote{margin-top:6px}
+.sf .dbtn{width:100%}
 .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .dbtn{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:8px 9px;
   font-size:.76rem;color:var(--dim);text-align:center;transition:background .12s}
@@ -944,7 +980,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
 
   <div class="pane" id="p-matrix">
     <div class="mxhead">
-      <h2 class="mxtitle">Eisenhower Matrix</h2>
+      <h2 class="mxtitle">Priorities</h2>
       <span class="mxnote" id="mxNote"></span>
       <div class="nav2 mxseg">
         <button id="mv-grid" class="on" onclick="mxView('grid')">Matrix</button>
@@ -952,6 +988,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
         <button id="mv-board" onclick="mxView('board')">Board</button>
       </div>
     </div>
+    <div class="mxmode" id="mxGroup"></div>
     <div class="mxqpick" id="mxQPick"></div>
     <div class="mxgrid" id="matrix"></div>
     <div class="card" id="matrixTree" style="display:none"></div>
@@ -1004,7 +1041,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
   <button class="on" data-p="today" onclick="go('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today</button>
   <button data-p="tasks" onclick="go('tasks')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Tasks</button>
   <button data-p="habits" onclick="go('habits')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>Habits</button>
-  <button data-p="matrix" onclick="go('matrix')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18M3 12h18"/></svg>Matrix</button>
+  <button data-p="matrix" onclick="go('matrix')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18M3 12h18"/></svg>Priorities</button>
   <button data-p="calendar" onclick="go('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Calendar</button>
   <button data-p="focus" onclick="go('focus')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>Focus</button>
   <button data-p="stats" onclick="go('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 19V10M12 19V5M19 19v-6"/></svg>Stats</button>
@@ -1031,8 +1068,15 @@ const QMETA=[
   {q:3,r:'III',t:'Urgent & Unimportant',      c:'#3E7BFA'},
   {q:4,r:'IV', t:'Not Urgent & Unimportant',  c:'#12A594'}];
 const qOf=n=>QMETA.find(x=>x.q===n);
+const RMETA=[{r:1,t:'Critical',c:'#E5484D'},{r:2,t:'High',c:'#F5A524'},
+             {r:3,t:'Normal',c:'#3E7BFA'},{r:4,t:'Low',c:'#8A8A8A'}];
+const rOf=r=>RMETA.find(m=>m.r===r);
+const rb=r=>{const m=rOf(r);return m?'<span class="rbadge" style="background:'+m.c+
+  '" title="Priority '+m.r+' \u00b7 '+m.t+'">'+m.r+'</span>':''};
+function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-09-09 · b50';
+const BUILD='2026-09-09 · b54';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='';
@@ -1071,7 +1115,8 @@ async function load(){try{S=JSON.parse(await DB.get(KEY))}catch(e){S=seed();awai
     {id:'b5',name:'Evening',         color:'#E3DDF5',start:'20:00',end:'22:30',days:ALL.slice()}];
   if(S.calHours===undefined)S.calHours=[6,23];
   S.tasks.forEach(t=>{if(t.time===undefined)t.time=null;if(t.dur===undefined)t.dur=60;
-    if(t.block===undefined)t.block=null;if(t.rep===undefined)t.rep=null});
+    if(t.block===undefined)t.block=null;if(t.rep===undefined)t.rep=null;
+    if(t.r===undefined)t.r=0});
   S.lists.forEach(l=>{if(/^U000[0-9A-F]{5}/.test(l.name)){const seed=LISTS.find(x=>x[0]===l.id);if(seed)l.name=seed[1]}});
   S.habits.forEach(h=>{if(CMAP[h.color])h.color=CMAP[h.color];if(ICONMAP[h.icon])h.icon=ICONMAP[h.icon];
     if(h.since===undefined){const ks=Object.keys(h.log);h.since=ks.length?ks.sort()[0]:null}});S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});tView=S.tView||'list';
@@ -1250,105 +1295,24 @@ function sysDark(){const m=mq();return !!(m&&m.matches)}
 (function(){const m=mq();if(!m)return;
   const f=()=>{if(S&&S.prefs&&S.prefs.theme==='system')applyPrefs()};
   m.addEventListener?m.addEventListener('change',f):m.addListener&&m.addListener(f)})();
-function openSettings(){const q=S.prefs;
-  modal.innerHTML='<h3>Settings</h3>'+
-    '<div class="f"><label>Text &amp; icon size</label><div class="seg" id="segScale">'+
-      [['0.9','Small'],['1','Default'],['1.15','Large'],['1.3','Larger']].map(([v,t])=>
-        '<button type="button" class="'+(String(q.scale)===v?'on':'')+'" onclick="setScale('+v+',this)">'+t+'</button>').join('')+'</div></div>'+
-    '<div class="f"><label>Board column width</label><div class="seg" id="segColw">'+
-      [['232','Narrow'],['268','Default'],['320','Wide'],['400','Extra wide']].map(([v,t])=>
-        '<button type="button" class="'+(String(q.colw||268)===v?'on':'')+'" onclick="setColw('+v+',this)">'+t+'</button>').join('')+
-      '</div><p class="dnote">Wider columns keep long Persian titles on one line in the board view.</p></div>'+
-    '<div class="f"><label>Calendar hour height</label><div class="seg" id="segHour">'+
-      [['38','Compact'],['52','Default'],['72','Roomy'],['96','Tall']].map(([v,t])=>
-        '<button type="button" class="'+(String(q.hourPx||52)===v?'on':'')+'" onclick="setHourPx('+v+',this)">'+t+'</button>').join('')+
-      '</div><p class="dnote">Taller hours give blocks room for more task cards.</p></div>'+
-    '<div class="f"><label>Column width inside a block</label><div class="seg" id="segBlkW">'+
-      [['150','Narrow'],['190','Default'],['240','Wide']].map(([v,t])=>
-        '<button type="button" class="'+(String(q.blkColw||190)===v?'on':'')+'" onclick="setBlkColw('+v+',this)">'+t+'</button>').join('')+
-      '</div></div>'+
-    '<div class="f"><label>Calendar height</label><div class="seg" id="segCalH">'+
-      [['360','Short'],['260','Default'],['180','Tall'],['110','Fullscreen']].map(([v,t])=>
-        '<button type="button" class="'+(String(q.calMax||260)===v?'on':'')+'" onclick="setCalMax('+v+',this)">'+t+'</button>').join('')+
-      '</div><p class="dnote">How much of the screen the day and week grids take.</p></div>'+
-    '<div class="f"><label>Appearance</label><div class="seg" id="segTheme">'+
-      [['light','Light'],['dark','Dark'],['system','System']].map(([v,t])=>
-        '<button type="button" class="'+(q.theme===v?'on':'')+'" onclick="setTheme(\''+v+'\',this)">'+t+'</button>').join('')+'</div></div>'+
-    '<div class="f"><label>Unfinished all-day tasks</label><div class="seg">'+
-      '<button type="button" class="'+(S.rollOver===false?'':'on')+'" onclick="setRoll(1,this)">Move to today</button>'+
-      '<button type="button" class="'+(S.rollOver===false?'on':'')+'" onclick="setRoll(0,this)">Leave as overdue</button>'+
-      '</div><p class="dnote">Tasks with a block or an exact time are never moved \u2014 a missed slot is real information.</p></div>'+
-    '<div class="f"><label>Completed items</label><div class="seg">'+
-      '<button type="button" class="'+(showDone?'':'on')+'" onclick="setDoneVis(0,this)">Hidden</button>'+
-      '<button type="button" class="'+(showDone?'on':'')+'" onclick="setDoneVis(1,this)">Shown</button></div></div>'+
-    '<div class="f"><label>Data</label>'+
-      '<div class="dgrid">'+
-        '<button class="dbtn" onclick="exportCSV(\'tasks\')">Tasks &middot; CSV</button>'+
-        '<button class="dbtn" onclick="exportCSV(\'habits\')">Habit log &middot; CSV</button>'+
-        '<button class="dbtn" onclick="exportCSV(\'inbox\')">Inbox &middot; CSV</button>'+
-        '<button class="dbtn" onclick="exportCSV(\'today\')">Today &middot; CSV</button>'+
-      '</div>'+
-      '<div class="dgrid" style="margin-top:7px;grid-template-columns:1fr">'+
-        '<button class="dbtn pri" onclick="exportCSV(\'all\')">Everything in one CSV</button>'+
-      '</div>'+
-      '<div class="dgrid" style="margin-top:7px">'+
-        '<button class="dbtn pri" onclick="exportBackup()">&#11015; Backup file (.json)</button>'+
-        '<button class="dbtn pri" onclick="document.getElementById(\'restoreFile\').click()">&#11014; Restore from backup</button>'+
-      '</div>'+
-      '<div class="dgrid" style="margin-top:7px">'+
-        '<button class="dbtn" onclick="shareBackup()">&#128228; Share backup\u2026</button>'+
-        '<button class="dbtn" onclick="copyBackup()">&#128203; Copy backup text</button>'+
-      '</div>'+
-      '<div class="dgrid" style="margin-top:7px;grid-template-columns:1fr">'+
-        '<button class="dbtn" onclick="pasteRestore()">&#128229; Restore from pasted text</button>'+
-      '</div>'+
-      '<div class="dgrid" style="margin-top:7px;grid-template-columns:1fr">'+
-        '<button class="dbtn pri" onclick="openSync()">&#128260; Sync across devices'+
-          (syncOn()?' \u00b7 on':'')+'</button>'+
-      '</div>'+
-      '<p class="dnote">On iPad and iPhone the file button often just opens the data in a tab. '+
-        '<b>Share</b> hands it to \u201CSave to Files\u201D, and <b>Copy</b> always works \u2014 paste it '+
-        'into any note or file, and use <b>Restore from pasted text</b> to bring it back.</p>'+
-      '<input type="file" id="restoreFile" accept="application/json,.json" style="display:none" onchange="restoreBackup(this)">'+
-      '<p class="dnote">Build <b>'+BUILD+'</b></p>'+
-      '<p class="dnote">Changes save automatically as you work — currently to <b>'+
-        (DB.kind==='localStorage'?'this browser (localStorage)':DB.kind)+'</b>'+
-        (lastSaved?', last write '+lastSaved.toLocaleTimeString('en-GB'):'')+
-        '. The dot next to Undo turns amber while writing and red if a write fails.</p>'+
-      '<p class="dnote">The backup holds everything — tasks, habits and their history, sections, inbox, focus sessions and preferences. CSV files are for reading elsewhere; only the backup can be restored.</p></div>'+
-    '<div class="mact"><button class="cancel" onclick="closeModal()">Close</button></div>';
-  veil.classList.add('on')}
+let setTab='look';
 
-/* ── export / restore ── */
-function dl(name,text,mime){
-  try{const b=new Blob([text],{type:mime||'text/plain;charset=utf-8'}),u=URL.createObjectURL(b);
-    const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();
-    a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return true}
-  catch(e){console.error(e);alert('Download failed in this browser.');return false}}
-const stamp=()=>new Date().toISOString().slice(0,10);
-const cq=v=>{v=v===null||v===undefined?'':String(v);
-  return /[",\n;]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
-const csv=rows=>'\uFEFF'+rows.map(r=>r.map(cq).join(',')).join('\r\n');
 function backupText(){
   return JSON.stringify({app:'personal-dashboard',version:4,
     exportedAt:new Date().toISOString(),data:S},null,1)}
 async function shareBackup(){
   const name='dashboard-backup-'+stamp()+'.json',text=backupText();
-  /* a real file share, when the platform allows it */
   try{
     if(navigator.canShare&&window.File){
       const f=new File([text],name,{type:'application/json'});
       if(navigator.canShare({files:[f]})){
         await navigator.share({files:[f],title:name});
-        toastMsg('Shared \u2014 choose Save to Files');return}
-    }
+        toastMsg('Shared \u2014 choose Save to Files');return}}
   }catch(e){if(e&&e.name==='AbortError')return}
-  /* otherwise share it as text */
   try{
-    if(navigator.share){await navigator.share({title:name,text});
-      toastMsg('Shared');return}
+    if(navigator.share){await navigator.share({title:name,text});toastMsg('Shared');return}
   }catch(e){if(e&&e.name==='AbortError')return}
-  copyBackup();}
+  copyBackup()}
 async function copyBackup(){
   const text=backupText();
   try{
@@ -1356,7 +1320,6 @@ async function copyBackup(){
       await navigator.clipboard.writeText(text);
       toastMsg('Backup copied \u2014 paste it somewhere safe');return}
   }catch(e){}
-  /* older webviews: a hidden textarea and execCommand still work */
   try{
     const ta=document.createElement('textarea');
     ta.value=text;ta.setAttribute('readonly','');
@@ -1365,11 +1328,10 @@ async function copyBackup(){
     const ok=document.execCommand('copy');ta.remove();
     if(ok){toastMsg('Backup copied');return}
   }catch(e){}
-  showBackupText(text);}
+  showBackupText(text)}
 function showBackupText(text){
   modal.innerHTML='<h3>Backup text</h3>'+
-    '<p class="dnote">Copying was blocked here. Select everything below, copy it by hand, '+
-      'and keep it somewhere safe.</p>'+
+    '<p class="dnote">Copying was blocked here. Select everything below and copy it by hand.</p>'+
     '<textarea class="bigbox" id="bkText" readonly>'+esc(text)+'</textarea>'+
     '<div class="mact"><button class="cancel" onclick="closeModal()">Close</button>'+
     '<button class="save" onclick="document.getElementById(\'bkText\').select()">Select all</button></div>';
@@ -1388,11 +1350,9 @@ async function doPasteRestore(){
   const box=document.getElementById('pasteBox');if(!box)return;
   let raw=(box.value||'').trim();
   if(!raw){toastMsg('Nothing pasted');return}
-  /* tolerate text copied out of a viewer: strip any HTML wrapper and entities */
   if(raw.indexOf('<')===0||/<pre|<html|<body/i.test(raw)){
     const m=raw.match(/\{[\s\S]*\}/);if(m)raw=m[0];
-    raw=raw.replace(/<[^>]+>/g,'');
-  }
+    raw=raw.replace(/<[^>]+>/g,'')}
   raw=raw.replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g,'\u00a0')
          .replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
   const first=raw.indexOf('{'),last=raw.lastIndexOf('}');
@@ -1407,107 +1367,185 @@ async function doPasteRestore(){
     data.habits.length+' habits saved on '+when+'. Undo can bring the current data back.',
     async()=>{
       mark('restore backup');
-      S=cleanState(data);S.sync={};S.focus=S.focus||{};S.open=S.open||{};S.sections=S.sections||[];S.inbox=S.inbox||[];
+      const keep=S.sync;
+      S=cleanState(data);S.sync={};
+      S.focus=S.focus||{};S.open=S.open||{};S.sections=S.sections||[];S.inbox=S.inbox||[];
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
       S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});
       showDone=!!S.showDone;tView=S.tView||'list';applyPrefs();
       await save();paint();closeModal();
       toastMsg('Restored \u2014 press Undo to revert')},'Restore',false)}
-function exportBackup(){
-  dl('dashboard-backup-'+stamp()+'.json',backupText(),'application/json');
-  toastMsg('Backup downloaded')}
+
+/* ── small helpers: toast, download, CSV and backups ─────────────────── */
+let toastT=null;
+function toastMsg(m){let el=document.getElementById('toast');
+  if(!el){el=document.createElement('div');el.id='toast';el.className='toast';document.body.appendChild(el)}
+  el.textContent=m;el.classList.add('on');
+  clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),2600)}
+const stamp=()=>new Date().toISOString().slice(0,10);
+function dl(name,text,mime){
+  try{
+    const blob=new Blob([text],{type:(mime||'text/plain')+';charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download=name;
+    document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},400);
+  }catch(e){toastMsg('Could not download here \u2014 try Copy instead')}}
+function csv(rows){
+  const q=v=>{v=v==null?'':String(v);
+    return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  return '\ufeff'+rows.map(r=>r.map(q).join(',')).join('\r\n')}
+function pathOf(t){const p=[t.title];let q=t.parent;
+  while(q){const u=S.tasks.find(x=>x.id===q);if(!u)break;p.unshift(u.title);q=u.parent}
+  return p.join(' / ')}
 function exportCSV(kind){
-  let rows=[],name='';
-  const pathOf=t=>{const parts=[t.title];let p=t.parent;
-    while(p){const par=S.tasks.find(x=>x.id===p);if(!par)break;parts.unshift(par.title);p=par.parent}
-    return parts.join(' / ')};
+  let rows,name;
   if(kind==='tasks'){name='tasks';
-    rows=[['id','list','board_archived','title','full_path','parent_id','depth','priority','quadrant','due','done','completed_on','active_project']];
-    S.tasks.forEach(t=>rows.push([t.id,listOf(t.list)[1],liveList(t.list)?'no':'yes',t.title,pathOf(t),t.parent||'',t.depth,
-      t.q||'',t.q?qOf(t.q).t:'',t.due||'',t.done?'yes':'no',t.at||'',t.active?'yes':'no']))}
+    rows=[['id','list','board_archived','title','full_path','parent_id','depth','priority','quadrant','due','time','block','repeat','done','completed_on','active_project']];
+    S.tasks.forEach(t=>rows.push([t.id,listOf(t.list)[1],liveList(t.list)?'no':'yes',t.title,pathOf(t),
+      t.parent||'',t.depth,t.q||'',t.q?qOf(t.q).t:'',t.due||'',t.time||'',
+      t.block?(blockOf(t.block)||{}).name||'':'',repSummary(t),
+      t.done?'yes':'no',t.at||'',t.active?'yes':'no']))}
   else if(kind==='habits'){name='habit-log';
     rows=[['habit','section','date','weekday','status','value']];
-    S.habits.forEach(x=>Object.keys(x.log).sort().forEach(d=>{
-      const e=x.log[d],s=st(x,d);
-      rows.push([x.name,secOf(x.sec).name,d,DFULL[(dow(d)+1)%7],s,e.v===undefined?'':e.v])}))}
+    S.habits.forEach(x=>Object.keys(x.log).sort().forEach(d=>{const e=x.log[d];
+      rows.push([x.name,secOf(x.sec).name,d,DFULL[(dow(d)+1)%7],st(x,d),e.v===undefined?'':e.v])}))}
   else if(kind==='inbox'){name='inbox';
-    rows=[['id','title','status','filed_into','filed_on']];
-    (S.inbox||[]).forEach(i=>rows.push([i.id,i.t,i.filed?'filed':'unsorted',
+    rows=[['id','text','filed','list','on']];
+    (S.inbox||[]).forEach(i=>rows.push([i.id,i.t,i.filed?'yes':'no',
       i.list?listOf(i.list)[1]:'',i.on||'']))}
   else if(kind==='all'){name='all-data';
     rows=[['record_type','id','title','list_or_section','parent_path','priority','quadrant',
            'date','status','value','extra']];
     S.tasks.forEach(t=>rows.push(['task',t.id,t.title,listOf(t.list)[1],pathOf(t),t.q||'',
       t.q?qOf(t.q).t:'',t.due||'',t.done?'done':'open','',
-      (liveList(t.list)?'':'board archived; ')+(t.active?'active project':'')+
-      (t.at?((t.active?'; ':'')+'completed/planned '+t.at):'')]));
+      (liveList(t.list)?'':'board archived; ')+(t.active?'active project; ':'')+
+      (t.time?('at '+t.time+'; '):'')+(repSummary(t)?('repeats '+repSummary(t)+'; '):'')+
+      (t.at?('completed '+t.at):'')]));
     S.habits.forEach(x=>rows.push(['habit',x.id,x.name,secOf(x.sec).name,'','','','',
       x.archived?'archived':'active','',
-      x.type+'; repeats '+x.days.map(d=>DLAB[DIDX.indexOf(d)]).join('/')+'; streak '+streak(x)+'; total '+total(x)]));
+      x.type+'; streak '+streak(x)+'; total '+total(x)]));
     S.habits.forEach(x=>Object.keys(x.log).sort().forEach(d=>{const e=x.log[d];
       rows.push(['habit_log',x.id,x.name,secOf(x.sec).name,'','','',d,st(x,d),
         e.v===undefined?'':e.v,DFULL[(dow(d)+1)%7]])}));
     (S.inbox||[]).forEach(i=>rows.push(['inbox',i.id,i.t,i.list?listOf(i.list)[1]:'','','','',
       i.on||'',i.filed?'filed':'unsorted','','']));
+    (S.blocks||[]).forEach(b=>rows.push(['block',b.id,b.name,'','','','','','','',
+      b.start+'\u2013'+b.end+'; '+b.days.map(d=>DLAB[DIDX.indexOf(d)]).join('')]));
     Object.keys(S.focus||{}).sort().forEach(d=>rows.push(['focus_day','','Focus sessions','','','','',
-      d,'logged',S.focus[d],(S.focus[d]*pget('work'))+' minutes at '+pget('work')+'m each']));
-    S.sections.sort((a,b)=>a.order-b.order).forEach(s=>rows.push(['habit_section',s.id,s.name,'','','','',
-      '','','',S.habits.filter(x=>x.sec===s.id).length+' habits']))}
+      d,'logged',S.focus[d],'']))}
   else{name='today';
-    rows=[['type','name','detail','status','due_or_date']];
-    todays().forEach(t=>rows.push(['task',t.title,listOf(t.list)[1]+(t.q?' · '+qOf(t.q).r:''),
-      t.done?'done':'open',t.due||t.at||'']));
-    activeH().filter(x=>sched(x,TODAY)).forEach(x=>rows.push(['habit',x.name,secOf(x.sec).name,st(x,TODAY),TODAY]));
-    (S.inbox||[]).forEach(i=>rows.push(['inbox',i.t,'',i.filed?'filed':'unsorted','']))}
-  if(rows.length<2){alert('Nothing to export yet for '+name+'.');return}
-  dl('dashboard-'+name+'-'+stamp()+'.csv',csv(rows),'text/csv;charset=utf-8');
-  toastMsg((rows.length-1)+' rows exported')}
-function restoreBackup(input){
-  const f=input.files&&input.files[0];input.value='';if(!f)return;
-  const r=new FileReader();
-  r.onload=async()=>{
-    let d;try{d=JSON.parse(r.result)}catch(e){alert('That file is not valid JSON.');return}
-    const data=d&&d.data?d.data:d;
-    if(!data||!Array.isArray(data.tasks)||!Array.isArray(data.habits)){
-      alert('This does not look like a dashboard backup — tasks or habits are missing.');return}
-    const when=d.exportedAt?new Date(d.exportedAt).toLocaleString('en-GB'):'unknown date';
-    const apply=async()=>{
-    mark('restore backup');
-    S=cleanState(data);S.sync={};S.focus=S.focus||{};S.open=S.open||{};S.sections=S.sections||[];S.inbox=S.inbox||[];
-  if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
-  if(!S.lists.some(l=>l.id===QUICK.id)){
-    S.lists.forEach(l=>l.order=(l.order||0)+1);
-    S.lists.push({id:QUICK.id,name:QUICK.name,color:QUICK.color,order:0})}
-  S.lists.forEach(l=>{if(l.icon===undefined){
-    const m=String(l.name).match(/^\s*([\p{Extended_Pictographic}\u{1F3FB}-\u{1F3FF}\u200D\uFE0F]+)\s*(.*)$/u);
-    if(m&&m[2]){l.icon=m[1];l.name=m[2]}else l.icon=''}});
-  if(!S.quickList||!S.lists.some(l=>l.id===S.quickList))S.quickList=QUICK.id;
-  if(S.quickPlan===undefined)S.quickPlan='today';
-  if(!Array.isArray(S.blocks))S.blocks=[
-    {id:'b1',name:'Morning routine',color:'#FADEC9',start:'06:00',end:'08:30',days:ALL.slice()},
-    {id:'b2',name:'Deep work',       color:'#D3E5EF',start:'09:00',end:'12:00',days:NOFRI.slice()},
-    {id:'b3',name:'Admin & calls',   color:'#FBF3DB',start:'13:00',end:'14:30',days:NOFRI.slice()},
-    {id:'b4',name:'Second block',    color:'#DBEDDB',start:'15:00',end:'18:00',days:NOFRI.slice()},
-    {id:'b5',name:'Evening',         color:'#E3DDF5',start:'20:00',end:'22:30',days:ALL.slice()}];
-  if(S.calHours===undefined)S.calHours=[6,23];
-  S.tasks.forEach(t=>{if(t.time===undefined)t.time=null;if(t.dur===undefined)t.dur=60;
-    if(t.block===undefined)t.block=null;if(t.rep===undefined)t.rep=null});
-    S.prefs=S.prefs||{scale:1,theme:'system'};
-    S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});
-    showDone=!!S.showDone;tView=S.tView||'list';applyPrefs();
-    await save();paint();closeModal();toastMsg('Restored — press Undo to revert')};
-    askConfirm('Restore backup','This replaces everything currently in the dashboard with '+
-      data.tasks.length+' tasks and '+data.habits.length+' habits saved on '+when+
-      '. Undo can bring the current data back.',apply,'Restore',false)};
-  r.onerror=()=>alert('Could not read that file.');
-  r.readAsText(f)}
-let toastT;
-function toastMsg(m){let el=document.getElementById('toast');
-  if(!el){el=document.createElement('div');el.id='toast';document.body.appendChild(el)}
-  el.textContent=m;el.classList.add('on');clearTimeout(toastT);
-  toastT=setTimeout(()=>el.classList.remove('on'),2600)}
-function segPick(el){el.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));el.classList.add('on')}
+    rows=[['type','title','list_or_section','status','detail']];
+    todays().forEach(t=>rows.push(['task',t.title,listOf(t.list)[1],t.done?'done':'open',
+      (t.time||'')+(t.block?(' '+(blockOf(t.block)||{}).name):'')]));
+    activeH().filter(x=>sched(x,TODAY)).forEach(x=>rows.push(['habit',x.name,secOf(x.sec).name,
+      st(x,TODAY),'streak '+streak(x)]))}
+  dl('dashboard-'+name+'-'+stamp()+'.csv',csv(rows),'text/csv')}
+function exportBackup(){
+  dl('dashboard-backup-'+stamp()+'.json',backupText(),'application/json')}
+async function restoreBackup(ev){
+  const f=ev.target.files&&ev.target.files[0];if(!f)return;
+  ev.target.value='';
+  let d;try{d=JSON.parse(await f.text())}
+  catch(e){askConfirm('Could not read it','That file is not valid JSON.',()=>{},'OK');return}
+  const data=d&&d.data?d.data:d;
+  if(!data||!Array.isArray(data.tasks)||!Array.isArray(data.habits)){
+    askConfirm('Not a backup','Tasks or habits are missing from that file.',()=>{},'OK');return}
+  const when=d.exportedAt?new Date(d.exportedAt).toLocaleString('en-GB'):'an unknown date';
+  askConfirm('Restore backup','This replaces everything with '+data.tasks.length+' tasks and '+
+    data.habits.length+' habits saved on '+when+'. Undo can bring the current data back.',
+    async()=>{
+      mark('restore backup');
+      const keep=S.sync;
+      S=cleanState(data);S.sync={};
+      S.focus=S.focus||{};S.open=S.open||{};S.sections=S.sections||[];S.inbox=S.inbox||[];
+      if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
+      S.prefs=S.prefs||{scale:1,theme:'system'};
+      S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});
+      showDone=!!S.showDone;tView=S.tView||'list';applyPrefs();
+      await save();paint();closeModal();toastMsg('Restored \u2014 press Undo to revert')},
+    'Restore',false)}
+
+function openSettings(tab){setTab=tab||setTab;drawSettings()}
+function goSet(t){setTab=t;drawSettings()}
+function segRow(label,id,opts,cur,fn,note){
+  return '<div class="sf"><label>'+label+'</label><div class="seg" id="'+id+'">'+
+    opts.map(([v,t])=>'<button type="button" class="'+(String(cur)===String(v)?'on':'')+
+      '" onclick="'+fn+'('+(isNaN(v)?'\''+v+'\'':v)+',this)">'+t+'</button>').join('')+'</div>'+
+    (note?'<p class="dnote">'+note+'</p>':'')+'</div>'}
+function drawSettings(){
+  const q=S.prefs||{};
+  const tabs=[['look','Look'],['cal','Calendar'],['flow','Behaviour'],['data','Data']];
+  let body='';
+  if(setTab==='look'){
+    body='<div class="sgrid">'+
+      segRow('Text &amp; icon size','segScale',
+        [['0.9','Small'],['1','Default'],['1.15','Large'],['1.3','Larger']],q.scale||1,'setScale')+
+      segRow('Appearance','segTheme',
+        [['light','Light'],['dark','Dark'],['system','System']],q.theme||'system','setTheme')+
+      segRow('Board column width','segColw',
+        [['232','Narrow'],['268','Default'],['320','Wide'],['400','Extra wide']],q.colw||268,'setColw',
+        'Wider columns keep long titles on one line.')+
+      segRow('Completed items','segDone',
+        [['1','Show'],['0','Hide']],showDone?1:0,'setDoneVis')+
+    '</div>';
+  }else if(setTab==='cal'){
+    body='<div class="sgrid">'+
+      segRow('Hour height','segHour',
+        [['38','Compact'],['52','Default'],['72','Roomy'],['96','Tall']],q.hourPx||52,'setHourPx',
+        'Taller hours give blocks room for more cards.')+
+      segRow('Calendar height','segCalH',
+        [['360','Short'],['260','Default'],['180','Tall'],['110','Full']],q.calMax||260,'setCalMax')+
+      segRow('Column width in a block','segBlkW',
+        [['150','Narrow'],['190','Default'],['240','Wide']],q.blkColw||190,'setBlkColw')+
+      '<div class="sf"><label>Time blocks &amp; day hours</label>'+
+        '<button class="dbtn pri" onclick="manageBlocks()">&#9202; Open the day editor</button>'+
+        '<p class="dnote">Set when your day starts and ends, and shape its blocks.</p></div>'+
+    '</div>';
+  }else if(setTab==='flow'){
+    body='<div class="sgrid">'+
+      segRow('Unfinished all-day tasks','segRoll',
+        [['1','Move to today'],['0','Leave as overdue']],S.rollOver===false?0:1,'setRoll',
+        'Tasks with a block or an exact time are never moved.')+
+      '<div class="sf"><label>Quick add on Today</label>'+
+        '<button class="dbtn" onclick="quickSettings()">Where new tasks go</button>'+
+        '<p class="dnote">Currently '+esc(listOf(S.quickList)[1])+'.</p></div>'+
+    '</div>';
+  }else{
+    body=dataPanel();
+  }
+  modal.innerHTML='<h3>Settings</h3>'+
+    '<div class="stabs">'+tabs.map(([k,t])=>
+      '<button class="'+(setTab===k?'on':'')+'" onclick="goSet(\''+k+'\')">'+t+'</button>').join('')+'</div>'+
+    '<div class="sbody">'+body+'</div>'+
+    '<div class="mact"><button class="cancel" onclick="closeModal()">Close</button></div>';
+  veil.classList.add('on')}
+function dataPanel(){
+  return '<p class="dnote">Build <b>'+BUILD+'</b> \u00b7 saving to <b>'+
+      (DB.kind==='localStorage'?'this browser':DB.kind)+'</b>'+
+      (lastSaved?', last write '+lastSaved.toLocaleTimeString('en-GB'):'')+'</p>'+
+    '<div class="sf"><label>Sync</label>'+
+      '<button class="dbtn pri" onclick="openSync()">&#128260; Sync across devices'+
+        (syncOn()?' \u00b7 on':'')+'</button></div>'+
+    '<div class="sf"><label>Backup</label><div class="dgrid">'+
+      '<button class="dbtn pri" onclick="exportBackup()">&#11015; Backup file</button>'+
+      '<button class="dbtn pri" onclick="document.getElementById(\'restoreFile\').click()">&#11014; Restore file</button>'+
+      '<button class="dbtn" onclick="shareBackup()">&#128228; Share\u2026</button>'+
+      '<button class="dbtn" onclick="copyBackup()">&#128203; Copy text</button>'+
+      '<button class="dbtn" onclick="pasteRestore()">&#128229; Paste to restore</button>'+
+      '</div><p class="dnote">On iPad the file button may just open the data in a tab \u2014 '+
+      '<b>Share</b> or <b>Copy</b> work better there.</p></div>'+
+    '<div class="sf"><label>Export as CSV</label><div class="dgrid">'+
+      '<button class="dbtn" onclick="exportCSV(\'tasks\')">Tasks</button>'+
+      '<button class="dbtn" onclick="exportCSV(\'habits\')">Habit log</button>'+
+      '<button class="dbtn" onclick="exportCSV(\'inbox\')">Inbox</button>'+
+      '<button class="dbtn" onclick="exportCSV(\'today\')">Today</button>'+
+      '<button class="dbtn" onclick="exportCSV(\'all\')">Everything</button>'+
+      '</div></div>'}
+function segPick(el){if(!el||!el.parentNode||!el.parentNode.querySelectorAll)return;
+  el.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on')}
 function setScale(v,el){S.prefs.scale=v;segPick(el);applyPrefs();save()}
 function setTheme(v,el){S.prefs.theme=v;segPick(el);applyPrefs();save()}
 function setColw(v,el){S.prefs.colw=v;segPick(el);applyPrefs();save();
@@ -1515,10 +1553,10 @@ function setColw(v,el){S.prefs.colw=v;segPick(el);applyPrefs();save();
 function setHourPx(v,el){S.prefs.hourPx=v;segPick(el);applyPrefs();save();renderCalendar()}
 function setBlkColw(v,el){S.prefs.blkColw=v;segPick(el);applyPrefs();save();renderCalendar()}
 function setCalMax(v,el){S.prefs.calMax=v;segPick(el);applyPrefs();save();renderCalendar()}
-function setRoll(v,el){S.rollOver=!!v;segPick(el);save();
+function setRoll(v,el){v=+v;S.rollOver=!!v;segPick(el);save();
   if(v){const n=rollOverdue();paint();toastMsg(n?(n+' task'+(n===1?'':'s')+' moved to today'):'Nothing to move')}
   else paint()}
-function setDoneVis(v,el){showDone=!!v;S.showDone=showDone;segPick(el);save();paint()}
+function setDoneVis(v,el){v=+v;showDone=!!v;S.showDone=showDone;segPick(el);save();paint()}
 function toggleDone(){showDone=!showDone;S.showDone=showDone;save();paint()}
 function mark(label){UNDO.push({label,snap:JSON.stringify(S)});if(UNDO.length>40)UNDO.shift();syncUndo()}
 function syncUndo(){undoBtn.disabled=!UNDO.length;undoN.textContent=UNDO.length?'Undo '+UNDO[UNDO.length-1].label:'Undo'}
@@ -1593,7 +1631,7 @@ function renderTodayTasks(){const tt=todays().filter(t=>showDone||!t.done)
   tCount.textContent=tt.filter(t=>!t.done).length+' open';
   todayTasks.innerHTML=tt.length?tt.map(t=>'<div class="row trow2 '+(t.done?'done':'')+'">'+
     '<div class="hit" onclick="event.stopPropagation();doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
-    (t.q?qb(t.q):'')+
+    (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
     '<span class="tstack">'+crumbHTML(t,'tcrumb')+
       '<span class=\"t\" dir=\"auto\"><span class=\"nameclick\" onclick=\"taskMenu(event,\''+t.id+'\')\">'+esc(t.title)+'</span></span>'+
       (t.block&&blockOf(t.block)
@@ -2022,17 +2060,16 @@ function renderProjects(){
     const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)),
       open=all.filter(t=>!t.done).length,kids=p=>ts.filter(t=>t.parent===p);
     const node=t=>'<div class="row trow-t '+(t.done?'done':'')+(kids(t.id).length?' grp':'')+
-      (selT===t.id?' tsel':'')+'" id="tr-'+t.id+'" style="padding-left:'+(14+t.depth*20)+'px"'+
-      ' draggable="'+DRAGGABLE+'" ondragstart="dragT(event,\''+t.id+'\')" ondragend="endT()"'+
-      ' ondragover="overT(event,\''+t.id+'\')" ondragleave="leaveT(\''+t.id+'\')" ondrop="dropT(event,\''+t.id+'\')">'+
-      '<button class="grab tgrab" data-drag="task" data-id="'+t.id+'" onclick="event.stopPropagation();pickT(\''+t.id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
+      (selT===t.id?' tsel':'')+'" id="tr-'+t.id+'" style="padding-left:'+(14+t.depth*20)+'px"'+'>'+
+      
       '<div class="hit" onclick="event.stopPropagation();doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
+      (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
       '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+hl(t.title)+'</span></span>'+
       taskChips(t)+'</div>'+kids(t.id).map(node).join('');
     return '<div class="pj '+((S.open[id]||(tQ&&ts.length))?'open':'')+(selL===id?' lsel':'')+
       (tQ&&!ts.length?' dim':'')+'" id="pj-'+id+'"'+
       ' draggable="'+DRAGGABLE+'" ondragstart="dragL(event,\''+id+'\')" ondragend="endL()"'+
-      ' ondragover="overLT(event,\''+id+'\')" ondragleave="leaveLT(\''+id+'\')" ondrop="dropLT(event,\''+id+'\')">'+
+      ' ondragover="overL(event,\''+id+'\')" ondragleave="leaveL(\''+id+'\')" ondrop="dropL(event,\''+id+'\')">'+
       '<div class="pj-h" onclick="toggle(\''+id+'\')">'+
       '<button class="grab" data-drag="list" data-id="'+id+'" onclick="event.stopPropagation();pickL(\''+id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
       '<span class="dot" style="background:'+c+'"></span>'+
@@ -2050,20 +2087,18 @@ function renderProjects(){
    when the same task is drawn on several days.                          */
 function subRows(t,d,kidsFn,pfx){
   return kidsFn(t.id).map(s=>'<div class="subrow trow-t '+(s.done?'done':'')+
-    (selT===s.id?' tsel':'')+'" id="'+pfx+s.id+'" style="padding-left:'+(12+(d||0)*12)+'px"'+
-    ' draggable="'+DRAGGABLE+'" ondragstart="dragT(event,\''+s.id+'\')" ondragend="endT()"'+
-    ' ondragover="overT(event,\''+s.id+'\')" ondragleave="leaveT(\''+s.id+'\')" ondrop="dropT(event,\''+s.id+'\')">'+
-    '<button class="grab tgrab" data-drag="task" data-id="'+s.id+'" onclick="event.stopPropagation();pickT(\''+s.id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
+    (selT===s.id?' tsel':'')+'" id="'+pfx+s.id+'" style="padding-left:'+(12+(d||0)*12)+'px"'+'>'+
+    
     '<div class="hit" onclick="event.stopPropagation();doneTask(\''+s.id+'\')">'+chk(s.done)+'</div>'+
+    (s.r?rb(s.r):'')+
     '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+s.id+'\')">'+hl(s.title)+'</span></span>'+
     taskChips(s)+'</div>'+subRows(s,(d||0)+1,kidsFn,pfx)).join('')}
 function calCard(t,ds,pfx){
   const proj=!!(t.rep&&t.rep.days&&t.rep.days.length);
   const on=proj?dayDone(t,ds):t.done;
   const n=dayCount(t);
-  return '<div class="ccard trow-t'+(on?' done':'')+(selT===t.id?' tsel':'')+'" id="'+pfx+t.id+'"'+
+  return '<div class="ccard trow-t'+(on?' done':'')+'" id="'+pfx+t.id+'"'+
     ' draggable="'+DRAGGABLE+'" ondragstart="dragT(event,\''+t.id+'\')" ondragend="endT()"'+
-    ' ondragover="overT(event,\''+t.id+'\')" ondragleave="leaveT(\''+t.id+'\')" ondrop="dropT(event,\''+t.id+'\')"'+
     ' data-drag="task" data-id="'+t.id+'">'+
     '<div class="hit" onclick="event.stopPropagation();toggleDay(\''+t.id+'\',\''+ds+'\')"'+
       ' title="'+(proj?'Tick just this day':'Complete this task')+'">'+chk(on)+'</div>'+
@@ -2076,14 +2111,12 @@ function boardCard(t,kidsFn,pfx,opts){
   opts=opts||{};pfx=pfx||'tr-';
   const ds=kidsFn(t.id),dn=ds.filter(x=>x.done).length;
   const l=listOf(t.list);
-  return '<div class="kcard trow-t '+(t.done?'done':'')+(selT===t.id?' tsel':'')+'" id="'+pfx+t.id+'"'+
-    ' draggable="'+DRAGGABLE+'" ondragstart="dragT(event,\''+t.id+'\')" ondragend="endT()"'+
-    ' ondragover="overT(event,\''+t.id+'\')" ondragleave="leaveT(\''+t.id+'\')" ondrop="dropT(event,\''+t.id+'\')">'+
+  return '<div class="kcard trow-t '+(t.done?'done':'')+(selT===t.id?' tsel':'')+'" id="'+pfx+t.id+'"'+'>'+
     (opts.crumb?crumbHTML(t,'bcrumb'):'')+
     '<div class="khead">'+
-    '<button class="grab tgrab" data-drag="task" data-id="'+t.id+'" onclick="event.stopPropagation();pickT(\''+t.id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
+    
     '<div class="hit" onclick="doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
-    (opts.q&&t.q?qb(t.q):'')+
+    (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
     '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+hl(t.title)+'</span></span>'+
     taskChips(t)+'</div>'+
     (opts.list?'<div class="bmeta"><span class="bdot" style="background:'+l[2]+'"></span>'+
@@ -2100,7 +2133,7 @@ function renderBoard(){
     const card=t=>boardCard(t,kids,'tr-');
     return '<div class="col'+(selL===id?' lsel':'')+'" id="col-'+id+'"'+
       ' draggable="'+DRAGGABLE+'" ondragstart="dragL(event,\''+id+'\')" ondragend="endL()"'+
-      ' ondragover="overLT(event,\''+id+'\')" ondragleave="leaveLT(\''+id+'\')" ondrop="dropLT(event,\''+id+'\')">'+
+      ' ondragover="overL(event,\''+id+'\')" ondragleave="leaveL(\''+id+'\')" ondrop="dropL(event,\''+id+'\')">'+
       '<div class="colh">'+
       '<button class="grab" data-drag="list" data-id="'+id+'" onclick="event.stopPropagation();pickL(\''+id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
       '<span class="dot" style="background:'+c+'"></span>'+
@@ -2136,6 +2169,20 @@ function renderStats(){const hb=[],tb=[],lb=[];
     '<b>\u26A1 '+s+'</b></div>').join('')||'<div class="empty">No streaks yet</div>'}
 
 let mxFold={},mxMode='grid',mxQ=0;   /* mxQ: 0 = every quadrant */
+/* what organises this tab: the 1–4 rank, the matrix quadrant, or neither */
+function mxBy(){return S.mxBy||'rank'}
+function setMxBy(v){S.mxBy=v;if(v!=='quad'&&mxMode==='grid')mxMode='tree';save();renderMatrix()}
+function groupKey(t){return mxBy()==='rank'?(t.r||0):(t.q||0)}
+function groupMeta(k){return mxBy()==='rank'
+  ?(rOf(k)?{badge:rb(k),title:rOf(k).t,c:rOf(k).c}:{badge:'',title:'No priority',c:'#8A8A8A'})
+  :(k?{badge:qb(k),title:qOf(k).t,c:qOf(k).c}:{badge:'',title:'No quadrant',c:'#8A8A8A'})}
+function renderGroupBar(){
+  const box=document.getElementById('mxGroup');if(!box)return;
+  const by=mxBy();
+  box.innerHTML='<span class="mxlab">Organise by</span><div class="seg">'+
+    [['rank','Priority 1–4'],['quad','Matrix'],['none','Nothing']].map(([v,t])=>
+      '<button type="button" class="'+(by===v?'on':'')+'" onclick="setMxBy(\''+v+'\')">'+t+'</button>').join('')+
+    '</div>'+(by==='quad'?'':'<span class="mxhint">The matrix grid needs the quadrant grouping</span>')}
 function mxView(v){mxMode=v;S.mxMode=v;save();renderMatrix()}
 function mxChrome(){
   const v=mxMode;
@@ -2151,12 +2198,15 @@ function mxPick(q){mxQ=q;S.mxQ=q;save();renderMatrix()}
 function mxToggle(k){mxFold[k]=!mxFold[k];renderMatrix()}
 function renderMatrix(){
   const el=document.getElementById('matrix');if(!el)return;
-  mxChrome();renderQPick();
+  mxChrome();renderGroupBar();renderQPick();
+  const note=document.getElementById('mxNote');
+  if(note)note.textContent=(mxBy()==='none'?'':
+    (S.tasks.filter(t=>liveList(t.list)&&!t.done&&!groupKey(t)).length+
+     ' tasks without a '+(mxBy()==='rank'?'priority':'quadrant')));
+  if(mxMode==='grid'&&mxBy()!=='quad'){mxMode='tree'}
   if(mxMode==='tree')return renderMatrixTree();
   if(mxMode==='board')return renderMatrixBoard();
   const pool=S.tasks.filter(t=>liveList(t.list)&&(showDone||!t.done));
-  document.getElementById('mxNote').textContent=
-    S.tasks.filter(t=>liveList(t.list)&&!t.done&&!t.q).length+' tasks without a priority';
   el.innerHTML=QMETA.map(m=>{
     const list=pool.filter(t=>t.q===m.q);
     const od=[],td=[],up=[],nd=[];
@@ -2187,7 +2237,21 @@ function renderMatrix(){
       '<div class="mxqb">'+body+'</div></section>'}).join('')}
 
 function renderQPick(){
-  const box=document.getElementById('mxQPick');if(!box||mxMode!=='tree')return;
+  const box=document.getElementById('mxQPick');if(!box)return;
+  if(mxMode==='grid'||mxBy()==='none'){box.innerHTML='';box.style.display='none';return}
+  box.style.display='';
+  if(mxBy()==='rank'){
+    const live=t=>liveList(t.list)&&(showDone||!t.done);
+    const n=r=>S.tasks.filter(t=>live(t)&&(r?t.r===r:true)).length;
+    box.innerHTML='<button class="qp'+(mxQ===0?' on':'')+'" onclick="mxPick(0)">'+
+        '<span class="qpn">All</span><span class="qpc">'+n(0)+'</span></button>'+
+      RMETA.map(m=>'<button class="qp'+(mxQ===m.r?' on':'')+'" onclick="mxPick('+m.r+')">'+
+        '<span class="rbadge" style="background:'+m.c+'">'+m.r+'</span>'+
+        '<span class="qpn">'+m.t+'</span><span class="qpc">'+n(m.r)+'</span></button>').join('')+
+      '<button class="qp'+(mxQ===-1?' on':'')+'" onclick="mxPick(-1)">'+
+        '<span class="qpn">Unset</span><span class="qpc">'+
+        S.tasks.filter(t=>live(t)&&!t.r).length+'</span></button>';
+    return}
   const live=t=>liveList(t.list)&&(showDone||!t.done);
   const n=q=>S.tasks.filter(t=>live(t)&&(q?t.q===q:true)).length;
   box.innerHTML=
@@ -2203,12 +2267,13 @@ function renderQPick(){
 function renderMatrixTree(){
   const box=document.getElementById('matrixTree');if(!box)return;
   const live=t=>liveList(t.list)&&(showDone||!t.done);
-  const hit=t=>live(t)&&(mxQ===0?true:(mxQ===-1?!t.q:t.q===mxQ));
+  const hit=t=>live(t)&&(mxBy()==='none'||mxQ===0?true:(mxQ===-1?!groupKey(t):groupKey(t)===mxQ));
   /* a task is shown when it matches, or when a descendant does */
   const keep=new Set();
   S.tasks.forEach(t=>{if(hit(t)){let c=t;keep.add(c.id);
     let p=c.parent;while(p){if(keep.has(p))break;keep.add(p);const u=S.tasks.find(x=>x.id===p);p=u?u.parent:null}}});
-  const label=mxQ===0?'Every task':(mxQ===-1?'Tasks with no priority':qOf(mxQ).t);
+  const label=(mxBy()==='none'||mxQ===0)?'Every task'
+    :(mxQ===-1?('Tasks with no '+(mxBy()==='rank'?'priority':'quadrant')):groupMeta(mxQ).title);
   const total=S.tasks.filter(hit).length;
   let out='<h2><span>'+esc(label)+' <small>'+total+' task'+(total===1?'':'s')+'</small></span></h2>';
   const shown=lists().filter(l=>S.tasks.some(t=>t.list===l.id&&keep.has(t.id)));
@@ -2235,8 +2300,9 @@ function renderMatrixTree(){
 function renderMatrixBoard(){
   const box=document.getElementById('matrixBoard');if(!box)return;
   const live=t=>liveList(t.list)&&(showDone||!t.done);
-  const hit=t=>live(t)&&(mxQ===0?true:(mxQ===-1?!t.q:t.q===mxQ));
-  const label=mxQ===0?'Every task':(mxQ===-1?'Tasks with no priority':qOf(mxQ).t);
+  const hit=t=>live(t)&&(mxBy()==='none'||mxQ===0?true:(mxQ===-1?!groupKey(t):groupKey(t)===mxQ));
+  const label=(mxBy()==='none'||mxQ===0)?'Every task'
+    :(mxQ===-1?('Tasks with no '+(mxBy()==='rank'?'priority':'quadrant')):groupMeta(mxQ).title);
   const total=S.tasks.filter(hit).length;
   const cols=lists().filter(l=>S.tasks.some(t=>t.list===l.id&&hit(t)));
   let out='<h2><span>'+esc(label)+' <small>'+total+' task'+(total===1?'':'s')+
@@ -2244,7 +2310,7 @@ function renderMatrixBoard(){
   if(!cols.length){box.innerHTML=out+'<div class="empty">Nothing here yet</div>';return}
   out+='<div class="board">'+cols.map(l=>{
     const ts=S.tasks.filter(t=>t.list===l.id&&hit(t))
-      .sort((a,b)=>(a.done-b.done)||((a.q||5)-(b.q||5))||((a.due||'9')<(b.due||'9')?-1:1));
+      .sort((a,b)=>(a.done-b.done)||((groupKey(a)||5)-(groupKey(b)||5))||((a.due||'9')<(b.due||'9')?-1:1));
     const trail=t=>{const p=[];let q=t.parent;
       while(q){const u=S.tasks.find(x=>x.id===q);if(!u)break;p.unshift(u.title);q=u.parent}
       return p.length?'<div class="kpath" dir="auto">'+esc(p.join('  \u203A  '))+'</div>':''};
@@ -2780,10 +2846,16 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
       (l.icon?'<span class="lico">'+esc(l.icon)+'</span>':'<span class="dot" style="background:'+l.color+'"></span>')+
       '<span class="mvn">'+esc(l.name)+'</span>'+
       (t.list===l.id&&!t.parent?'<span class="ck">&#10003;</span>':'')+'</button>').join('')+
-    '<hr><button onclick="moveTaskDialog(\''+id+'\')">&#8627;&nbsp; Under another task\u2026</button>'+
+    '<hr><button onclick="moveTaskDialog(\''+id+'\')">&#8942;&nbsp; More options\u2026</button>'+
     (t.parent?'<button onclick="moveTaskToList(\''+id+'\',\''+t.list+'\')&&paint()">&#8593;&nbsp; Lift out of \u201C'+
       esc((S.tasks.find(x=>x.id===t.parent)||{}).title||'')+'\u201D</button>':'')+
     '</div></div>';
+  const rsub='<div class="subm"><div class="inner">'+
+    '<div class="submh">How important is it?</div>'+
+    RMETA.map(m=>'<button onclick="setR(\''+id+'\','+m.r+')">'+
+      '<span class="rbadge" style="background:'+m.c+'">'+m.r+'</span>'+m.t+
+      (t.r===m.r?'<span class="ck">&#10003;</span>':'')+'</button>').join('')+
+    (t.r?'<hr><button onclick="setR(\''+id+'\',0)">Clear priority</button>':'')+'</div></div>';
   const subm='<div class="subm"><div class="inner">'+QMETA.map(m=>
       '<button onclick="setQ(\''+id+'\','+m.q+')">'+
       '<span class="qbadge sm" style="background:'+m.c+'">'+m.r+'</span>'+m.t+
@@ -2796,8 +2868,10 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
       'finishTask(\''+id+'\')']:null),
     (proj?null:null),
     ['&#9998;&nbsp; Rename','renameTask(\''+id+'\')'],
+    ['<span class="qlab">'+(t.r?rb(t.r):'&#9733;&nbsp;')+
+      'Priority</span><span class="arr">&#8250;</span>',null,rsub],
     ['<span class="qlab">'+(cur?'<span class="qbadge sm" style="background:'+cur.c+'">'+cur.r+'</span>':'&#9873;&nbsp;')+
-      'Priority</span><span class="arr">&#8250;</span>',null,subm],
+      'Matrix</span><span class="arr">&#8250;</span>',null,subm],
     ['&#43;&nbsp; Add subtask','addSub(\''+id+'\')'],
     ['<span class="qlab">&#128194;&nbsp; Move to</span><span class="arr">&#8250;</span>',null,movesub],
     [(t.active?'&#9733; Remove from active':'&#9734; Make active project'),'toggleActive(\''+id+'\')'],
@@ -2805,14 +2879,23 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
     [(t.at===TODAY||(t.due&&t.due<=TODAY))?'Remove from today':'Plan for today',
       (t.at===TODAY||(t.due&&t.due<=TODAY))?'unplan(\''+id+'\')':'planToday(\''+id+'\')'],null,
     ['<span class="warn">Delete task</span>','delTask(\''+id+'\')']])}
-function showMenu(ev,items){items=items.filter((it,i,a)=>!(it===null&&(i===0||a[i-1]===null||i===a.length-1)));
-  menu.classList.toggle('scroll-y',items.length>9);menu.innerHTML=items.map(it=>it===null?'<hr>':
-    (it[2]?'<div class="sub" onclick="event.stopPropagation();this.classList.toggle(\'open\')"><button>'+it[0]+'</button>'+it[2]+'</div>'
+function subToggle(el){
+  const open=el.classList.contains('open');
+  menu.querySelectorAll('.sub').forEach(s=>s.classList.remove('open'));
+  if(!open){el.classList.add('open');
+    setTimeout(()=>{const b=el.getBoundingClientRect(),m=menu.getBoundingClientRect();
+      if(b.bottom>m.bottom)menu.scrollTop+=b.bottom-m.bottom+8;
+      else if(b.top<m.top)menu.scrollTop-=m.top-b.top+8},20)}}
+function showMenu(ev,items){
+  items=items.filter((it,i,a)=>!(it===null&&(i===0||a[i-1]===null||i===a.length-1)));
+  menu.innerHTML=items.map(it=>it===null?'<hr>':
+    (it[2]?'<div class="sub" onclick="event.stopPropagation();subToggle(this)"><button>'+it[0]+'</button>'+it[2]+'</div>'
          :'<button '+(it[1]?'onclick="'+it[1]+'"':'style="cursor:default"')+'>'+it[0]+'</button>')).join('');
-  menu.style.display='block';const r=menu.getBoundingClientRect();
-  const left=Math.min(ev.clientX,innerWidth-r.width-10);
-  menu.style.left=left+'px';menu.style.top=Math.min(ev.clientY,innerHeight-r.height-10)+'px';
-  menu.classList.toggle('flip',left+r.width+235>innerWidth)}
+  menu.style.display='block';menu.scrollTop=0;
+  const r=menu.getBoundingClientRect();
+  const left=Math.max(8,Math.min(ev.clientX,innerWidth-r.width-10));
+  const top=Math.max(8,Math.min(ev.clientY,innerHeight-r.height-10));
+  menu.style.left=left+'px';menu.style.top=top+'px'}
 function hideMenu(){menu.style.display='none'}
 document.addEventListener('click',e=>{if(lpJust())return;if(!menu.contains(e.target))hideMenu()});
 function archive(id){const h=S.habits.find(x=>x.id===id);mark('archive');h.archived=!h.archived;save();paint();hideMenu()}
@@ -3068,17 +3151,65 @@ function unplan(id){const t=S.tasks.find(x=>x.id===id);mark('remove from today')
   delete t.pdue;save();paint();hideMenu()}
 function setQ(id,q){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark(q?'priority '+qOf(q).r:'clear priority');t.q=q;save();paint();hideMenu()}
+let MV=null;
 function moveTaskDialog(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
-  const startList=t.list;
-  modalForm('Move \u201C'+esc(t.title)+'\u201D',
-    [['list','Board','select',lists().map(l=>[l.id,(l.icon?l.icon+' ':'')+l.name]),startList],
-     ['parent','Place it \u2014 <span id="treeLabel" class="tlab"></span>','tree',null,'']],
-    v=>{const par=v.parent?S.tasks.find(x=>x.id===v.parent):null;
-      if(par){if(moveTaskUnder(id,par.id))paint()}
-      else if(moveTaskToList(id,v.list))paint()});
-  renderTree(startList,'',id);
-  const ls=document.getElementById('mf-list');
-  if(ls)ls.onchange=()=>{mVals.list=ls.value;mVals.parent='';renderTree(ls.value,'',id)}}
+  MV={id,list:t.list,parent:t.parent||'',pos:'end'};
+  drawMove()}
+function mvSet(k,v){MV[k]=v;drawMove()}
+function drawMove(){
+  const t=S.tasks.find(x=>x.id===MV.id);if(!t)return;
+  const bad=descendants(t.id);
+  const rows=[];
+  const kids=p=>S.tasks.filter(x=>x.list===MV.list&&x.parent===p&&!bad.has(x.id));
+  const walk=(p,d)=>kids(p).forEach(x=>{if(d>3)return;
+    rows.push({id:x.id,title:x.title,depth:d,done:x.done,kids:kids(x.id).length});walk(x.id,d+1)});
+  walk(null,0);
+  const cur=MV.parent?(S.tasks.find(x=>x.id===MV.parent)||{}).title:null;
+  modal.innerHTML='<h3>Move \u201C'+esc(t.title)+'\u201D</h3>'+
+    (descendants(t.id).size>1?'<p class="dnote">Its '+(descendants(t.id).size-1)+
+      ' subtask'+(descendants(t.id).size>2?'s':'')+' travel with it.</p>':'')+
+    '<div class="f"><label>Board</label><div class="mvlists">'+
+      lists().map(l=>'<button type="button" class="mvl'+(MV.list===l.id?' on':'')+
+        '" onclick="mvSet(\'list\',\''+l.id+'\');mvSet(\'parent\',\'\')">'+
+        '<span class="bdot" style="background:'+l.color+'"></span>'+
+        (l.icon?'<span class="lico">'+esc(l.icon)+'</span>':'')+
+        '<span class="mvn" dir="auto">'+esc(l.name)+'</span>'+
+        (MV.list===l.id?'<span class="ck">&#10003;</span>':'')+'</button>').join('')+
+    '</div></div>'+
+    '<div class="f"><label>Place it '+(cur?'\u2014 under \u201C'+esc(cur)+'\u201D':'\u2014 at the top level')+'</label>'+
+      '<div class="treebox">'+
+      '<button type="button" class="trow'+(MV.parent?'':' on')+'" onclick="mvSet(\'parent\',\'\')">'+
+        '<span class="tdot" style="background:'+listOf(MV.list)[2]+'"></span>'+
+        '<span class="tnm">Top level</span>'+(MV.parent?'':'<span class="tck">&#10003;</span>')+'</button>'+
+      (rows.length?rows.map(r=>
+        '<button type="button" class="trow d'+r.depth+(MV.parent===r.id?' on':'')+(r.done?' dim':'')+
+          '" onclick="mvSet(\'parent\',\''+r.id+'\')">'+
+          '<span class="tpipe">'+(r.depth?'&#9492;&#9472;':'')+'</span>'+
+          '<span class="tnm" dir="auto">'+esc(r.title)+'</span>'+
+          (r.kids?'<span class="tct">'+r.kids+'</span>':'')+
+          (MV.parent===r.id?'<span class="tck">&#10003;</span>':'')+'</button>').join('')
+        :'<div class="tempty">This board has no other open tasks</div>')+
+      '</div></div>'+
+    '<div class="f"><label>Where among its siblings</label><div class="seg">'+
+      [['start','First'],['end','Last']].map(([v,l])=>
+        '<button type="button" class="'+(MV.pos===v?'on':'')+'" onclick="mvSet(\'pos\',\''+v+'\')">'+l+'</button>').join('')+
+    '</div></div>'+
+    '<div class="mact"><button class="cancel" onclick="closeModal()">Cancel</button>'+
+    '<button class="save" onclick="mvApply()">Move</button></div>';
+  veil.classList.add('on')}
+function mvApply(){
+  const t=S.tasks.find(x=>x.id===MV.id);if(!t)return;
+  mark('move task');
+  if(MV.parent){const par=S.tasks.find(x=>x.id===MV.parent);
+    if(par){t.parent=par.id;reList(t.id,par.list);reDepth(t.id,(par.depth||0)+1)}}
+  else{t.parent=null;reList(t.id,MV.list);reDepth(t.id,0)}
+  /* first or last among the tasks that share its parent */
+  const sibs=S.tasks.filter(x=>x.parent===t.parent&&x.list===t.list&&x.id!==t.id);
+  const rest=S.tasks.filter(x=>!(x.parent===t.parent&&x.list===t.list));
+  S.tasks=MV.pos==='start'?rest.concat([t],sibs):rest.concat(sibs,[t]);
+  S.open[t.list]=true;save();paint();closeModal();
+  toastMsg('Moved to '+(MV.parent?('\u201C'+(S.tasks.find(x=>x.id===MV.parent)||{}).title+'\u201D')
+    :listOf(t.list)[1]))}
 function renameTask(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
   modalForm('Rename task',[['title','Title','text',null,t.title]],v=>{
     if(!v.title.trim())return;mark('rename');t.title=v.title.trim();save();paint()})}
