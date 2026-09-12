@@ -751,10 +751,25 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .menu .sub>button .arr{color:var(--faint)}
 .menu .sub:hover>button{background:var(--hover)}
 .menu .qlab{display:flex;align-items:center}
-.menu .subm{display:none;padding:2px 0 4px 8px;min-width:0;background:none;border:none}
-.sub.open>.subm{display:block}
-.sub>button .arr{transition:transform .15s}
-.sub.open>button .arr{transform:rotate(90deg)}
+.flyout{position:fixed;z-index:60;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:4px;min-width:200px;max-width:min(320px,88vw);
+  box-shadow:var(--menuShadow);max-height:min(70vh,460px);overflow-y:auto;overflow-x:hidden;
+  overscroll-behavior:contain}
+.flyout::-webkit-scrollbar{width:6px}
+.flyout::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.flyout button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;
+  padding:8px 10px;border-radius:var(--r);font-size:.82rem;color:var(--text)}
+.flyout button:hover{background:var(--hover)}
+.flyout hr{border:none;border-top:1px solid var(--line);margin:4px 2px}
+.flyout .mvt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.flyout .mvn2{font-size:.64rem;color:var(--faint);background:var(--raise);border-radius:20px;padding:0 6px}
+.flyout .arr{color:var(--faint);flex:0 0 auto}
+.flyout .arr.dim{opacity:.25}
+.flyout .tempty{padding:10px;text-align:center;color:var(--faint);font-size:.76rem}
+.flyout .submh{font-size:.64rem;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;
+  padding:6px 9px 4px;font-weight:600}
+.menu button.flyparent,.flyout button.flyparent{background:var(--accBg)}
+.menu button.sub{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .menu .subm .inner{background:var(--soft);border:1px solid var(--line);border-radius:var(--r);
   padding:3px;box-shadow:none}
 .menu .sub:hover>.subm,.menu .sub.open>.subm{display:block}
@@ -1076,7 +1091,7 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge" style="background:'+m
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-09-09 · b54';
+const BUILD='2026-09-09 · b57';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='';
@@ -2873,31 +2888,120 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
     ['<span class="qlab">'+(cur?'<span class="qbadge sm" style="background:'+cur.c+'">'+cur.r+'</span>':'&#9873;&nbsp;')+
       'Matrix</span><span class="arr">&#8250;</span>',null,subm],
     ['&#43;&nbsp; Add subtask','addSub(\''+id+'\')'],
-    ['<span class="qlab">&#128194;&nbsp; Move to</span><span class="arr">&#8250;</span>',null,movesub],
+    ['<span class="qlab">&#128194;&nbsp; Move to</span><span class="arr">&#8250;</span>',id,null,'mv'],
     [(t.active?'&#9733; Remove from active':'&#9734; Make active project'),'toggleActive(\''+id+'\')'],
     ['&#128197;&nbsp; Schedule\u2026','scheduleTask(\''+id+'\')'],
     [(t.at===TODAY||(t.due&&t.due<=TODAY))?'Remove from today':'Plan for today',
       (t.at===TODAY||(t.due&&t.due<=TODAY))?'unplan(\''+id+'\')':'planToday(\''+id+'\')'],null,
     ['<span class="warn">Delete task</span>','delTask(\''+id+'\')']])}
-function subToggle(el){
-  const open=el.classList.contains('open');
-  menu.querySelectorAll('.sub').forEach(s=>s.classList.remove('open'));
-  if(!open){el.classList.add('open');
-    setTimeout(()=>{const b=el.getBoundingClientRect(),m=menu.getBoundingClientRect();
-      if(b.bottom>m.bottom)menu.scrollTop+=b.bottom-m.bottom+8;
-      else if(b.top<m.top)menu.scrollTop-=m.top-b.top+8},20)}}
+/* ── flyout panels ─────────────────────────────────────────────────────
+   Submenus are separate fixed panels, so a deep chain never makes the
+   menu itself scroll sideways. Each level opens to the right of the row
+   that spawned it, or to the left when the screen runs out.            */
+let FLY=[];
+function flyClear(from){from=from||0;
+  while(FLY.length>from){const p=FLY.pop();if(p&&p.remove)p.remove()}
+  if(FLY.length===0)document.querySelectorAll('.flyparent').forEach(e=>e.classList.remove('flyparent'))}
+function flyOpen(anchor,html,level){
+  flyClear(level);
+  const p=document.createElement('div');
+  p.className='flyout';p.innerHTML=html;p.dataset.lvl=level;
+  p.addEventListener('click',e=>e.stopPropagation());
+  p.addEventListener('mouseenter',flyHold);
+  p.addEventListener('mouseleave',flyLater);
+  p.addEventListener('mouseenter',flyHold);
+  document.body.appendChild(p);FLY[level]=p;
+  const a=anchor.getBoundingClientRect(),r=p.getBoundingClientRect();
+  let left=a.right+2;
+  if(left+r.width>innerWidth-8)left=Math.max(8,a.left-r.width-2);
+  let top=a.top-4;
+  if(top+r.height>innerHeight-8)top=Math.max(8,innerHeight-r.height-8);
+  p.style.left=left+'px';p.style.top=Math.max(8,top)+'px';
+  const own=anchor.closest?anchor.closest('.flyout'):null;
+  (own||menu).querySelectorAll('.flyparent').forEach(e=>e.classList.remove('flyparent'));
+  anchor.classList.add('flyparent');
+  return p}
+let flyT=null;
+function flyHover(fn){clearTimeout(flyT);flyT=setTimeout(fn,90)}
+function flyHold(){clearTimeout(flyT)}
+function flyLater(){clearTimeout(flyT);flyT=setTimeout(()=>flyClear(0),260)}
+function subFly(el,key){
+  if(el.classList.contains('flyparent'))return;
+  flyOpen(el,MENUSUB[key]||'',0)}
+function subHover(el,key){flyHover(()=>subFly(el,key))}
+/* a row with no children of its own closes anything deeper */
+function flyLeafHover(el){flyHover(()=>flyClear(flyLevelOf(el)))}
+/* ── the cascading picker behind "Move to" ──────────────────────────── */
+function mvRows(listId,parentId,skipId){
+  const bad=skipId?descendants(skipId):new Set();
+  const kids=S.tasks.filter(t=>t.list===listId&&t.parent===(parentId||null)&&!bad.has(t.id));
+  const here=parentId?('<button onmouseenter="flyLeafHover(this)" onclick="mvHere(\''+listId+'\',\''+parentId+'\')">'+
+      '&#8627;&nbsp; Put it inside this task</button><hr>')
+    :('<button onmouseenter="flyLeafHover(this)" onclick="mvHere(\''+listId+'\',\'\')">'+
+      '&#8595;&nbsp; Top level of this board</button>'+(kids.length?'<hr>':''));
+  return '<div class="flyin">'+here+
+    (kids.length?kids.map(t=>{
+      const n=S.tasks.filter(x=>x.parent===t.id&&!bad.has(x.id)).length;
+      const sk=(MV&&MV.id)?'\''+MV.id+'\'':'null';
+      return '<button class="mvrow" onmouseenter="mvHover(this,\''+listId+'\',\''+t.id+'\','+sk+')"'+
+        ' onmouseleave="flyHold()"'+
+        ' onclick="event.stopPropagation();mvDrill(this,\''+listId+'\',\''+t.id+'\','+sk+','+(n?1:0)+')">'+
+        '<span class="mvt" dir="auto">'+esc(t.title)+'</span>'+
+        (n?'<span class="mvn2">'+n+'</span><span class="arr">&#8250;</span>'
+          :'<span class="arr dim">&#8250;</span>')+'</button>'}).join('')
+      :'<div class="tempty">No subtasks here</div>')+'</div>'}
+function flyLevelOf(el){const p=el.closest?el.closest('.flyout'):null;
+  return p?(+p.dataset.lvl+1):0}
+function mvDrill(el,listId,parentId,skipId,hasKids){
+  if(el.classList.contains('flyparent'))return;
+  flyOpen(el,mvRows(listId,parentId,skipId),flyLevelOf(el))}
+function mvHover(el,listId,parentId,skipId){flyHover(()=>mvDrill(el,listId,parentId,skipId))}
+function mvStartHover(el,id){flyHover(()=>mvStart(el,id))}
+function mvStart(el,id){
+  if(el.classList.contains('flyparent'))return;
+  MV={id};
+  flyOpen(el,'<div class="flyin"><div class="submh">Which board?</div>'+
+    lists().map(l=>'<button class="mvrow" onmouseenter="mvHover(this,\''+l.id+'\',\'\',\''+id+'\')"'+
+      ' onmouseleave="flyHold()"'+
+      ' onclick="event.stopPropagation();mvDrill(this,\''+l.id+'\',\'\',\''+id+'\',1)">'+
+      '<span class="bdot" style="background:'+l.color+'"></span>'+
+      (l.icon?'<span class="lico">'+esc(l.icon)+'</span>':'')+
+      '<span class="mvt" dir="auto">'+esc(l.name)+'</span><span class="arr">&#8250;</span></button>').join('')+
+    '</div>',0)}
+function mvHere(listId,parentId){
+  const t=S.tasks.find(x=>x.id===(MV&&MV.id));if(!t)return;
+  const par=parentId?S.tasks.find(x=>x.id===parentId):null;
+  if(par&&descendants(t.id).has(par.id)){toastMsg('A task cannot move inside its own subtask');return}
+  mark('move task');
+  if(par){t.parent=par.id;reList(t.id,par.list);reDepth(t.id,(par.depth||0)+1)}
+  else{t.parent=null;reList(t.id,listId);reDepth(t.id,0)}
+  S.open[t.list]=true;save();paint();flyClear(0);hideMenu();
+  toastMsg('Moved '+(par?('under \u201C'+par.title+'\u201D'):('to '+listOf(listId)[1])))}
+let MENUSUB={};
 function showMenu(ev,items){
+  flyClear(0);
   items=items.filter((it,i,a)=>!(it===null&&(i===0||a[i-1]===null||i===a.length-1)));
-  menu.innerHTML=items.map(it=>it===null?'<hr>':
-    (it[2]?'<div class="sub" onclick="event.stopPropagation();subToggle(this)"><button>'+it[0]+'</button>'+it[2]+'</div>'
-         :'<button '+(it[1]?'onclick="'+it[1]+'"':'style="cursor:default"')+'>'+it[0]+'</button>')).join('');
+  MENUSUB={};
+  menu.innerHTML=items.map((it,i)=>{
+    if(it===null)return '<hr>';
+    if(it[2]){MENUSUB['k'+i]=it[2];
+      return '<button class="sub" onmouseenter="subHover(this,\'k'+i+'\')" onmouseleave="flyHold()"'+
+        ' onclick="event.stopPropagation();subFly(this,\'k'+i+'\')">'+it[0]+'</button>'}
+    if(it[3]==='mv')return '<button class="sub" onmouseenter="mvStartHover(this,\''+it[1]+'\')" onmouseleave="flyHold()"'+
+      ' onclick="event.stopPropagation();mvStart(this,\''+it[1]+'\')">'+it[0]+'</button>';
+    return '<button onmouseenter="flyHover(function(){flyClear(0)})" onmouseleave="flyHold()" '+
+      (it[1]?'onclick="'+it[1]+'"':'style="cursor:default"')+'>'+it[0]+'</button>'}).join('');
+  menu.onmouseenter=flyHold;menu.onmouseleave=flyLater;
   menu.style.display='block';menu.scrollTop=0;
   const r=menu.getBoundingClientRect();
   const left=Math.max(8,Math.min(ev.clientX,innerWidth-r.width-10));
   const top=Math.max(8,Math.min(ev.clientY,innerHeight-r.height-10));
   menu.style.left=left+'px';menu.style.top=top+'px'}
-function hideMenu(){menu.style.display='none'}
-document.addEventListener('click',e=>{if(lpJust())return;if(!menu.contains(e.target))hideMenu()});
+function hideMenu(){menu.style.display='none';flyClear(0)}
+document.addEventListener('click',e=>{if(lpJust())return;
+  if(menu.contains(e.target))return;
+  if(FLY.some(p=>p&&p.contains&&p.contains(e.target)))return;
+  hideMenu()});
 function archive(id){const h=S.habits.find(x=>x.id===id);mark('archive');h.archived=!h.archived;save();paint();hideMenu()}
 function delHabit(id){hideMenu();const h=S.habits.find(x=>x.id===id);if(!h)return;
   askConfirm('Delete habit','\u201C'+esc(h.name)+'\u201D and its '+total(h)+' recorded check-ins will be removed. Undo can bring it back.',
