@@ -376,15 +376,22 @@ html[data-theme="dark"] mark{background:rgba(245,165,36,.3)}
 .lead div:last-child{border:none}
 .lead b{color:var(--dim);font-weight:500;white-space:nowrap}
 
-.board{display:flex;gap:12px;overflow-x:auto;padding:14px;align-items:flex-start;scroll-behavior:auto;overscroll-behavior-x:contain}
-.board::-webkit-scrollbar{height:8px}
-.board::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.board{display:flex;gap:12px;overflow:auto;padding:14px 14px 4px;align-items:flex-start;scroll-behavior:auto;overscroll-behavior-x:contain;max-height:calc(100vh - 132px);scrollbar-gutter:stable}
+.hbar{overflow-x:auto;overflow-y:hidden;margin:6px 14px 0;display:none}
+.hbar>div{height:1px}
+.hbar::-webkit-scrollbar{height:11px}
+.hbar::-webkit-scrollbar-track{background:var(--soft);border-radius:6px}
+.hbar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:6px;border:2px solid var(--soft)}
+.board::-webkit-scrollbar{height:11px;width:9px}
+.board::-webkit-scrollbar-track{background:var(--soft);border-radius:6px}
+.board::-webkit-scrollbar-thumb{background:var(--border3,var(--border2));border-radius:6px;border:2px solid var(--soft)}
+.board::-webkit-scrollbar-thumb:hover{background:var(--dim)}
 .col{flex:0 0 var(--colw);min-width:var(--colw);background:var(--soft);border:1px solid var(--line);border-radius:var(--r)}
-.colh{display:flex;align-items:center;gap:8px;padding:9px 11px;border-bottom:1px solid var(--line)}
+.colh{display:flex;align-items:center;gap:8px;padding:9px 11px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3;background:var(--soft);border-radius:var(--r) var(--r) 0 0}
 .colh .nm{flex:1;min-width:0;font-size:.8rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lico{flex:0 0 auto;font-size:1.02em;line-height:1}
 .colh .ct{font-size:.7rem;color:var(--faint);background:var(--raise);padding:0 6px;border-radius:3px}
-.colb{padding:8px;max-height:calc(100vh - 240px);overflow-y:auto}
+.colb{padding:8px}
 .colb::-webkit-scrollbar{width:6px}
 .colb::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .kcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:8px 9px;margin-bottom:7px;
@@ -743,6 +750,15 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .arestore{font-size:.72rem;color:var(--brass);border:1px solid var(--accLine);background:var(--card);
   border-radius:3px;padding:2px 8px;flex:0 0 auto}
 .arestore:hover{background:var(--accBg)}
+.rbadge{display:inline-grid;place-items:center;width:1.3rem;height:1.3rem;border-radius:4px;
+  border:1px solid var(--border2);color:var(--dim);background:transparent;
+  font-size:.62rem;font-weight:700;flex:0 0 auto;line-height:1;letter-spacing:0}
+.rbadge.r1{background:#E5484D;border-color:#E5484D;color:#fff}
+.rbadge.r2{background:#F5A524;border-color:#F5A524;color:#3a2600}
+.rbadge.r3{background:#3E7BFA;border-color:#3E7BFA;color:#fff}
+.rbadge.r4{background:#8A8A8A;border-color:#8A8A8A;color:#fff}
+.menu .rbadge,.flyout .rbadge{margin-right:7px}
+.qp .rbadge{margin-right:2px}
 .qbadge{width:1.15rem;height:1.15rem;border-radius:50%;display:inline-grid;place-items:center;
   color:#fff;font-size:.6rem;font-weight:700;flex:0 0 auto;letter-spacing:0;line-height:1}
 .qbadge.sm{width:1rem;height:1rem;font-size:.54rem;margin-right:2px}
@@ -1067,10 +1083,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
 const SEED={"tasks":[],"habits":[],"sections":[]};
 const QUICK={id:'today',name:'⭐ Today\u2019s Picks',color:'#F5A524'};
 const LISTS=[['today','⭐ Today\u2019s Picks','#F5A524'],
-['inbox','📥 Inbox & Quick Tasks','#949BAA'],['trade','💰 Trading & Investing','#D9A24B'],
-['biz','🚀 Business & Startup','#4FB8A8'],['career','🎓 Career, MBA & Immigration','#8E86E8'],
-['learn','📚 Learning & Coaching','#7BC4FA'],['sys','🧠 Systems & Life Dashboard','#97E38B'],
-['health','💪 Health & Wellbeing','#E0728A'],['home','🏠 Home, Family & Admin','#FEE068']];
+['inbox','📥 Inbox','#949BAA']];
 const CMAP={},ICONMAP={};
 const ALL=[0,1,2,3,4,5,6],NOFRI=[0,1,2,3,4,6],FRI=[5];
 const EMOJI=["☀️", "🌙", "✨", "🔥", "💧", "💦", "🥤", "☕", "🍃", "🌱", "🧘", "🙏", "🤫", "💭", "🧠", "👁️", "❤️", "💕", "💌", "👥", "🤝", "📞", "📤", "📥", "📝", "✍️", "📖", "📚", "📰", "🎧", "🎤", "🎬", "🎨", "🎸", "🎲", "🎯", "🏆", "🥇", "📈", "📉", "💰", "💳", "🏦", "📊", "📋", "📅", "⏰", "⏳", "🏋️", "🏃", "🚶", "🧗", "🚴", "🏊", "🧘‍♀️", "🛌", "🚿", "🦼", "💊", "🍎", "🥗", "🍛", "🧹", "🏠", "🐕", "🐈", "💻", "⚙️", "🔧", "🔄", "✅", "❓", "⭐", "🌟", "🚀", "🌍", "🧭", "🔑", "2️⃣", "🅰️", "🔔", "📵"];
@@ -1086,12 +1099,12 @@ const qOf=n=>QMETA.find(x=>x.q===n);
 const RMETA=[{r:1,t:'Critical',c:'#E5484D'},{r:2,t:'High',c:'#F5A524'},
              {r:3,t:'Normal',c:'#3E7BFA'},{r:4,t:'Low',c:'#8A8A8A'}];
 const rOf=r=>RMETA.find(m=>m.r===r);
-const rb=r=>{const m=rOf(r);return m?'<span class="rbadge" style="background:'+m.c+
+const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
   '" title="Priority '+m.r+' \u00b7 '+m.t+'">'+m.r+'</span>':''};
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-09-09 · b57';
+const BUILD='2026-09-14 · b59';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='';
@@ -1549,6 +1562,9 @@ function dataPanel(){
       '<button class="dbtn" onclick="shareBackup()">&#128228; Share\u2026</button>'+
       '<button class="dbtn" onclick="copyBackup()">&#128203; Copy text</button>'+
       '<button class="dbtn" onclick="pasteRestore()">&#128229; Paste to restore</button>'+
+      '<input type="file" id="restoreFile" accept="application/json,.json,text/plain" '+
+        'style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none" '+
+        'onchange="restoreBackup(event)">'+
       '</div><p class="dnote">On iPad the file button may just open the data in a tab \u2014 '+
       '<b>Share</b> or <b>Copy</b> work better there.</p></div>'+
     '<div class="sf"><label>Export as CSV</label><div class="dgrid">'+
@@ -2105,7 +2121,7 @@ function subRows(t,d,kidsFn,pfx){
     (selT===s.id?' tsel':'')+'" id="'+pfx+s.id+'" style="padding-left:'+(12+(d||0)*12)+'px"'+'>'+
     
     '<div class="hit" onclick="event.stopPropagation();doneTask(\''+s.id+'\')">'+chk(s.done)+'</div>'+
-    (s.r?rb(s.r):'')+
+    (s.r?rb(s.r):'')+(s.q?qb(s.q):'')+
     '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+s.id+'\')">'+hl(s.title)+'</span></span>'+
     taskChips(s)+'</div>'+subRows(s,(d||0)+1,kidsFn,pfx)).join('')}
 function calCard(t,ds,pfx){
@@ -2140,7 +2156,8 @@ function boardCard(t,kidsFn,pfx,opts){
       '<div class="ksubs">'+subRows(t,0,kidsFn,pfx)+'</div>':'')+
     '</div>'}
 function renderBoard(){
-  projects.innerHTML='<div class="board">'+lists().map(({id,name,color:c,icon})=>{
+  projects.innerHTML='<div class="hbar" id="hbarTop"><div id="hbarIn"></div></div>'+
+    '<div class="board">'+lists().map(({id,name,color:c,icon})=>{
     const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)),kids=p=>ts.filter(t=>t.parent===p);
     /* a match deeper in the tree whose parent was filtered out still needs a card */
     const orphanHits=tQ?ts.filter(t=>t.parent&&!ts.some(p=>p.id===t.parent)):[];
@@ -2159,7 +2176,22 @@ function renderBoard(){
       '<button class="mini dots" onclick="event.stopPropagation();listMenu(event,\''+id+'\')" title="Options">&#8942;</button></div>'+
       '<div class="colb">'+(tops.length?tops.map(card).join('')
         :'<div class="empty">'+(tQ?'No matches':'Empty')+'</div>')+
-      '</div></div>'}).join('')+'</div>'}
+      '</div></div>'}).join('')+'</div>';
+  syncHBar()}
+/* the board can be taller than the screen, so mirror its sideways scrollbar
+   in a thin strip that sits above the columns and is always in view        */
+function syncHBar(){
+  const bar=document.getElementById('hbarTop'),inn=document.getElementById('hbarIn'),
+        b=document.querySelector('.board');
+  if(!bar||!inn||!b)return;
+  const fit=()=>{inn.style.width=b.scrollWidth+'px';
+    bar.style.display=b.scrollWidth>b.clientWidth+2?'block':'none'};
+  fit();
+  let lock=false;
+  bar.onscroll=()=>{if(lock)return;lock=true;b.scrollLeft=bar.scrollLeft;lock=false};
+  b.onscroll=()=>{if(lock)return;lock=true;bar.scrollLeft=b.scrollLeft;lock=false};
+  try{if(window.ResizeObserver){const ro=new ResizeObserver(fit);ro.observe(b)}}catch(e){}
+  addEventListener('resize',fit)}
 
 function bars(c,x,v,l){const mx=Math.max(...v,1);
   c.innerHTML=v.map((n,i)=>{const r=n/mx;
@@ -2186,7 +2218,18 @@ function renderStats(){const hb=[],tb=[],lb=[];
 let mxFold={},mxMode='grid',mxQ=0;   /* mxQ: 0 = every quadrant */
 /* what organises this tab: the 1–4 rank, the matrix quadrant, or neither */
 function mxBy(){return S.mxBy||'rank'}
-function setMxBy(v){S.mxBy=v;if(v!=='quad'&&mxMode==='grid')mxMode='tree';save();renderMatrix()}
+function mxThen(){const t=S.mxThen||'none';return t===mxBy()?'none':t}
+function setMxBy(v){S.mxBy=v;if(S.mxThen===v)S.mxThen='none';
+  if(v!=='quad'&&mxMode==='grid')mxMode='tree';save();renderMatrix()}
+function setMxThen(v){S.mxThen=v;save();renderMatrix()}
+/* the secondary dimension decides the order inside each group */
+function thenKey(t){const k=mxThen();
+  if(k==='rank')return t.r||9;
+  if(k==='quad')return t.q||9;
+  if(k==='date')return t.due||'9999';
+  return 0}
+function thenSort(a,b){const k=mxThen();if(k==='none')return 0;
+  const x=thenKey(a),y=thenKey(b);return x<y?-1:(x>y?1:0)}
 function groupKey(t){return mxBy()==='rank'?(t.r||0):(t.q||0)}
 function groupMeta(k){return mxBy()==='rank'
   ?(rOf(k)?{badge:rb(k),title:rOf(k).t,c:rOf(k).c}:{badge:'',title:'No priority',c:'#8A8A8A'})
@@ -2194,10 +2237,16 @@ function groupMeta(k){return mxBy()==='rank'
 function renderGroupBar(){
   const box=document.getElementById('mxGroup');if(!box)return;
   const by=mxBy();
-  box.innerHTML='<span class="mxlab">Organise by</span><div class="seg">'+
+  const then=mxThen();
+  box.innerHTML='<span class="mxlab">Group by</span><div class="seg">'+
     [['rank','Priority 1–4'],['quad','Matrix'],['none','Nothing']].map(([v,t])=>
       '<button type="button" class="'+(by===v?'on':'')+'" onclick="setMxBy(\''+v+'\')">'+t+'</button>').join('')+
-    '</div>'+(by==='quad'?'':'<span class="mxhint">The matrix grid needs the quadrant grouping</span>')}
+    '</div>'+
+    '<span class="mxlab">then order by</span><div class="seg">'+
+    [['rank','Priority'],['quad','Matrix'],['date','Date'],['none','—']]
+      .filter(([v])=>v!==by).map(([v,t])=>
+      '<button type="button" class="'+(then===v?'on':'')+'" onclick="setMxThen(\''+v+'\')">'+t+'</button>').join('')+
+    '</div>'+(by==='quad'?'':'<span class="mxhint">The 2×2 grid needs matrix grouping</span>')}
 function mxView(v){mxMode=v;S.mxMode=v;save();renderMatrix()}
 function mxChrome(){
   const v=mxMode;
@@ -2233,10 +2282,11 @@ function renderMatrix(){
       return '<div class="mxg"><button class="mxgh" onclick="mxToggle(\''+k+'\')">'+
         '<span class="cv'+(open?' o':'')+'">&#9656;</span><span class="gl">'+lab+'</span>'+
         '<span class="n">'+arr.length+'</span></button>'+
-        (open?'<div>'+arr.sort((a,b)=>(a.done-b.done)||((a.due||'9')<(b.due||'9')?-1:1)).map(t=>{
+        (open?'<div>'+arr.sort((a,b)=>(a.done-b.done)||thenSort(a,b)||((a.due||'9')<(b.due||'9')?-1:1)).map(t=>{
           const l=listOf(t.list),late=t.due&&t.due<TODAY&&!t.done;
           return '<div class="mxrow '+(t.done?'done':'')+'">'+
             '<div class="hit" onclick="doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
+            (t.r?rb(t.r):'')+
             '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</span></span>'+
             '<span class="mxl" dir="auto">'+esc(l[1])+'</span>'+
             (t.due?'<span class="mxd'+(late?' late':'')+'">'+
@@ -2261,7 +2311,7 @@ function renderQPick(){
     box.innerHTML='<button class="qp'+(mxQ===0?' on':'')+'" onclick="mxPick(0)">'+
         '<span class="qpn">All</span><span class="qpc">'+n(0)+'</span></button>'+
       RMETA.map(m=>'<button class="qp'+(mxQ===m.r?' on':'')+'" onclick="mxPick('+m.r+')">'+
-        '<span class="rbadge" style="background:'+m.c+'">'+m.r+'</span>'+
+        '<span class="rbadge r'+m.r+'">'+m.r+'</span>'+
         '<span class="qpn">'+m.t+'</span><span class="qpc">'+n(m.r)+'</span></button>').join('')+
       '<button class="qp'+(mxQ===-1?' on':'')+'" onclick="mxPick(-1)">'+
         '<span class="qpn">Unset</span><span class="qpc">'+
@@ -2295,7 +2345,7 @@ function renderMatrixTree(){
   if(!shown.length){box.innerHTML=out+'<div class="empty">Nothing here yet</div>';return}
   shown.forEach(l=>{
     const ts=S.tasks.filter(t=>t.list===l.id&&keep.has(t.id));
-    const kids=p=>ts.filter(t=>t.parent===p);
+    const kids=p=>ts.filter(t=>t.parent===p).sort(thenSort);
     const node=t=>{const on=hit(t);
       return '<div class="row mxt'+(on?'':' ctx')+(t.done?' done':'')+
         '" style="padding-left:'+(14+t.depth*20)+'px">'+
@@ -2325,7 +2375,7 @@ function renderMatrixBoard(){
   if(!cols.length){box.innerHTML=out+'<div class="empty">Nothing here yet</div>';return}
   out+='<div class="board">'+cols.map(l=>{
     const ts=S.tasks.filter(t=>t.list===l.id&&hit(t))
-      .sort((a,b)=>(a.done-b.done)||((groupKey(a)||5)-(groupKey(b)||5))||((a.due||'9')<(b.due||'9')?-1:1));
+      .sort((a,b)=>(a.done-b.done)||thenSort(a,b)||((groupKey(a)||5)-(groupKey(b)||5))||((a.due||'9')<(b.due||'9')?-1:1));
     const trail=t=>{const p=[];let q=t.parent;
       while(q){const u=S.tasks.find(x=>x.id===q);if(!u)break;p.unshift(u.title);q=u.parent}
       return p.length?'<div class="kpath" dir="auto">'+esc(p.join('  \u203A  '))+'</div>':''};
@@ -2868,7 +2918,7 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
   const rsub='<div class="subm"><div class="inner">'+
     '<div class="submh">How important is it?</div>'+
     RMETA.map(m=>'<button onclick="setR(\''+id+'\','+m.r+')">'+
-      '<span class="rbadge" style="background:'+m.c+'">'+m.r+'</span>'+m.t+
+      '<span class="rbadge r'+m.r+'">'+m.r+'</span>'+m.t+
       (t.r===m.r?'<span class="ck">&#10003;</span>':'')+'</button>').join('')+
     (t.r?'<hr><button onclick="setR(\''+id+'\',0)">Clear priority</button>':'')+'</div></div>';
   const subm='<div class="subm"><div class="inner">'+QMETA.map(m=>
