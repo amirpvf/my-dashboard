@@ -753,6 +753,16 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .rbadge{display:inline-grid;place-items:center;width:1.3rem;height:1.3rem;border-radius:4px;
   border:1px solid var(--border2);color:var(--dim);background:transparent;
   font-size:.62rem;font-weight:700;flex:0 0 auto;line-height:1;letter-spacing:0}
+.fav{flex:0 0 auto;font-size:.8rem;line-height:1;color:#E5484D}
+.favtog.on{color:#E5484D;border-color:#E5484D;background:var(--accBg)}
+.mini.heart{color:var(--dim);font-size:1.15rem;line-height:1;opacity:.75;
+  min-width:2rem;height:1.9rem;padding:0 .3rem}
+.mini.heart.on{color:#E5484D;opacity:1}
+.mini.heart:hover{opacity:1;color:#E5484D}
+.colh .mini.heart,.pj-h .mini.heart{font-size:1.25rem;min-width:2.1rem;height:2rem}
+.row:hover .mini.heart,.kcard:hover .mini.heart{opacity:1}
+#favBtn{font-size:1rem;line-height:1;color:var(--faint)}
+#favBtn.on{color:#E5484D;border-color:#E5484D;background:var(--accBg)}
 .rbadge.r1{background:#E5484D;border-color:#E5484D;color:#fff}
 .rbadge.r2{background:#F5A524;border-color:#F5A524;color:#3a2600}
 .rbadge.r3{background:#3E7BFA;border-color:#3E7BFA;color:#fff}
@@ -989,7 +999,8 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
         <div class="tsearch"><span class="tsi">&#8981;</span>
           <input id="tQuery" placeholder="Search tasks" oninput="taskSearch(this.value)">
           <button id="tClear" onclick="taskSearch('')" style="display:none" title="Clear">&#10005;</button></div>
-        <div class="nav2"><button onclick="newList()">+ New list</button>
+        <div class="nav2"><button class="favtog" id="favBtnT" onclick="toggleFavOnly()" title="Show favourites only">&#9825; Favourites</button>
+          <button onclick="newList()">+ New list</button>
           <button id="archBoards" onclick="openListArchive()" style="display:none">&#128230; Archived (0)</button>
           <button id="tv-list" class="on" onclick="taskView('list')">List</button>
           <button id="tv-kanban" onclick="taskView('kanban')">Board</button></div>
@@ -1014,6 +1025,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
       <h2 class="mxtitle">Priorities</h2>
       <span class="mxnote" id="mxNote"></span>
       <div class="nav2 mxseg">
+        <button class="favtog" id="favBtnM" onclick="toggleFavOnly()" title="Show favourites only">&#9825; Favourites</button>
         <button id="mv-grid" class="on" onclick="mxView('grid')">Matrix</button>
         <button id="mv-tree" onclick="mxView('tree')">List</button>
         <button id="mv-board" onclick="mxView('board')">Board</button>
@@ -1104,10 +1116,10 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-09-14 · b59';
+const BUILD='2026-09-14 · b66';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
-let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='';
+let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='',favOnly=false;
 const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const TODAY=iso(new Date());
 const uid=(()=>{let i=0;return p=>p+(++i)+Math.random().toString(36).slice(2,5)})();
@@ -1148,7 +1160,7 @@ async function load(){try{S=JSON.parse(await DB.get(KEY))}catch(e){S=seed();awai
   S.lists.forEach(l=>{if(/^U000[0-9A-F]{5}/.test(l.name)){const seed=LISTS.find(x=>x[0]===l.id);if(seed)l.name=seed[1]}});
   S.habits.forEach(h=>{if(CMAP[h.color])h.color=CMAP[h.color];if(ICONMAP[h.icon])h.icon=ICONMAP[h.icon];
     if(h.since===undefined){const ks=Object.keys(h.log);h.since=ks.length?ks.sort()[0]:null}});S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});tView=S.tView||'list';
-  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';
+  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';favOnly=!!S.favOnly;
   if(S.rollOver===undefined)S.rollOver=true;
   S.sync=S.sync||{};
   const moved=rollOverdue();
@@ -1401,7 +1413,7 @@ async function doPasteRestore(){
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
       S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';applyPrefs();
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;applyPrefs();
       await save();paint();closeModal();
       toastMsg('Restored \u2014 press Undo to revert')},'Restore',false)}
 
@@ -1491,7 +1503,7 @@ async function restoreBackup(ev){
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
       S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';applyPrefs();
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;applyPrefs();
       await save();paint();closeModal();toastMsg('Restored \u2014 press Undo to revert')},
     'Restore',false)}
 
@@ -1645,6 +1657,7 @@ function renderHead(){const h=new Date().getHours();
   date.textContent=new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long'}).format(new Date())+
     '  ·  '+tt0+' tasks  ·  '+hh0+' habits'}
 function renderActive(){
+  syncFavBtn();
   document.getElementById('doneBtn').classList.toggle('on',showDone);
   document.getElementById('doneBtn').title=showDone?'Hide completed':'Show completed';
   const act=S.tasks.filter(t=>t.active&&liveList(t.list)&&(showDone||!t.done)).sort((a,b)=>a.done-b.done);
@@ -1662,7 +1675,7 @@ function renderTodayTasks(){const tt=todays().filter(t=>showDone||!t.done)
   tCount.textContent=tt.filter(t=>!t.done).length+' open';
   todayTasks.innerHTML=tt.length?tt.map(t=>'<div class="row trow2 '+(t.done?'done':'')+'">'+
     '<div class="hit" onclick="event.stopPropagation();doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
-    (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
+    (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+(t.fav?star(true):'')+
     '<span class="tstack">'+crumbHTML(t,'tcrumb')+
       '<span class=\"t\" dir=\"auto\"><span class=\"nameclick\" onclick=\"taskMenu(event,\''+t.id+'\')\">'+esc(t.title)+'</span></span>'+
       (t.block&&blockOf(t.block)
@@ -1889,6 +1902,32 @@ addEventListener('touchend',e=>{
 },{passive:false});
 addEventListener('touchcancel',()=>{lpCancel();tdCancel()},{passive:true});
 
+/* The native HTML5 drag on boards was unreliable, so the ☰ handle now
+   drives the same engine the touch path uses — mouse and finger behave
+   identically, and a plain click still falls through to tap-to-move.   */
+let MD=null;
+addEventListener('mousedown',e=>{
+  if(e.button!==0)return;
+  const gh=e.target.closest&&e.target.closest('[data-drag]');if(!gh)return;
+  MD={gh,x:e.clientX,y:e.clientY,moved:false,
+      kind:gh.getAttribute('data-drag'),id:gh.getAttribute('data-id')};
+  gh.classList.add('arming')},true);
+addEventListener('mousemove',e=>{
+  if(TD.on){tdMove(e.clientX,e.clientY);return}
+  if(!MD)return;
+  if(Math.abs(e.clientX-MD.x)<5&&Math.abs(e.clientY-MD.y)<5)return;
+  MD.moved=true;MD.gh.classList.remove('arming');
+  const k=MD.kind,id=MD.id;
+  const host=k==='task'?(taskEls(id)[0]||null)
+            :k==='habit'?document.getElementById('hab-'+id)
+            :k==='section'?document.getElementById('sec-'+id)
+            :document.getElementById((tView==='kanban'?'col-':'pj-')+id);
+  tdStart(k,id,e.clientX,e.clientY,host)});
+addEventListener('mouseup',e=>{
+  if(MD){MD.gh.classList.remove('arming')}
+  if(TD.on){e.preventDefault();e.stopPropagation();tdEnd();MD=null;return}
+  MD=null},true);
+
 addEventListener('dragend',ndOff,true);
 const lpJust=()=>(typeof LP!=='undefined')&&Date.now()-LP.fired<600;
 function renderSelBar(){const bar=document.getElementById('selBar');if(!bar)return;
@@ -2057,6 +2096,53 @@ function taskSearch(v){tQ=v;const el=document.getElementById('tQuery');
 const norm=s=>String(s).toLowerCase()
   .replace(/[\u064A\u0649]/g,'\u06CC').replace(/[\u0643]/g,'\u06A9')   /* Arabic ya/kaf -> Persian */
   .replace(/[\u064B-\u0652\u0670]/g,'').replace(/\u200C/g,' ');        /* drop harakat, ZWNJ */
+/* ── favourites ────────────────────────────────────────────────────────
+   A board marked as a favourite counts every task inside it, so starring
+   a board is a quick way to pin a whole area of work.                   */
+const listFav=id=>{const l=S.lists.find(x=>x.id===id);return !!(l&&l.fav)};
+function favSelf(t){return !!t.fav||listFav(t.list)}
+function favOK(t){
+  if(!favOnly)return true;
+  if(favSelf(t))return true;
+  let p=t.parent;                     /* a starred parent keeps its subtasks */
+  while(p){const par=S.tasks.find(x=>x.id===p);if(!par)break;
+    if(favSelf(par))return true;p=par.parent}
+  return S.tasks.some(k=>k.parent===t.id&&favOK(k))}   /* keep the path to a starred child */
+const favLists=()=>lists().filter(l=>!favOnly||l.fav||
+  S.tasks.some(t=>t.list===l.id&&t.fav)).sort(favSort);
+const star=on=>'<span class="fav'+(on?' on':'')+'">\u2665</span>';
+function toggleFavTask(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  mark(t.fav?'unfavourite':'favourite');t.fav=!t.fav;
+  if(t.fav)t.favAt=Date.now();else delete t.favAt;
+  save();paint();hideMenu()}
+function toggleFavList(id){const l=S.lists.find(x=>x.id===id);if(!l)return;
+  mark(l.fav?'unfavourite board':'favourite board');l.fav=!l.fav;
+  if(l.fav)l.favAt=Date.now();else delete l.favAt;
+  save();paint();hideMenu()}
+/* Favourites lead \u2014 oldest favourite first \u2014 but only while the
+   favourites filter is on. In normal view the manual order is left alone. */
+const favSort=(a,b)=>!favOnly?0:
+  ((a.fav?0:1)-(b.fav?0:1)||((a.favAt||0)-(b.favAt||0)));
+function toggleFavOnly(){favOnly=!favOnly;S.favOnly=favOnly;save();paint()}
+
+/* ── manual ordering ───────────────────────────────────────────────────
+   Tasks have no order field: they sit in S.tasks in the order they were
+   made, so moving one means swapping it with the nearest sibling there. */
+function moveTaskBy(id,dir){
+  const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  const sib=S.tasks.filter(x=>x.list===t.list&&x.parent===t.parent);
+  const k=sib.indexOf(t),n=sib[k+dir];
+  if(!n){toastMsg(dir<0?'Already at the top':'Already at the bottom');return}
+  const i=S.tasks.indexOf(t),j=S.tasks.indexOf(n);
+  mark('reorder task');S.tasks[i]=n;S.tasks[j]=t;save();paint();hideMenu()}
+function moveListBy(id,dir){
+  const arr=lists(),i=arr.findIndex(x=>x.id===id),j=i+dir;
+  if(i<0)return;
+  if(j<0||j>=arr.length){toastMsg(dir<0?'Already first':'Already last');return}
+  mark('reorder boards');
+  const [m]=arr.splice(i,1);arr.splice(j,0,m);
+  arr.forEach((x,k)=>x.order=k);save();paint();hideMenu()}
+
 function matches(t){if(!tQ)return true;
   const q=norm(tQ);
   if(norm(t.title).includes(q))return true;
@@ -2076,7 +2162,8 @@ function taskChips(t){
     (t.due?'<button class="tag '+(t.due<TODAY&&!t.done?'late':(t.rfrom?'moved':'act'))+
       '" title="'+(t.rfrom?'Carried over from '+t.rfrom:'')+'" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')">'+
       (t.rfrom&&t.due===TODAY?'\u21B7 ':'')+t.due.slice(5)+'</button>':'')+
-    (!t.done?'<button class="mini star'+(t.active?' on':'')+'" onclick="event.stopPropagation();toggleActive(\''+t.id+'\')" title="'+(t.active?'Active project \u2014 tap to remove':'Mark as an active project')+'">'+(t.active?'&#9733;':'&#9734;')+'</button>'+
+    (!t.done?'<button class="mini heart'+(t.fav?' on':'')+'" onclick="event.stopPropagation();toggleFavTask(\''+t.id+'\')" title="'+(t.fav?'In favourites \u2014 tap to remove':'Add to favourites')+'">'+(t.fav?'&#9829;':'&#9825;')+'</button>'+
+      '<button class="mini star'+(t.active?' on':'')+'" onclick="event.stopPropagation();toggleActive(\''+t.id+'\')" title="'+(t.active?'Active project \u2014 tap to remove':'Mark as an active project')+'">'+(t.active?'&#9733;':'&#9734;')+'</button>'+
       '<button class="mini" onclick="event.stopPropagation();addSub(\''+t.id+'\')" title="Add subtask">&#43;</button>'+
       '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button>':'')}
 function renderProjects(){
@@ -2087,9 +2174,9 @@ function renderProjects(){
   const ab=document.getElementById('archBoards');
   if(ab){ab.textContent='\u{1F4E6} Archived ('+na+')';ab.style.display=na?'':'none'}
   renderListBar();if(tView==='kanban')return renderBoard();
-  projects.innerHTML=lists().map(({id,name,color:c,icon})=>{
-    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)),
-      open=all.filter(t=>!t.done).length,kids=p=>ts.filter(t=>t.parent===p);
+  projects.innerHTML=favLists().map(({id,name,color:c,icon,fav})=>{
+    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)&&favOK(t)),
+      open=all.filter(t=>!t.done).length,kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
     const node=t=>'<div class="row trow-t '+(t.done?'done':'')+(kids(t.id).length?' grp':'')+
       (selT===t.id?' tsel':'')+'" id="tr-'+t.id+'" style="padding-left:'+(14+t.depth*20)+'px"'+'>'+
       
@@ -2107,6 +2194,7 @@ function renderProjects(){
       (icon?'<span class="lico">'+esc(icon)+'</span>':'')+
       '<span class="nm" dir="auto"><span class="nameclick" onclick="event.stopPropagation();listMenu(event,\''+id+'\')">'+esc(name)+'</span></span>'+
       '<span class="ct">'+open+'</span>'+
+      '<button class="mini heart'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavList(\''+id+'\')" title="'+(fav?'Board is in favourites \u2014 tap to remove':'Add board to favourites')+'">'+(fav?'&#9829;':'&#9825;')+'</button>'+
       '<button class="mini plus" onclick="event.stopPropagation();newTaskIn(\''+id+'\')" title="New task">&#43;</button>'+
       '<button class="mini dots" onclick="event.stopPropagation();listMenu(event,\''+id+'\')" title="Options">&#8942;</button>'+
       '<span class="chev">&#9656;</span></div>'+
@@ -2157,11 +2245,11 @@ function boardCard(t,kidsFn,pfx,opts){
     '</div>'}
 function renderBoard(){
   projects.innerHTML='<div class="hbar" id="hbarTop"><div id="hbarIn"></div></div>'+
-    '<div class="board">'+lists().map(({id,name,color:c,icon})=>{
-    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)),kids=p=>ts.filter(t=>t.parent===p);
+    '<div class="board">'+favLists().map(({id,name,color:c,icon,fav})=>{
+    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)&&favOK(t)),kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
     /* a match deeper in the tree whose parent was filtered out still needs a card */
     const orphanHits=tQ?ts.filter(t=>t.parent&&!ts.some(p=>p.id===t.parent)):[];
-    const tops=kids(null).concat(orphanHits).sort((a,b)=>a.done-b.done);
+    const tops=kids(null).concat(orphanHits).sort((a,b)=>a.done-b.done||favSort(a,b));
     const card=t=>boardCard(t,kids,'tr-');
     return '<div class="col'+(selL===id?' lsel':'')+'" id="col-'+id+'"'+
       ' draggable="'+DRAGGABLE+'" ondragstart="dragL(event,\''+id+'\')" ondragend="endL()"'+
@@ -2172,6 +2260,7 @@ function renderBoard(){
       (icon?'<span class="lico">'+esc(icon)+'</span>':'')+
       '<span class="nm" dir="auto"><span class="nameclick" onclick="event.stopPropagation();listMenu(event,\''+id+'\')">'+esc(name)+'</span></span>'+
       '<span class="ct">'+all.filter(t=>!t.done).length+'</span>'+
+      '<button class="mini heart'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavList(\''+id+'\')" title="'+(fav?'Board is in favourites \u2014 tap to remove':'Add board to favourites')+'">'+(fav?'&#9829;':'&#9825;')+'</button>'+
       '<button class="mini plus" onclick="event.stopPropagation();newTaskIn(\''+id+'\')" title="New task">&#43;</button>'+
       '<button class="mini dots" onclick="event.stopPropagation();listMenu(event,\''+id+'\')" title="Options">&#8942;</button></div>'+
       '<div class="colb">'+(tops.length?tops.map(card).join('')
@@ -2270,7 +2359,7 @@ function renderMatrix(){
   if(mxMode==='grid'&&mxBy()!=='quad'){mxMode='tree'}
   if(mxMode==='tree')return renderMatrixTree();
   if(mxMode==='board')return renderMatrixBoard();
-  const pool=S.tasks.filter(t=>liveList(t.list)&&(showDone||!t.done));
+  const pool=S.tasks.filter(t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t));
   el.innerHTML=QMETA.map(m=>{
     const list=pool.filter(t=>t.q===m.q);
     const od=[],td=[],up=[],nd=[];
@@ -2306,7 +2395,7 @@ function renderQPick(){
   if(mxMode==='grid'||mxBy()==='none'){box.innerHTML='';box.style.display='none';return}
   box.style.display='';
   if(mxBy()==='rank'){
-    const live=t=>liveList(t.list)&&(showDone||!t.done);
+    const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t);
     const n=r=>S.tasks.filter(t=>live(t)&&(r?t.r===r:true)).length;
     box.innerHTML='<button class="qp'+(mxQ===0?' on':'')+'" onclick="mxPick(0)">'+
         '<span class="qpn">All</span><span class="qpc">'+n(0)+'</span></button>'+
@@ -2317,7 +2406,7 @@ function renderQPick(){
         '<span class="qpn">Unset</span><span class="qpc">'+
         S.tasks.filter(t=>live(t)&&!t.r).length+'</span></button>';
     return}
-  const live=t=>liveList(t.list)&&(showDone||!t.done);
+  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t);
   const n=q=>S.tasks.filter(t=>live(t)&&(q?t.q===q:true)).length;
   box.innerHTML=
     '<button class="qp'+(mxQ===0?' on':'')+'" onclick="mxPick(0)">'+
@@ -2331,7 +2420,7 @@ function renderQPick(){
       S.tasks.filter(t=>live(t)&&!t.q).length+'</span></button>'}
 function renderMatrixTree(){
   const box=document.getElementById('matrixTree');if(!box)return;
-  const live=t=>liveList(t.list)&&(showDone||!t.done);
+  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t);
   const hit=t=>live(t)&&(mxBy()==='none'||mxQ===0?true:(mxQ===-1?!groupKey(t):groupKey(t)===mxQ));
   /* a task is shown when it matches, or when a descendant does */
   const keep=new Set();
@@ -2364,7 +2453,7 @@ function renderMatrixTree(){
   box.innerHTML=out}
 function renderMatrixBoard(){
   const box=document.getElementById('matrixBoard');if(!box)return;
-  const live=t=>liveList(t.list)&&(showDone||!t.done);
+  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t);
   const hit=t=>live(t)&&(mxBy()==='none'||mxQ===0?true:(mxQ===-1?!groupKey(t):groupKey(t)===mxQ));
   const label=(mxBy()==='none'||mxQ===0)?'Every task'
     :(mxQ===-1?('Tasks with no '+(mxBy()==='rank'?'priority':'quadrant')):groupMeta(mxQ).title);
@@ -2938,12 +3027,20 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
     ['<span class="qlab">'+(cur?'<span class="qbadge sm" style="background:'+cur.c+'">'+cur.r+'</span>':'&#9873;&nbsp;')+
       'Matrix</span><span class="arr">&#8250;</span>',null,subm],
     ['&#43;&nbsp; Add subtask','addSub(\''+id+'\')'],
+    ['\u2665&nbsp; '+(t.fav?'Remove from favourites':'Add to favourites'),'toggleFavTask(\''+id+'\')'],
+    ['&#8593;&nbsp; Move up','moveTaskBy(\''+id+'\',-1)'],
+    ['&#8595;&nbsp; Move down','moveTaskBy(\''+id+'\',1)'],
     ['<span class="qlab">&#128194;&nbsp; Move to</span><span class="arr">&#8250;</span>',id,null,'mv'],
     [(t.active?'&#9733; Remove from active':'&#9734; Make active project'),'toggleActive(\''+id+'\')'],
     ['&#128197;&nbsp; Schedule\u2026','scheduleTask(\''+id+'\')'],
     [(t.at===TODAY||(t.due&&t.due<=TODAY))?'Remove from today':'Plan for today',
       (t.at===TODAY||(t.due&&t.due<=TODAY))?'unplan(\''+id+'\')':'planToday(\''+id+'\')'],null,
-    ['<span class="warn">Delete task</span>','delTask(\''+id+'\')']])}
+    ['<span class="warn">Delete this task only</span>'+
+      (S.tasks.some(x=>x.parent===id)?' <span style="color:var(--faint);font-size:.72rem">(keeps subtasks)</span>':''),
+      'delOnly(\''+id+'\')'],
+    ['<span class="warn">Delete task</span>'+
+      (S.tasks.some(x=>x.parent===id)?' <span style="color:var(--faint);font-size:.72rem">(with subtasks)</span>':''),
+      'delTask(\''+id+'\')']])}
 /* ── flyout panels ─────────────────────────────────────────────────────
    Submenus are separate fixed panels, so a deep chain never makes the
    menu itself scroll sideways. Each level opens to the right of the row
@@ -3380,11 +3477,36 @@ function delTask(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
   const kids=ids.size-1;
   askConfirm('Delete task','“'+esc(t.title)+'”'+(kids?' and its '+kids+' subtask'+(kids>1?'s':''):'')+' will be removed.',
     ()=>{mark('delete task');S.tasks=S.tasks.filter(x=>!ids.has(x.id));save();paint()},'Delete',true)}
+/* Remove just this one task and let its subtasks take its place, one level
+   up \u2014 the opposite of Delete task, which takes the whole branch.      */
+function delOnly(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  const kids=S.tasks.filter(x=>x.parent===id);
+  const where=t.parent?'\u201C'+esc((S.tasks.find(x=>x.id===t.parent)||{}).title||'')+'\u201D'
+                      :'the top level of '+esc(listOf(t.list)[1]);
+  const body=kids.length
+    ? '\u201C'+esc(t.title)+'\u201D is removed on its own. Its '+kids.length+' subtask'+
+      (kids.length>1?'s move':' moves')+' up to '+where+' \u2014 nothing else is lost.'
+    : '\u201C'+esc(t.title)+'\u201D will be removed. It has no subtasks.';
+  askConfirm('Delete this task only',body,()=>{
+    mark('delete task only');
+    const i=S.tasks.indexOf(t);
+    kids.forEach(k=>{k.parent=t.parent;reDepth(k.id,t.depth||0)});
+    /* keep the subtasks where the parent used to sit, not at the end */
+    const moved=kids.slice();
+    S.tasks=S.tasks.filter(x=>x.id!==id&&moved.indexOf(x)<0);
+    const at=Math.min(Math.max(i,0),S.tasks.length);
+    S.tasks.splice(at,0,...moved);
+    save();paint();
+    toastMsg(kids.length?'Removed \u2014 '+kids.length+' subtask'+(kids.length>1?'s':'')+' moved up':'Removed')},
+    'Delete',true)}
 function listMenu(ev,id){ev.stopPropagation();const l=S.lists.find(x=>x.id===id);if(!l)return;
   const n=S.tasks.filter(t=>t.list===id).length;
   showMenu(ev,[['&#43;&nbsp; New task','newTaskIn(\''+id+'\')'],
     ['&#9998;&nbsp; Rename &amp; icon','renameList(\''+id+'\')'],
     ['&#127912;&nbsp; Change colour','recolourList(\''+id+'\')'],
+    ['\u2665&nbsp; '+(l.fav?'Remove this board from favourites':'Add this board to favourites'),'toggleFavList(\''+id+'\')'],
+    ['&#8592;&nbsp; Move board left','moveListBy(\''+id+'\',-1)'],
+    ['&#8594;&nbsp; Move board right','moveListBy(\''+id+'\',1)'],
     ['&#128230;&nbsp; Archive list','archiveList(\''+id+'\')'],null,
     ['&#43;&nbsp; New list','newList()'],
     ['<span class="warn">Delete list</span>'+(n?' <span style="color:var(--faint);font-size:.72rem">('+n+' tasks)</span>':''),
@@ -3412,7 +3534,7 @@ function orderLists(src,dst){if(src===dst)return;
   const [m]=arr.splice(i,1);arr.splice(j,0,m);
   arr.forEach((x,k)=>x.order=k);save()}
 let dragL_id=null,selL=null;
-function pickL(id){if(selL===id){selL=null}else if(selL){orderLists(selL,id);selL=null}else{selL=id}
+function pickL(id){if(MD&&MD.moved)return;if(selL===id){selL=null}else if(selL){orderLists(selL,id);selL=null}else{selL=id}
   renderProjects();renderListBar()}
 function clearPickL(){selL=null;renderProjects();renderListBar()}
 function renderListBar(){const bar=document.getElementById('listBar');if(!bar)return;
@@ -3606,10 +3728,17 @@ function quickSettings(ev){if(ev)ev.stopPropagation();
       toastMsg('Quick adds now go to '+listOf(v.list)[1])})}
 qAdd.addEventListener('keydown',e=>{if(e.key==='Enter')quickAdd()});
 ibAdd.addEventListener('keydown',e=>{if(e.key==='Enter')inboxAdd()});
+let PAGE='today';
 function go(p){document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
   document.getElementById('p-'+p).classList.add('on');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
-  window.scrollTo(0,0)}
+  PAGE=p;syncFavBtn();window.scrollTo(0,0)}
+/* the favourites filter only means anything on Tasks and Priorities */
+function syncFavBtn(){
+  ['favBtnT','favBtnM'].forEach(k=>{const fb=document.getElementById(k);if(!fb)return;
+    fb.classList.toggle('on',favOnly);
+    fb.innerHTML=(favOnly?'&#9829;':'&#9825;')+' Favourites';
+    fb.title=favOnly?'Show everything':'Show favourites only'})}
 
 const PDEF={work:25,short:5,long:15,every:4};
 const PLAB={work:'Focus session',short:'Short break',long:'Long break'};
