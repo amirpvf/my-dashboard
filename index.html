@@ -754,6 +754,80 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
   border:1px solid var(--border2);color:var(--dim);background:transparent;
   font-size:.62rem;font-weight:700;flex:0 0 auto;line-height:1;letter-spacing:0}
 .fav{flex:0 0 auto;font-size:.8rem;line-height:1;color:#E5484D}
+.board.sysboard{max-height:calc(100vh - 210px)}
+.syspick{display:flex;gap:7px;flex-wrap:wrap;padding:0 2px 12px}
+.spchip{font-size:.78rem;padding:6px 11px;border:1px solid var(--border2);border-radius:999px;
+  background:transparent;color:var(--dim);cursor:pointer}
+.spchip.on{color:var(--text);background:var(--soft);border-width:1.6px}
+.mapwrap{border:1.5px solid var(--border2);border-radius:var(--r);background:var(--soft);overflow:hidden}
+.mapbar{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);
+  flex-wrap:wrap}
+.mzl{font-size:.72rem;color:var(--faint);min-width:2.6rem;text-align:center}
+.mpurp{font-size:.74rem;color:var(--faint);cursor:pointer;margin-left:auto;text-align:right;
+  max-width:52%;line-height:1.5}
+.mpurp.add{opacity:.7;font-style:italic}
+.mapscroll{overflow:auto;max-height:calc(100vh - 230px);scrollbar-gutter:stable}
+.mapscroll::-webkit-scrollbar{height:11px;width:11px}
+.mapscroll::-webkit-scrollbar-track{background:var(--soft)}
+.mapscroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:6px;border:2px solid var(--soft)}
+.mapinner{position:relative;transform-origin:0 0}
+.maplines{position:absolute;inset:0;pointer-events:none}
+.mroot,.mnode{position:absolute;box-sizing:border-box;width:196px;
+  border:2px solid var(--border2);border-radius:10px;background:var(--card);font-size:.8rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.09);cursor:pointer}
+.mroot{height:38px;display:flex;align-items:center;gap:7px;padding:0 10px;font-weight:600;
+  cursor:default;background:var(--soft);border-color:var(--border2)}
+.mhead{display:flex;align-items:center;gap:7px;height:36px;padding:0 9px}
+.pstk{display:inline-block;width:1rem;color:var(--brass)}
+.askbtn.on{border-color:var(--brass);color:var(--text)}
+.mnode:hover{border-color:var(--brass)}
+.mnode.done .mttl{text-decoration:line-through;color:var(--faint)}
+.mttl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.mitems{border-top:1px solid var(--line);padding:4px 0}
+.mitem{display:flex;align-items:center;gap:7px;height:25px;padding:0 9px}
+.mitem .mit{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:.74rem;color:var(--dim);cursor:pointer}
+.mitem.done .mit{text-decoration:line-through;color:var(--faint)}
+.mitem:hover{background:var(--soft)}
+.mplus{position:absolute;z-index:4;width:22px;height:22px;border-radius:50%;
+  border:1.6px solid var(--border2);background:var(--card);color:var(--dim);font-size:.9rem;
+  line-height:1;cursor:pointer;display:grid;place-items:center;padding:0;opacity:.85;
+  transition:opacity .12s}
+.mplus:hover{opacity:1;border-color:var(--brass);color:var(--brass)}
+.mplus.ghost{opacity:0}
+.mplus.ghost:hover,.mnode:hover+.mplus.ghost{opacity:1}
+#sysmap .mapbar button{color:var(--text);opacity:1;background:var(--card);
+  border:1px solid var(--border2);border-radius:8px;transition:none}
+#sysmap .mapbar button:hover{color:var(--text);opacity:1;background:var(--card);
+  border-color:var(--brass)}
+#sysmap .mapbar button.off{color:var(--faint)}
+#sysmap .mapbar .mini{padding:3px 9px}
+.mnode .mini{opacity:.6}
+.mnode:hover .mini{opacity:1}
+.mitem .mini,.mitem .mini.dots{opacity:.6}
+.mitem:hover .mini{opacity:1}
+.pstlist{display:flex;flex-direction:column;gap:8px;margin:4px 0 6px}
+.pstrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  padding:11px 12px;border:1.5px solid var(--border2);border-radius:10px;
+  background:transparent;color:var(--dim);font-size:.86rem;cursor:pointer}
+.pstrow:hover{border-color:var(--brass)}
+.pstrow.on{border-color:var(--border2);color:var(--dim);background:transparent}
+.pstrow.on:hover{border-color:var(--brass)}
+.pstbox{flex:0 0 auto;width:19px;height:19px;border:1.6px solid var(--border2);border-radius:6px;
+  display:grid;place-items:center;font-size:.72rem;line-height:1;color:#fff}
+.pstrow.on .pstbox{background:var(--brass);border-color:var(--brass)}
+.pstname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mselbar{display:flex;align-items:center;gap:7px;font-size:.74rem;color:var(--dim)}
+.sschip.on{border-style:solid;border-color:var(--brass);color:var(--brass)}
+.mapempty{position:absolute;font-size:.78rem;color:var(--faint);height:36px;display:flex;align-items:center}
+.syspurpose{font-size:.72rem;color:var(--faint);padding:0 11px 8px;line-height:1.5}
+.sysstart{padding:12px 10px;display:flex;flex-direction:column;gap:7px}
+.sslab{font-size:.72rem;color:var(--faint)}
+.sschip{text-align:left;font-size:.78rem;padding:7px 10px;border:1px dashed var(--border2);
+  border-radius:8px;background:transparent;color:var(--dim);cursor:pointer}
+.sschip:hover{border-style:solid;color:var(--text);border-color:var(--brass)}
+.syszero{max-width:520px;margin:28px auto;text-align:center}
+.syszero p{color:var(--dim);font-size:.85rem;line-height:1.7;margin:10px 0 16px}
 .favtog.on{color:#E5484D;border-color:#E5484D;background:var(--accBg)}
 .mini.heart{color:var(--dim);font-size:1.15rem;line-height:1;opacity:.75;
   min-width:2rem;height:1.9rem;padding:0 .3rem}
@@ -1038,6 +1112,21 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
     <div class="card" id="matrixBoard" style="display:none"></div>
   </div>
 
+  <div class="pane" id="p-systems">
+    <div class="mxhead">
+      <h2 class="mxtitle">Systems</h2>
+      <span class="mxnote" id="sysNote"></span>
+      <div class="nav2 mxseg" id="sysSeg">
+        <button id="sv-map" onclick="sysSetView('map')">Map</button>
+        <button id="sv-board" onclick="sysSetView('board')">Board</button>
+      </div>
+      <div class="nav2"><button onclick="newSystem()">+ New system</button></div>
+    </div>
+    <div class="syspick" id="sysPick"></div>
+    <div id="sysboard"></div>
+    <div id="sysmap" class="mapwrap" style="display:none"></div>
+  </div>
+
   <div class="pane" id="p-calendar">
     <div class="card">
       <div class="calbar">
@@ -1085,6 +1174,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
   <button data-p="tasks" onclick="go('tasks')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Tasks</button>
   <button data-p="habits" onclick="go('habits')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>Habits</button>
   <button data-p="matrix" onclick="go('matrix')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18M3 12h18"/></svg>Priorities</button>
+  <button data-p="systems" onclick="go('systems')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M5 8.2v3.3h14V8.2M12 11.5v4.3"/></svg>Systems</button>
   <button data-p="calendar" onclick="go('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Calendar</button>
   <button data-p="focus" onclick="go('focus')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>Focus</button>
   <button data-p="stats" onclick="go('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 19V10M12 19V5M19 19v-6"/></svg>Stats</button>
@@ -1116,7 +1206,7 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-09-14 · b66';
+const BUILD='2026-09-17 · b76';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='',favOnly=false;
@@ -1160,7 +1250,7 @@ async function load(){try{S=JSON.parse(await DB.get(KEY))}catch(e){S=seed();awai
   S.lists.forEach(l=>{if(/^U000[0-9A-F]{5}/.test(l.name)){const seed=LISTS.find(x=>x[0]===l.id);if(seed)l.name=seed[1]}});
   S.habits.forEach(h=>{if(CMAP[h.color])h.color=CMAP[h.color];if(ICONMAP[h.icon])h.icon=ICONMAP[h.icon];
     if(h.since===undefined){const ks=Object.keys(h.log);h.since=ks.length?ks.sort()[0]:null}});S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});tView=S.tView||'list';
-  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';favOnly=!!S.favOnly;
+  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';favOnly=!!S.favOnly;sysView=S.sysView||'map';sysSel=S.sysSel||null;
   if(S.rollOver===undefined)S.rollOver=true;
   S.sync=S.sync||{};
   const moved=rollOverdue();
@@ -1413,7 +1503,7 @@ async function doPasteRestore(){
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
       S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;applyPrefs();
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
       await save();paint();closeModal();
       toastMsg('Restored \u2014 press Undo to revert')},'Restore',false)}
 
@@ -1503,7 +1593,7 @@ async function restoreBackup(ev){
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
       S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;applyPrefs();
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
       await save();paint();closeModal();toastMsg('Restored \u2014 press Undo to revert')},
     'Restore',false)}
 
@@ -1645,6 +1735,13 @@ const ttl=s=>'<span class="t" dir="auto">'+esc(s)+'</span>';
 const liveList=id=>{const l=S.lists.find(x=>x.id===id);return !!l&&!l.archived};
 const todays=()=>S.tasks.filter(t=>liveList(t.list)&&((t.due&&t.due<=TODAY)||t.at===TODAY));
 const lists=()=>S.lists.filter(l=>!l.archived).sort((a,b)=>a.order-b.order);
+/* A system is just a board with a flag, so every task feature works inside it. */
+const wlists=()=>lists();
+const slists=()=>lists().filter(l=>l.sys);
+let SYSMODE=false;                       /* true while the Systems pane renders */
+let sysView='map',sysSel=null,mapZoom=1;
+const hostEl=()=>SYSMODE?document.getElementById('sysboard'):projects;
+const purposeOf=id=>{const l=S.lists.find(x=>x.id===id);return (l&&l.purpose)||''};
 const archivedLists=()=>S.lists.filter(l=>l.archived).sort((a,b)=>a.order-b.order);
 const listOf=id=>{const l=S.lists&&S.lists.find(x=>x.id===id);return l?[l.id,(l.icon?l.icon+' ':'')+l.name,l.color,l.icon||'',l.name]:['','—','#8A8A8A','','—']};
 const LPAL=['#D9A24B','#4FB8A8','#E0728A','#8E86E8','#7BC4FA','#97E38B','#FEE068','#F18BEC',
@@ -2108,7 +2205,7 @@ function favOK(t){
   while(p){const par=S.tasks.find(x=>x.id===p);if(!par)break;
     if(favSelf(par))return true;p=par.parent}
   return S.tasks.some(k=>k.parent===t.id&&favOK(k))}   /* keep the path to a starred child */
-const favLists=()=>lists().filter(l=>!favOnly||l.fav||
+const favLists=()=>(SYSMODE?slists():wlists()).filter(l=>SYSMODE||!favOnly||l.fav||
   S.tasks.some(t=>t.list===l.id&&t.fav)).sort(favSort);
 const star=on=>'<span class="fav'+(on?' on':'')+'">\u2665</span>';
 function toggleFavTask(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;
@@ -2174,7 +2271,7 @@ function renderProjects(){
   const ab=document.getElementById('archBoards');
   if(ab){ab.textContent='\u{1F4E6} Archived ('+na+')';ab.style.display=na?'':'none'}
   renderListBar();if(tView==='kanban')return renderBoard();
-  projects.innerHTML=favLists().map(({id,name,color:c,icon,fav})=>{
+  hostEl().innerHTML=favLists().map(({id,name,color:c,icon,fav})=>{
     const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)&&favOK(t)),
       open=all.filter(t=>!t.done).length,kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
     const node=t=>'<div class="row trow-t '+(t.done?'done':'')+(kids(t.id).length?' grp':'')+
@@ -2244,8 +2341,8 @@ function boardCard(t,kidsFn,pfx,opts){
       '<div class="ksubs">'+subRows(t,0,kidsFn,pfx)+'</div>':'')+
     '</div>'}
 function renderBoard(){
-  projects.innerHTML='<div class="hbar" id="hbarTop"><div id="hbarIn"></div></div>'+
-    '<div class="board">'+favLists().map(({id,name,color:c,icon,fav})=>{
+  hostEl().innerHTML=(SYSMODE?'':'<div class="hbar" id="hbarTop"><div id="hbarIn"></div></div>')+
+    '<div class="board'+(SYSMODE?' sysboard':'')+'">'+favLists().map(({id,name,color:c,icon,fav})=>{
     const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)&&favOK(t)),kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
     /* a match deeper in the tree whose parent was filtered out still needs a card */
     const orphanHits=tQ?ts.filter(t=>t.parent&&!ts.some(p=>p.id===t.parent)):[];
@@ -2263,10 +2360,11 @@ function renderBoard(){
       '<button class="mini heart'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavList(\''+id+'\')" title="'+(fav?'Board is in favourites \u2014 tap to remove':'Add board to favourites')+'">'+(fav?'&#9829;':'&#9825;')+'</button>'+
       '<button class="mini plus" onclick="event.stopPropagation();newTaskIn(\''+id+'\')" title="New task">&#43;</button>'+
       '<button class="mini dots" onclick="event.stopPropagation();listMenu(event,\''+id+'\')" title="Options">&#8942;</button></div>'+
+      (SYSMODE&&purposeOf(id)?'<div class="syspurpose" onclick="editPurpose(\''+id+'\')" title="Click to edit">'+esc(purposeOf(id))+'</div>':'')+
       '<div class="colb">'+(tops.length?tops.map(card).join('')
-        :'<div class="empty">'+(tQ?'No matches':'Empty')+'</div>')+
+        :(SYSMODE?sysStarter(id):'<div class="empty">'+(tQ?'No matches':'Empty')+'</div>'))+
       '</div></div>'}).join('')+'</div>';
-  syncHBar()}
+  if(!SYSMODE)syncHBar()}
 /* the board can be taller than the screen, so mirror its sideways scrollbar
    in a thin strip that sits above the columns and is always in view        */
 function syncHBar(){
@@ -2553,8 +2651,12 @@ function repeatsOn(t,ds){
   if(t.rep.until&&ds>t.rep.until)return false;
   return t.rep.days.includes(dow(ds))}
 let SCH=null;
-function scheduleTask(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
-  SCH={id,
+function scheduleTask(id){return scheduleMany([id])}
+/* the same sheet drives one task or a whole selection \u2014 label says which */
+function scheduleMany(ids,label){hideMenu();
+  ids=ids.filter(i=>S.tasks.some(x=>x.id===i));if(!ids.length)return;
+  const t=S.tasks.find(x=>x.id===ids[0]);
+  SCH={id:ids[0],ids,label:label||null,
     due:t.due||t.at||TODAY,
     mode:t.block?'block':(t.time?'time':'allday'),
     block:t.block||null,
@@ -2581,10 +2683,13 @@ function schGrab(){   /* read the inputs before any redraw wipes them */
   if(g('sch-until'))SCH.until=g('sch-until').value}
 function drawSchedule(){
   const t=S.tasks.find(x=>x.id===SCH.id);if(!t)return;
+  const many=(SCH.ids||[]).length>1;
   const bl=(S.blocks||[]).slice().sort((a,b)=>hm2m(a.start)-hm2m(b.start));
   const onDay=blocksOn(SCH.due).map(b=>b.id);
   const seg=(m,lab)=>'<button type="button" class="'+(SCH.mode===m?'on':'')+'" onclick="schMode(\''+m+'\')">'+lab+'</button>';
-  let html='<h3>Schedule \u201C'+esc(t.title)+'\u201D</h3>'+
+  let html='<h3>Schedule '+(many?esc(SCH.label||(SCH.ids.length+' branches')):
+      '\u201C'+esc(t.title)+'\u201D')+'</h3>'+
+    (many?'<p class="askmsg">The same day, time and repeat are applied to every one of them.</p>':'')+
     '<div class="f"><label>'+(SCH.project?'Starts on':'Day')+'</label>'+
       '<input type="date" id="sch-due" value="'+esc(SCH.due||'')+'"></div>'+
     '<div class="f"><label>When</label><div class="seg">'+
@@ -2638,22 +2743,26 @@ function schClear(){const t=S.tasks.find(x=>x.id===SCH.id);if(!t)return;
   mark('clear schedule');t.due=null;t.at=null;t.time=null;t.block=null;t.rep=null;
   save();paint();closeModal();toastMsg('Schedule cleared')}
 function schSave(){
-  const t=S.tasks.find(x=>x.id===SCH.id);if(!t)return;
+  const ids=SCH.ids||[SCH.id];
+  const first=S.tasks.find(x=>x.id===ids[0]);if(!first)return;
   schGrab();
   if(SCH.project&&!SCH.days.length){toastMsg('Pick the days it should run on');return}
   mark('schedule');
-  t.due=SCH.due||null;
-  if(SCH.mode==='allday'){t.time=null;t.block=null}
-  else if(SCH.mode==='block'){
-    const b=blockOf(SCH.block);
-    if(b){t.block=b.id;t.time=b.start;t.dur=Math.max(5,hm2m(b.end)-hm2m(b.start))}
-    else{t.block=null;t.time=null}}
-  else{t.block=null;
-    const m=hm2m(SCH.time);t.time=m!=null?m2hm(m):null;t.dur=Math.max(5,+SCH.dur||60)}
-  t.rep=SCH.project?{days:SCH.days.slice(),until:SCH.until||null,from:t.due||TODAY}:null;
+  ids.forEach(i=>{const t=S.tasks.find(x=>x.id===i);if(!t)return;
+    t.due=SCH.due||null;
+    if(SCH.mode==='allday'){t.time=null;t.block=null}
+    else if(SCH.mode==='block'){
+      const b=blockOf(SCH.block);
+      if(b){t.block=b.id;t.time=b.start;t.dur=Math.max(5,hm2m(b.end)-hm2m(b.start))}
+      else{t.block=null;t.time=null}}
+    else{t.block=null;
+      const m=hm2m(SCH.time);t.time=m!=null?m2hm(m):null;t.dur=Math.max(5,+SCH.dur||60)}
+    t.rep=SCH.project?{days:SCH.days.slice(),until:SCH.until||null,from:t.due||TODAY}:null});
+  if(typeof mapSel!=='undefined'&&ids.length>1)mapSel.clear();
   save();paint();closeModal();
-  toastMsg(t.rep?('Project \u00b7 '+repSummary(t))
-    :(t.time?((t.due||'')+' at '+t.time):(t.due||'no date')))}
+  const what=ids.length>1?(ids.length+' branches'):('\u201C'+first.title+'\u201D');
+  toastMsg(what+' \u00b7 '+(first.rep?repSummary(first)
+    :(first.time?((first.due||'')+' at '+first.time):(first.due||'no date'))))}
 function hourOpts(sel){return Array.from({length:24},(_,i)=>
   '<option value="'+i+'"'+(i===sel?' selected':'')+'>'+String(i).padStart(2,'0')+':00</option>').join('')}
 /* the grid draws the H1 row too, so the day really ends at H1+1 — label it that way */
@@ -2696,12 +2805,17 @@ function manageBlocks(){
     '<div class="mact"><button class="cancel" onclick="closeModal()">Close</button>'+
     '<button class="save" onclick="editBlock()">+ New block</button></div>';
   veil.classList.add('on')}
+/* quarter-hour choices, so a block time is picked rather than typed */
+function qOpts(last){const out=[];
+  for(let m=0;m<=(last?1440:1425);m+=15)out.push([m2hm(m),m2hm(m)]);
+  return out}
+const qSnap=v=>{const m=hm2m(v);return m==null?'09:00':m2hm(Math.min(1440,Math.round(m/15)*15))};
 function editBlock(id){
   const b=id?blockOf(id):null;
   modalForm(b?'Edit block':'New time block',
     [['name','Name','text',null,b?b.name:''],
-     ['start','Starts (HH:MM)','text',null,b?b.start:'09:00'],
-     ['end','Ends (HH:MM)','text',null,b?b.end:'11:00'],
+     ['start','Starts','select',qOpts(false),b?qSnap(b.start):'09:00'],
+     ['end','Ends','select',qOpts(true),b?qSnap(b.end):'11:00'],
      ['days','Repeat on','days',null,b?b.days.slice():NOFRI.slice()],
      ['color','Colour','colour',null,b?b.color:PALETTE[(S.blocks||[]).length%PALETTE.length]]],
     v=>{const s=hm2m(v.start),e=hm2m(v.end);
@@ -2944,7 +3058,7 @@ function renderFocus(){renderPomo();fToday.textContent=(S.focus[TODAY]||0)+' ses
 function paint(){const sc=scrollSnap();
   if(pulse)setTimeout(()=>{pulse=null},420);
   renderHead();renderActive();renderTodayTasks();renderInbox();renderTodayHabits();
-  renderProjects();renderHabits();renderMatrix();renderCalendar();renderStats();renderFocus();syncUndo();
+  renderProjects();renderSystems();renderHabits();renderMatrix();renderCalendar();renderStats();renderFocus();syncUndo();
   scrollBack(sc)}
 
 /* ── Habit actions ── */
@@ -3027,6 +3141,9 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
     ['<span class="qlab">'+(cur?'<span class="qbadge sm" style="background:'+cur.c+'">'+cur.r+'</span>':'&#9873;&nbsp;')+
       'Matrix</span><span class="arr">&#8250;</span>',null,subm],
     ['&#43;&nbsp; Add subtask','addSub(\''+id+'\')'],
+    ...((S.lists.find(x=>x.id===t.list)||{}).sys?
+      [[(t.item?'&#9678;&nbsp; Turn into a branch':'&#9679;&nbsp; Turn into an item'),
+        'setBranch(\''+id+'\','+(t.item?'true':'false')+')']]:[]),
     ['\u2665&nbsp; '+(t.fav?'Remove from favourites':'Add to favourites'),'toggleFavTask(\''+id+'\')'],
     ['&#8593;&nbsp; Move up','moveTaskBy(\''+id+'\',-1)'],
     ['&#8595;&nbsp; Move down','moveTaskBy(\''+id+'\',1)'],
@@ -3503,6 +3620,7 @@ function listMenu(ev,id){ev.stopPropagation();const l=S.lists.find(x=>x.id===id)
   const n=S.tasks.filter(t=>t.list===id).length;
   showMenu(ev,[['&#43;&nbsp; New task','newTaskIn(\''+id+'\')'],
     ['&#9998;&nbsp; Rename &amp; icon','renameList(\''+id+'\')'],
+    ...(l.sys?[['&#10024;&nbsp; What is this system for?','editPurpose(\''+id+'\')']]:[]),
     ['&#127912;&nbsp; Change colour','recolourList(\''+id+'\')'],
     ['\u2665&nbsp; '+(l.fav?'Remove this board from favourites':'Add this board to favourites'),'toggleFavList(\''+id+'\')'],
     ['&#8592;&nbsp; Move board left','moveListBy(\''+id+'\',-1)'],
@@ -3511,8 +3629,264 @@ function listMenu(ev,id){ev.stopPropagation();const l=S.lists.find(x=>x.id===id)
     ['&#43;&nbsp; New list','newList()'],
     ['<span class="warn">Delete list</span>'+(n?' <span style="color:var(--faint);font-size:.72rem">('+n+' tasks)</span>':''),
       'delList(\''+id+'\')']])}
+/* ── Systems ───────────────────────────────────────────────────────────
+   A system starts with what it is for, then a name. Everything after that
+   is ordinary tasks: sections are top-level tasks, sub-sections are their
+   subtasks, and each of them can be scheduled like any other task.      */
+const SYSSTARTER=[['\uD83D\uDCA1','Idea bank'],['\uD83D\uDD01','Weekly review'],
+  ['\u23F3','Waiting on'],['\uD83D\uDCE6','Archive']];
+function newSystem(){hideMenu();
+  modalForm('New system',[
+    ['why','What is this system meant to fix? (one line)','text',null,''],
+    ['name','Name of the system','text',null,''],
+    ['icon','Icon','emoji',null,'\u2699\uFE0F'],
+    ['color','Colour','listcolour',null,LPAL[S.lists.length%LPAL.length]]],
+    v=>{if(!v.name.trim())return;mark('new system');
+      const id=uid('l');
+      S.lists.push({id,name:v.name.trim(),icon:(v.icon||'').trim(),color:v.color,
+        sys:true,purpose:(v.why||'').trim(),
+        order:Math.max(0,...S.lists.map(x=>x.order))+1});
+      S.open[id]=true;save();go('systems');paint()})}
+function editPurpose(id){hideMenu();const l=S.lists.find(x=>x.id===id);if(!l)return;
+  modalForm('What is this system for?',[['why','One line','text',null,l.purpose||'']],
+    v=>{mark('edit purpose');l.purpose=(v.why||'').trim();save();paint()})}
+/* starter sections are only ever suggestions \u2014 nothing is added unasked */
+function sysStarter(id){
+  return '<div class="sysstart"><div class="sslab">Add a section, or start from one of these:</div>'+
+    SYSSTARTER.map(([e,n])=>'<button class="sschip" onclick="addSysSection(\''+id+'\',\''+n+'\')">'+
+      e+' '+n+'</button>').join('')+'</div>'}
+function addSysSection(list,title){addBranch(list,null,title)}
+function sysSetView(v){sysView=v;S.sysView=v;save();renderSystems()}
+function sysSelect(id){sysSel=id;S.sysSel=id;save();renderSystems()}
+function mapZoomBy(d){mapZoom=Math.min(1.6,Math.max(.5,+(mapZoom+d).toFixed(2)));renderSystems()}
+
+/* ── Mind map ──────────────────────────────────────────────────────────
+   One system at a time, laid out left to right: the system itself is the
+   root, its sections are the first branches, and their subtasks branch on
+   from there. Nodes are the same tasks as the board \u2014 this is a view,
+   not a second copy.                                                    */
+const MAPW=196,MAPGAPX=76,MAPH=38,MAPITEM=25,MAPGAPY=18,MAPPAD=30;
+/* Inside a system a node is a branch by default; only what was added with the
+   \u201C+\u201D beside a branch name is an item, so nothing has to be repaired later. */
+const isBranch=t=>!t.item;
+const brKids=id=>S.tasks.filter(t=>t.parent===id&&isBranch(t));
+const brItems=id=>S.tasks.filter(t=>t.parent===id&&t.item&&(showDone||!t.done));
+const nodeH=t=>MAPH+(brItems(t.id).length?brItems(t.id).length*MAPITEM+8:0);
+function mapLayout(id){
+  const nodes=[];let cursor=0,maxD=0;
+  /* every node is placed by the centre of its whole box, so a branch that
+     grows taller keeps its connector in the middle instead of drifting   */
+  const walk=(t,d)=>{
+    maxD=Math.max(maxD,d);
+    const ch=brKids(t.id),h=nodeH(t);
+    let cy;
+    if(!ch.length){cy=cursor+h/2;cursor+=h+MAPGAPY}
+    else{const cs=ch.map(c=>walk(c,d+1));cy=(cs[0]+cs[cs.length-1])/2}
+    nodes.push({t,d,cy,h,x:MAPPAD+d*(MAPW+MAPGAPX)});
+    return cy};
+  const roots=S.tasks.filter(t=>t.list===id&&!t.parent&&isBranch(t));
+  let rcy=MAPH/2;
+  if(!roots.length)cursor=MAPH+MAPGAPY;
+  else{const cs=roots.map(r=>walk(r,1));rcy=(cs[0]+cs[cs.length-1])/2}
+  /* a tall root or parent can push a centre above the top edge — shift back in */
+  let top=Math.min(rcy-MAPH/2,...nodes.map(n=>n.cy-n.h/2));
+  const off=top<0?-top:0;
+  nodes.forEach(n=>{n.cy+=off;n.y=n.cy-n.h/2});
+  rcy+=off;
+  const bottom=Math.max(rcy+MAPH/2,...nodes.map(n=>n.y+n.h),MAPH);
+  return {nodes,roots,rootCY:rcy,
+    w:MAPPAD*2+(maxD+1)*(MAPW+MAPGAPX),h:bottom+MAPPAD*2}}
+const mapLink=(x1,y1,x2,y2,c)=>{const mx=(x1+x2)/2;
+  return '<path d="M'+x1+' '+y1+' C'+mx+' '+y1+' '+mx+' '+y2+' '+x2+' '+y2+
+    '" fill="none" stroke="'+c+'" stroke-width="2" stroke-opacity=".55"/>'};
+
+/* ── branches, items and stages ────────────────────────────────────────
+   A branch is a stage with a name. What sits inside it are items, and
+   ticking an item hands it on to the next stage rather than just closing
+   it \u2014 that is what makes the map a flow and not a drawing.           */
+function addBranch(list,parent,title){mark('new branch');
+  const p=parent?S.tasks.find(x=>x.id===parent):null;
+  S.tasks.push({id:uid('t'),list,title:title||'New branch',parent:parent||null,
+    depth:p?(p.depth||0)+1:0,done:false,at:null,active:false,q:0,r:0});
+  S.open[list]=true;save();paint()}
+function addItem(id){const p=S.tasks.find(x=>x.id===id);if(!p)return;
+  modalForm('Add to \u201C'+esc(p.title)+'\u201D',[['name','Name','text',null,'']],v=>{
+    if(!v.name.trim())return;mark('new item');
+    S.tasks.push({id:uid('t'),list:p.list,title:v.name.trim(),parent:p.id,
+      depth:(p.depth||0)+1,done:false,at:null,active:false,q:0,r:0,item:true});
+    save();paint()})}
+function nextStages(branchId){
+  const b=S.tasks.find(x=>x.id===branchId);if(!b)return [];
+  const out=brKids(b.id).slice();
+  const sib=S.tasks.filter(t=>t.list===b.list&&t.parent===b.parent&&isBranch(t));
+  const i=sib.findIndex(x=>x.id===b.id);
+  if(i>=0&&sib[i+1]&&out.indexOf(sib[i+1])<0)out.push(sib[i+1]);
+  return out}
+function advanceItem(id){
+  const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  if(t.done){mark('reopen');t.done=false;save();paint();return}
+  const kin=descendants(t.id);              /* never hand an item to itself */
+  const opts=nextStages(t.parent).filter(o=>!kin.has(o.id));
+  const put=dst=>{mark('advance');t.parent=dst.id;t.list=dst.list;
+    reDepth(t.id,(dst.depth||0)+1);save();paint();
+    toastMsg('\u201C'+t.title+'\u201D \u2192 '+dst.title)};
+  if(!opts.length){mark('done');t.done=true;save();paint();
+    toastMsg('\u201C'+t.title+'\u201D is the last stage \u2014 marked done');return}
+  if(opts.length===1)return put(opts[0]);
+  pickStages(t,opts)}
+/* more than one way on: the item can go down several branches at once,
+   in which case the first keeps it and the rest get their own copy   */
+let PST={id:null,sel:[]};
+function pstToggle(i){const k=PST.sel.indexOf(i);
+  k<0?PST.sel.push(i):PST.sel.splice(k,1);drawPickStages()}
+function pickStages(t,opts){PST={id:t.id,opts,sel:[]};drawPickStages()}
+function drawPickStages(){
+  const t=S.tasks.find(x=>x.id===PST.id);if(!t)return;
+  modal.innerHTML='<h3>Where does it go next?</h3>'+
+    '<p class="askmsg">\u201C'+esc(t.title)+'\u201D can move on to more than one branch. '+
+    'Pick one, or several \u2014 each extra branch gets its own copy.</p>'+
+    '<div class="pstlist">'+PST.opts.map((o,i)=>{const on=PST.sel.indexOf(i)>=0;
+      return '<button class="pstrow'+(on?' on':'')+'" onclick="pstToggle('+i+')">'+
+      '<span class="pstbox">'+(on?'&#10003;':'')+'</span>'+
+      '<span class="pstname" dir="auto">'+esc(o.title)+'</span></button>'}).join('')+
+    '</div><div class="mact"><button class="cancel" onclick="closeModal()">Cancel</button>'+
+    '<button class="save" onclick="pstGo()"'+(PST.sel.length?'':' disabled')+'>Move on</button></div>';
+  veil.classList.add('on')}
+function pstGo(){
+  const t=S.tasks.find(x=>x.id===PST.id);if(!t||!PST.sel.length)return;
+  mark('advance');
+  const picks=PST.sel.map(i=>PST.opts[i]);
+  picks.forEach((dst,k)=>{
+    if(k===0){t.parent=dst.id;t.list=dst.list;reDepth(t.id,(dst.depth||0)+1)}
+    else S.tasks.push({id:uid('t'),list:dst.list,title:t.title,parent:dst.id,
+      depth:(dst.depth||0)+1,done:false,at:null,active:false,q:0,r:0,item:true})});
+  save();paint();closeModal();
+  toastMsg('\u201C'+t.title+'\u201D \u2192 '+picks.map(p=>p.title).join(', '))}
+
+/* ── selecting branches to schedule together ──────────────────────── */
+let mapSel=new Set();
+function mapPick(id){mapSel.has(id)?mapSel.delete(id):mapSel.add(id);renderSystems()}
+function mapClear(){mapSel.clear();renderSystems()}
+function mapDelete(){
+  const ids=[...mapSel].filter(i=>S.tasks.some(x=>x.id===i));
+  if(!ids.length){toastMsg('Select a branch first');return}
+  const all=new Set();ids.forEach(i=>descendants(i).forEach(x=>all.add(x)));
+  const extra=all.size-ids.length;
+  askConfirm('Delete '+ids.length+' branch'+(ids.length>1?'es':''),
+    ids.map(i=>'\u201C'+esc((S.tasks.find(x=>x.id===i)||{}).title||'')+'\u201D').join(', ')+
+    (extra?' and the '+extra+' thing'+(extra>1?'s':'')+' inside':'')+' will be removed.',
+    ()=>{mark('delete branches');S.tasks=S.tasks.filter(x=>!all.has(x.id));
+      mapSel.clear();save();paint()},'Delete',true)}
+function mapSchedule(){const ids=[...mapSel];if(!ids.length)return;
+  scheduleMany(ids,ids.length+' branches')}
+function sysSchedule(){const l=S.lists.find(x=>x.id===sysSel);if(!l)return;
+  const ids=S.tasks.filter(t=>t.list===l.id&&!t.parent&&isBranch(t)).map(t=>t.id);
+  if(!ids.length){toastMsg('Add a branch first');return}
+  scheduleMany(ids,'the whole \u201C'+l.name+'\u201D system')}
+
+function mapNode(n,colour){
+  const t=n.t,items=brItems(t.id),on=mapSel.has(t.id);
+  /* a branch is part of the system's shape, so it has no tick of its own */
+  return '<div class="mnode'+(on?' msel':'')+'" id="mn-'+t.id+
+    '" onclick="mapPick(\''+t.id+'\')" title="Click anywhere on the branch to select it"'+
+    ' style="left:'+n.x+'px;top:'+n.y+'px;height:'+n.h+'px'+
+    (on?';border-color:'+colour+';box-shadow:0 0 0 3px '+colour+'33':'')+'">'+
+    '<div class="mhead">'+
+      '<span class="mttl" dir="auto" title="'+esc(t.title)+'">'+esc(t.title)+'</span>'+
+      (t.fav?'<span class="fav">&#9829;</span>':'')+
+      '<button class="mini additem" onclick="event.stopPropagation();addItem(\''+t.id+'\')" title="Add something inside this branch">&#43;</button>'+
+      '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button>'+
+    '</div>'+
+    (items.length?'<div class="mitems">'+items.map(it=>
+      '<div class="mitem'+(it.done?' done':'')+'">'+
+      '<div class="hit" onclick="event.stopPropagation();advanceItem(\''+it.id+'\')" title="Tick to send it to the next stage">'+chk(it.done)+'</div>'+
+      '<span class="mit" dir="auto" title="'+esc(it.title)+'">'+esc(it.title)+'</span>'+
+      '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+it.id+'\')" title="Options">&#8942;</button>'+
+      '</div>').join('')+'</div>':'')+
+    '</div>'+
+    /* stays on the right edge at the middle of the box, so it rides along as
+       the branch grows; once the branch has children it only shows on hover */
+    '<button class="mplus'+(brKids(t.id).length?' ghost':'')+'" style="left:'+(n.x+MAPW+9)+
+      'px;top:'+(n.cy-11)+'px" onclick="event.stopPropagation();addBranch(\''+t.list+'\',\''+t.id+
+      '\')" title="Add a branch after this one">&#43;</button>'}
+
+function renderMap(){
+  const host=document.getElementById('sysmap');if(!host)return;
+  const l=S.lists.find(x=>x.id===sysSel);if(!l){host.innerHTML='';return}
+  const L=mapLayout(l.id),c=l.color||'#888';
+  const byId={};L.nodes.forEach(n=>byId[n.t.id]=n);
+  const lines=L.nodes.map(n=>{
+    const p=byId[n.t.parent];
+    const py=n.d===1?L.rootCY:(p?p.cy:L.rootCY);
+    const px=n.d===1?MAPPAD+MAPW:(p?p.x+MAPW:MAPPAD+MAPW);
+    return mapLink(px,py,n.x,n.cy,c)}).join('');
+  const nsel=mapSel.size;
+  host.style.borderColor=c+'40';               /* the system's colour, kept quiet */
+  host.innerHTML='<div class="mapbar">'+
+      '<button class="mini" onclick="mapZoomBy(-.1)" title="Zoom out">&#8722;</button>'+
+      '<span class="mzl">'+Math.round(mapZoom*100)+'%</span>'+
+      '<button class="mini" onclick="mapZoomBy(.1)" title="Zoom in">&#43;</button>'+
+      '<button class="sschip" onclick="addBranch(\''+l.id+'\',null)">&#43; Branch</button>'+
+      '<button class="sschip" onclick="sysSchedule()">&#128197; Schedule whole system</button>'+
+      '<button class="sschip'+(nsel?'':' off')+'" onclick="mapDelete()" title="Delete the selected branches">&#128465; Delete</button>'+
+      (nsel?'<span class="mselbar">'+nsel+' selected'+
+        '<button class="sschip" onclick="mapSchedule()">&#128197; Schedule these</button>'+
+        '<button class="sschip" onclick="mapClear()">Clear</button></span>':'')+
+      (l.purpose?'<span class="mpurp" onclick="editPurpose(\''+l.id+'\')" title="Click to edit">'+esc(l.purpose)+'</span>':
+        '<span class="mpurp add" onclick="editPurpose(\''+l.id+'\')">+ what is this system for?</span>')+
+    '</div>'+
+    '<div class="mapscroll"><div class="mapinner" style="width:'+L.w+'px;height:'+L.h+
+      'px;transform:scale('+mapZoom+')">'+
+      '<svg class="maplines" width="'+L.w+'" height="'+L.h+'">'+lines+'</svg>'+
+      '<div class="mroot" style="left:'+MAPPAD+'px;top:'+(L.rootCY-MAPH/2)+'px">'+
+        (l.icon?'<span class="lico">'+esc(l.icon)+'</span>':'')+
+        '<span class="mttl" dir="auto" title="'+esc(l.name)+'">'+esc(l.name)+'</span>'+
+        '<button class="mini dots" onclick="event.stopPropagation();listMenu(event,\''+l.id+'\')" title="Options">&#8942;</button>'+
+      '</div>'+
+      '<button class="mplus'+(L.roots.length?' ghost':'')+'" style="left:'+(MAPPAD+MAPW+9)+
+        'px;top:'+(L.rootCY-11)+'px" onclick="addBranch(\''+l.id+
+        '\',null)" title="Add a first-level branch">&#43;</button>'+
+      L.nodes.map(n=>mapNode(n,c)).join('')+
+    '</div></div>'}
+function renderSysPick(){
+  const bar=document.getElementById('sysPick');if(!bar)return;
+  const arr=slists();
+  if(sysView!=='map'||arr.length<1){bar.innerHTML='';bar.style.display='none';return}
+  if(!arr.some(l=>l.id===sysSel))sysSel=arr[0].id;
+  bar.style.display='';
+  bar.innerHTML=arr.map(l=>'<button class="spchip'+(l.id===sysSel?' on':'')+
+    '" onclick="sysSelect(\''+l.id+'\')" style="'+(l.id===sysSel?'border-color:'+l.color:'')+'">'+
+    (l.icon?esc(l.icon)+' ':'')+esc(l.name)+'</button>').join('')}
+/* Branches predate the br flag, and a task added from the Tasks tab has none
+   either, so anything top-level in a system \u2014 or anything with children \u2014
+   is treated as a branch and stamped once.                                  */
+function fixBranches(){let n=0;      /* drop the old flag, it no longer decides anything */
+  S.tasks.forEach(t=>{if(t.br){delete t.br;n++}});
+  if(n)save();return n}
+function setBranch(id,on){const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  mark(on?'make branch':'make item');
+  if(on)delete t.item;else t.item=true;
+  save();paint();hideMenu()}
+function renderSystems(){
+  const host=document.getElementById('sysboard');if(!host)return;
+  const map=document.getElementById('sysmap'),seg=document.getElementById('sysSeg');
+  const n=slists().length;
+  const note=document.getElementById('sysNote');
+  if(note)note.textContent=n?n+' system'+(n===1?'':'s'):'';
+  if(seg){['map','board'].forEach(v=>{const b=document.getElementById('sv-'+v);
+    if(b)b.classList.toggle('on',sysView===v)});seg.style.display=n?'':'none'}
+  fixBranches();renderSysPick();
+  if(n&&sysView==='map'){host.style.display='none';map.style.display='';host.innerHTML='';return renderMap()}
+  if(map){map.style.display='none';map.innerHTML=''}
+  host.style.display='';
+  if(!n){host.innerHTML='<div class="card syszero"><h3>No systems yet</h3>'+
+    '<p>A system is a board you design once: what it is for, the sections it moves through, '+
+    'and when each of those sections actually happens. Start with one.</p>'+
+    '<button class="dbtn pri" onclick="newSystem()">+ New system</button></div>';return}
+  SYSMODE=true;const keep=tView;tView='kanban';
+  try{renderBoard()}finally{tView=keep;SYSMODE=false}}
 function newList(){hideMenu();
-  modalForm('New list',[['icon','Icon','emoji',null,'\U0001F5C2\uFE0F'],
+  modalForm('New list',[['icon','Icon','emoji',null,'\uD83D\uDDC2\uFE0F'],
     ['name','Name','text',null,''],
     ['color','Colour','listcolour',null,LPAL[S.lists.length%LPAL.length]]],
     v=>{if(!v.name.trim())return;mark('new list');
