@@ -26,11 +26,15 @@
   --colw:268px;       /* kanban column width, set in Settings */
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
 body{background:var(--page);color:var(--text);
   font-family:Inter,Vazirmatn,-apple-system,system-ui,sans-serif;
-  direction:ltr;font-variant-numeric:tabular-nums;padding:0 0 76px;line-height:1.55;
+  direction:ltr;font-variant-numeric:tabular-nums;padding:0;line-height:1.55;
+  overflow:hidden;                       /* the window never scrolls; panes do */
   -webkit-font-smoothing:antialiased}
-.wrap{width:100%;max-width:none;margin:0;padding:30px clamp(16px,2.6vw,44px) 0;position:relative;z-index:1}
+.wrap{width:100%;max-width:none;margin:0;padding:30px clamp(16px,2.6vw,44px) 0;position:relative;
+  z-index:1;height:100%;display:flex;flex-direction:column;overflow:hidden}
+.wrap>.head{flex:0 0 auto}
 /* planner paper: faint dot grid, a warm wash, and a hairline margin rule */
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:radial-gradient(circle at 1px 1px,var(--dotc) 1px,transparent 0);
@@ -70,11 +74,16 @@ input,select{font-family:inherit;color:inherit}
 .hbtns button{font-size:.74rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:600;
   border:1px solid var(--line);border-radius:var(--r);padding:4px 9px;background:var(--card);transition:background .12s}
 .hbtns button:hover{background:var(--raise)}
-.scroll{max-height:440px;overflow-y:auto;overscroll-behavior:contain}
-.scroll.tall{max-height:calc(100vh - 210px);min-height:340px}
-.scroll::-webkit-scrollbar{width:8px}
-.scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
-.scroll::-webkit-scrollbar-track{background:transparent}
+.scroll{overscroll-behavior:contain}
+/* one scrollbar look everywhere in the panel */
+*{scrollbar-width:thin;scrollbar-color:var(--border3) transparent}
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-corner{background:transparent}
+*::-webkit-scrollbar-thumb{background:var(--border3);border-radius:8px;
+  border:2.5px solid transparent;background-clip:padding-box}
+*::-webkit-scrollbar-thumb:hover{background:var(--dim);background-clip:padding-box}
+#p-today .scroll,#p-today .scroll.tall{max-height:none;overflow:visible}
 
 .row{display:flex;align-items:center;gap:10px;padding:7px 14px;border-top:1px solid var(--line);transition:background .1s}
 .row:first-child{border-top:none}
@@ -241,8 +250,6 @@ html[data-theme="dark"] mark{background:rgba(245,165,36,.3)}
 .menu{position:fixed;z-index:40;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:4px;
   min-width:190px;max-width:min(300px,92vw);box-shadow:var(--menuShadow);display:none;
   max-height:min(72vh,540px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}
-.menu::-webkit-scrollbar{width:6px}
-.menu::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}          /* must stay visible or the Priority submenu gets clipped */
 
 .menu button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:6px 9px;
   border-radius:3px;font-size:.83rem;color:var(--text)}
@@ -317,8 +324,6 @@ html[data-theme="dark"] mark{background:rgba(245,165,36,.3)}
   padding:7px 10px;font-size:.83rem;outline:none;margin-bottom:8px}
 .fsearch:focus{border-color:var(--brass);box-shadow:0 0 0 2px var(--accBg)}
 .flist{max-height:270px;overflow-y:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--soft)}
-.flist::-webkit-scrollbar{width:6px}
-.flist::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .fitem{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:7px 10px;
   border-bottom:1px solid var(--line)}
 .fitem:last-child{border-bottom:none}
@@ -376,24 +381,15 @@ html[data-theme="dark"] mark{background:rgba(245,165,36,.3)}
 .lead div:last-child{border:none}
 .lead b{color:var(--dim);font-weight:500;white-space:nowrap}
 
-.board{display:flex;gap:12px;overflow:auto;padding:14px 14px 4px;align-items:flex-start;scroll-behavior:auto;overscroll-behavior-x:contain;max-height:calc(100vh - 132px);scrollbar-gutter:stable}
-.hbar{overflow-x:auto;overflow-y:hidden;margin:6px 14px 0;display:none}
-.hbar>div{height:1px}
-.hbar::-webkit-scrollbar{height:11px}
-.hbar::-webkit-scrollbar-track{background:var(--soft);border-radius:6px}
-.hbar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:6px;border:2px solid var(--soft)}
-.board::-webkit-scrollbar{height:11px;width:9px}
-.board::-webkit-scrollbar-track{background:var(--soft);border-radius:6px}
-.board::-webkit-scrollbar-thumb{background:var(--border3,var(--border2));border-radius:6px;border:2px solid var(--soft)}
-.board::-webkit-scrollbar-thumb:hover{background:var(--dim)}
+.board{display:flex;gap:12px;overflow:auto;padding:14px 14px 4px;align-items:flex-start;
+  scroll-behavior:auto;overscroll-behavior:contain;scrollbar-gutter:stable;
+  overflow-anchor:none;will-change:scroll-position}
 .col{flex:0 0 var(--colw);min-width:var(--colw);background:var(--soft);border:1px solid var(--line);border-radius:var(--r)}
 .colh{display:flex;align-items:center;gap:8px;padding:9px 11px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3;background:var(--soft);border-radius:var(--r) var(--r) 0 0}
 .colh .nm{flex:1;min-width:0;font-size:.8rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lico{flex:0 0 auto;font-size:1.02em;line-height:1}
 .colh .ct{font-size:.7rem;color:var(--faint);background:var(--raise);padding:0 6px;border-radius:3px}
 .colb{padding:8px}
-.colb::-webkit-scrollbar{width:6px}
-.colb::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .kcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:8px 9px;margin-bottom:7px;
   transition:box-shadow .12s,border-color .12s}
 .kcard:hover{border-color:var(--border2);box-shadow:0 1px 3px rgba(15,15,15,.06)}
@@ -480,9 +476,10 @@ html[data-theme="dark"] .calbar button.on{color:#16212C}
 .tgbadd{font-size:.9rem;font-weight:700;line-height:.7;color:rgba(25,24,22,.5);padding:0 3px 2px}
 .tgbadd:hover{color:rgba(25,24,22,.85)}
 .tgbb{flex:1;min-height:0;overflow:hidden;padding:0 4px 4px}
+.minilist{display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start;height:100%;
+  overflow-y:auto;padding:1px}
+.minilist>*{flex:1 1 var(--blkcolw);min-width:var(--blkcolw);max-width:100%}
 .miniboard{display:flex;gap:5px;height:100%;overflow-x:auto;overflow-y:hidden;align-items:stretch}
-.miniboard::-webkit-scrollbar{height:5px}
-.miniboard::-webkit-scrollbar-thumb{background:rgba(25,24,22,.25);border-radius:3px}
 .minicol{flex:0 0 var(--blkcolw);min-width:var(--blkcolw);display:flex;flex-direction:column;
   background:rgba(255,255,255,.5);border-radius:5px;overflow:hidden}
 html[data-theme="dark"] .minicol{background:rgba(0,0,0,.16)}
@@ -496,8 +493,6 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
 .minih .plus{font-size:1.05em!important;padding:0 3px!important;min-width:1em!important;
   color:rgba(25,24,22,.5);line-height:.8}
 .minib{flex:1;min-height:0;overflow-y:auto;padding:0 4px 4px;display:flex;flex-direction:column;gap:4px}
-.minib::-webkit-scrollbar{width:4px}
-.minib::-webkit-scrollbar-thumb{background:rgba(25,24,22,.22);border-radius:2px}
 .ccard{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--line);
   border-radius:5px;padding:3px 5px;flex:0 0 auto;cursor:grab}
 .ccard.done{opacity:.5}
@@ -626,7 +621,10 @@ nav button{flex:1;padding:9px 2px 11px;font-size:.62rem;color:var(--faint);displ
 nav button.on{color:var(--text)}
 nav button.on svg{color:var(--brass)}
 nav svg{width:1.2em;height:1.2em}
-.pane{display:none}.pane.on{display:block}
+.pane{display:none}
+.pane.on{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;
+  padding-bottom:78px;scrollbar-gutter:stable}
+.pane.on.fixed{overflow:hidden;padding-bottom:0}
 .wknav{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;
   border-top:1px solid var(--line);background:var(--soft)}
 .wknav button{color:var(--dim);font-size:.95em;padding:2px 8px;border-radius:3px}
@@ -720,8 +718,6 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 
 /* ── settings ── */
 .treebox{max-height:210px;overflow-y:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--soft)}
-.treebox::-webkit-scrollbar{width:6px}
-.treebox::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .trow{display:flex;align-items:center;gap:7px;width:100%;text-align:left;padding:7px 9px;
   font-size:.83rem;border-bottom:1px solid var(--line);color:var(--text)}
 .trow:last-child{border-bottom:none}
@@ -741,8 +737,6 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .tempty{padding:16px 10px;text-align:center;color:var(--faint);font-size:.78rem}
 .tlab{text-transform:none;letter-spacing:0;color:var(--brass);font-weight:600}
 .archlist{max-height:52vh;overflow-y:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--soft)}
-.archlist::-webkit-scrollbar{width:6px}
-.archlist::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .archrow{display:flex;align-items:center;gap:9px;padding:8px 10px;border-bottom:1px solid var(--line)}
 .archrow:last-child{border-bottom:none}
 .archrow:hover{background:var(--hover)}
@@ -754,7 +748,6 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
   border:1px solid var(--border2);color:var(--dim);background:transparent;
   font-size:.62rem;font-weight:700;flex:0 0 auto;line-height:1;letter-spacing:0}
 .fav{flex:0 0 auto;font-size:.8rem;line-height:1;color:#E5484D}
-.board.sysboard{max-height:calc(100vh - 210px)}
 .syspick{display:flex;gap:7px;flex-wrap:wrap;padding:0 2px 12px}
 .spchip{font-size:.78rem;padding:6px 11px;border:1px solid var(--border2);border-radius:999px;
   background:transparent;color:var(--dim);cursor:pointer}
@@ -766,10 +759,7 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .mpurp{font-size:.74rem;color:var(--faint);cursor:pointer;margin-left:auto;text-align:right;
   max-width:52%;line-height:1.5}
 .mpurp.add{opacity:.7;font-style:italic}
-.mapscroll{overflow:auto;max-height:calc(100vh - 230px);scrollbar-gutter:stable}
-.mapscroll::-webkit-scrollbar{height:11px;width:11px}
-.mapscroll::-webkit-scrollbar-track{background:var(--soft)}
-.mapscroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:6px;border:2px solid var(--soft)}
+.mapscroll{overflow:auto;scrollbar-gutter:stable}
 .mapinner{position:relative;transform-origin:0 0}
 .maplines{position:absolute;inset:0;pointer-events:none}
 .mroot,.mnode{position:absolute;box-sizing:border-box;width:196px;
@@ -828,7 +818,44 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .sschip:hover{border-style:solid;color:var(--text);border-color:var(--brass)}
 .syszero{max-width:520px;margin:28px auto;text-align:center}
 .syszero p{color:var(--dim);font-size:.85rem;line-height:1.7;margin:10px 0 16px}
+.grab.trg{opacity:1;flex:0 0 auto;color:var(--border3);font-size:1.02em;cursor:grab;
+  padding:0 2px;line-height:1}
+.trow-t:hover .grab.trg{color:var(--dim)}
+.grab.trg:hover{color:var(--text);background:var(--hover)}
+.fold{flex:0 0 auto;width:16px;height:16px;padding:0;border:0;background:transparent;
+  color:var(--faint);font-size:.7rem;line-height:1;cursor:pointer;
+  display:grid;place-items:center;transition:transform .12s}
+.fold.open{transform:rotate(90deg)}
+.fold:hover{color:var(--text)}
+.foldsp{flex:0 0 auto;width:16px}
+.kidn{flex:0 0 auto;font-size:.66rem;color:var(--faint);background:var(--soft);
+  border-radius:20px;padding:1px 7px}
+.wkgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:2px 2px 4px}
+.wkcell{display:flex;align-items:center;gap:5px;min-height:34px;padding:4px 6px;
+  border:1px solid var(--line);border-radius:7px;background:var(--card);overflow:hidden}
+.wkcell.empty{border-style:dashed;justify-content:center;color:var(--faint);font-size:.68rem;
+  background:transparent}
+.wkmain{flex:1;min-width:0}
+.wkt{font-size:.72rem;line-height:1.25;cursor:pointer;overflow:hidden;text-overflow:ellipsis;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.wkmeta{display:none}
+.wkcell .mini.dots{opacity:0}
+.wkcell:hover .mini.dots{opacity:.7}
+@media(max-width:900px){.wkgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fltbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 2px 4px}
+.fltlab{font-size:.68rem;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;
+  margin-right:2px}
+.fltsep{width:1px;height:16px;background:var(--line);margin:0 6px}
+.fchip{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;color:var(--dim);
+  padding:4px 9px;border:1px solid var(--border2);border-radius:999px;background:transparent;
+  cursor:pointer}
+.fchip:hover{border-color:var(--brass);color:var(--text)}
+.fchip.on{color:var(--text);background:var(--accBg);border-color:var(--accLine)}
+.fchip .rbadge,.fchip .qbadge{width:1.05rem;height:1.05rem;font-size:.56rem}
+.fchip.clear{color:var(--faint);border-style:dashed}
 .favtog.on{color:#E5484D;border-color:#E5484D;background:var(--accBg)}
+.trow-t.above,.kcard.above,.subrow.above{box-shadow:inset 0 2.5px 0 var(--brass)}
+.trow-t.below,.kcard.below,.subrow.below{box-shadow:inset 0 -2.5px 0 var(--brass)}
 .mini.heart{color:var(--dim);font-size:1.15rem;line-height:1;opacity:.75;
   min-width:2rem;height:1.9rem;padding:0 .3rem}
 .mini.heart.on{color:#E5484D;opacity:1}
@@ -855,8 +882,6 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
   border-radius:var(--r);padding:4px;min-width:200px;max-width:min(320px,88vw);
   box-shadow:var(--menuShadow);max-height:min(70vh,460px);overflow-y:auto;overflow-x:hidden;
   overscroll-behavior:contain}
-.flyout::-webkit-scrollbar{width:6px}
-.flyout::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .flyout button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;
   padding:8px 10px;border-radius:var(--r);font-size:.82rem;color:var(--text)}
 .flyout button:hover{background:var(--hover)}
@@ -891,8 +916,6 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .mxhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
 .mxhead .mxnote{flex:1}
 .mxqpick{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
-.mxqpick::-webkit-scrollbar{height:5px}
-.mxqpick::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .qp{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);
   border-radius:20px;padding:6px 12px;font-size:.76rem;color:var(--dim);white-space:nowrap;flex:0 0 auto}
 .qp:hover{background:var(--hover);color:var(--text)}
@@ -919,8 +942,6 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .mxqt{font-size:.82rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mxqn{font-size:.7rem;color:var(--faint);background:var(--raise);border-radius:3px;padding:0 6px}
 .mxqb{flex:1;min-height:0;overflow-y:auto;padding:0 6px 8px}
-.mxqb::-webkit-scrollbar{width:6px}
-.mxqb::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .mxempty{height:100%;display:grid;place-items:center;color:var(--faint);font-size:.82rem}
 .mxg{margin-bottom:2px}
 .mxgh{display:flex;align-items:center;gap:6px;width:100%;text-align:left;padding:6px 8px;
@@ -945,8 +966,6 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .stabs button.on{background:var(--brass);color:#fff;font-weight:600}
 html[data-theme="dark"] .stabs button.on{color:#16212C}
 .sbody{max-height:min(62vh,520px);overflow-y:auto;padding-right:2px}
-.sbody::-webkit-scrollbar{width:6px}
-.sbody::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .sf{min-width:0}
 .sf label{display:block;font-size:.68rem;color:var(--faint);text-transform:uppercase;
@@ -1041,6 +1060,10 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
   <div class="pane on" id="p-today">
     <div class="grid">
       <div>
+        <div class="card wkcard">
+          <h2>This week <small id="weekCount"></small></h2>
+          <div class="wkgrid" id="weekGrid"></div>
+        </div>
         <div class="card">
           <h2>Active projects <small id="pjCount"></small></h2>
           <div class="scroll" id="activeProjects"></div>
@@ -1053,7 +1076,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
         </div>
         <div class="card">
           <h2>Inbox <small id="ibCount"></small></h2>
-          <div class="scroll" id="inboxList" style="max-height:260px"></div>
+          <div class="scroll" id="inboxList"></div>
           <div class="add"><input id="ibAdd" placeholder="Capture anything — sort it later"><button onclick="inboxAdd()">Add</button></div>
         </div>
       </div>
@@ -1079,6 +1102,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
           <button id="tv-list" class="on" onclick="taskView('list')">List</button>
           <button id="tv-kanban" onclick="taskView('kanban')">Board</button></div>
       </div>
+      <div class="fltbar" id="fltBarT"></div>
       <div id="listBar"></div>
       <div id="projects"></div></div></div>
 
@@ -1105,6 +1129,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
         <button id="mv-board" onclick="mxView('board')">Board</button>
       </div>
     </div>
+    <div class="fltbar" id="fltBarM"></div>
     <div class="mxmode" id="mxGroup"></div>
     <div class="mxqpick" id="mxQPick"></div>
     <div class="mxgrid" id="matrix"></div>
@@ -1206,7 +1231,7 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-09-17 · b76';
+const BUILD='2026-09-19 · b90';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='',favOnly=false;
@@ -1249,8 +1274,8 @@ async function load(){try{S=JSON.parse(await DB.get(KEY))}catch(e){S=seed();awai
     if(t.r===undefined)t.r=0});
   S.lists.forEach(l=>{if(/^U000[0-9A-F]{5}/.test(l.name)){const seed=LISTS.find(x=>x[0]===l.id);if(seed)l.name=seed[1]}});
   S.habits.forEach(h=>{if(CMAP[h.color])h.color=CMAP[h.color];if(ICONMAP[h.icon])h.icon=ICONMAP[h.icon];
-    if(h.since===undefined){const ks=Object.keys(h.log);h.since=ks.length?ks.sort()[0]:null}});S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});tView=S.tView||'list';
-  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';favOnly=!!S.favOnly;sysView=S.sysView||'map';sysSel=S.sysSel||null;
+    if(h.since===undefined){const ks=Object.keys(h.log);h.since=ks.length?ks.sort()[0]:null}});S.tasks.forEach(t=>{if(t.q===undefined)t.q=0});tView=S.tView||'list';
+  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);sysView=S.sysView||'map';sysSel=S.sysSel||null;
   if(S.rollOver===undefined)S.rollOver=true;
   S.sync=S.sync||{};
   const moved=rollOverdue();
@@ -1259,6 +1284,7 @@ async function load(){try{S=JSON.parse(await DB.get(KEY))}catch(e){S=seed();awai
   if(!S.prefs.colw)S.prefs.colw=268;
   if(!S.prefs.hourPx)S.prefs.hourPx=52;
   if(!S.prefs.blkColw)S.prefs.blkColw=190;
+  if(!S.prefs.calTask)S.prefs.calTask='board';
   if(!S.prefs.calMax)S.prefs.calMax=260;
   applyPrefs()}
 /* ── autosave: debounced on every change, flushed on hide/close, plus a 20s safety net ── */
@@ -1502,8 +1528,8 @@ async function doPasteRestore(){
       S.focus=S.focus||{};S.open=S.open||{};S.sections=S.sections||[];S.inbox=S.inbox||[];
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
-      S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
+      S.tasks.forEach(t=>{if(t.q===undefined)t.q=0});
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
       await save();paint();closeModal();
       toastMsg('Restored \u2014 press Undo to revert')},'Restore',false)}
 
@@ -1536,7 +1562,7 @@ function exportCSV(kind){
     S.tasks.forEach(t=>rows.push([t.id,listOf(t.list)[1],liveList(t.list)?'no':'yes',t.title,pathOf(t),
       t.parent||'',t.depth,t.q||'',t.q?qOf(t.q).t:'',t.due||'',t.time||'',
       t.block?(blockOf(t.block)||{}).name||'':'',repSummary(t),
-      t.done?'yes':'no',t.at||'',t.active?'yes':'no']))}
+      t.done?'yes':'no',t.at||'',isProj(t)?'yes':'no']))}
   else if(kind==='habits'){name='habit-log';
     rows=[['habit','section','date','weekday','status','value']];
     S.habits.forEach(x=>Object.keys(x.log).sort().forEach(d=>{const e=x.log[d];
@@ -1550,7 +1576,7 @@ function exportCSV(kind){
            'date','status','value','extra']];
     S.tasks.forEach(t=>rows.push(['task',t.id,t.title,listOf(t.list)[1],pathOf(t),t.q||'',
       t.q?qOf(t.q).t:'',t.due||'',t.done?'done':'open','',
-      (liveList(t.list)?'':'board archived; ')+(t.active?'active project; ':'')+
+      (liveList(t.list)?'':'board archived; ')+(isProj(t)?'active project; ':'')+
       (t.time?('at '+t.time+'; '):'')+(repSummary(t)?('repeats '+repSummary(t)+'; '):'')+
       (t.at?('completed '+t.at):'')]));
     S.habits.forEach(x=>rows.push(['habit',x.id,x.name,secOf(x.sec).name,'','','','',
@@ -1592,8 +1618,8 @@ async function restoreBackup(ev){
       S.focus=S.focus||{};S.open=S.open||{};S.sections=S.sections||[];S.inbox=S.inbox||[];
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
-      S.tasks.forEach(t=>{if(t.active===undefined)t.active=false;if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
+      S.tasks.forEach(t=>{if(t.q===undefined)t.q=0});
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
       await save();paint();closeModal();toastMsg('Restored \u2014 press Undo to revert')},
     'Restore',false)}
 
@@ -1627,6 +1653,10 @@ function drawSettings(){
         'Taller hours give blocks room for more cards.')+
       segRow('Calendar height','segCalH',
         [['360','Short'],['260','Default'],['180','Tall'],['110','Full']],q.calMax||260,'setCalMax')+
+      segRow('Tasks inside a block','segCalTask',
+        [['board','Boards'],['list','One list']],q.calTask||'board','setCalTask',
+        'Boards keeps a column per parent board. One list drops the columns and wraps '+
+        'the cards side by side, so a short block needs no scrolling.')+
       segRow('Column width in a block','segBlkW',
         [['150','Narrow'],['190','Default'],['240','Wide']],q.blkColw||190,'setBlkColw')+
       '<div class="sf"><label>Time blocks &amp; day hours</label>'+
@@ -1675,7 +1705,12 @@ function dataPanel(){
       '<button class="dbtn" onclick="exportCSV(\'inbox\')">Inbox</button>'+
       '<button class="dbtn" onclick="exportCSV(\'today\')">Today</button>'+
       '<button class="dbtn" onclick="exportCSV(\'all\')">Everything</button>'+
-      '</div></div>'}
+      '</div></div>'+
+    '<div class="sf"><label>Housekeeping</label><div class="dgrid">'+
+      '<button class="dbtn" onclick="purgeDone()">&#128465; Clear finished tasks'+
+        '<small>'+S.tasks.filter(t=>t.done).length+' done right now</small></button>'+
+      '</div><p class="dnote">Deletes completed tasks for good, so take a backup first if you '+
+      'want the history. Tasks that still hold an open subtask are kept.</p></div>'}
 function segPick(el){if(!el||!el.parentNode||!el.parentNode.querySelectorAll)return;
   el.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
   el.classList.add('on')}
@@ -1685,6 +1720,7 @@ function setColw(v,el){S.prefs.colw=v;segPick(el);applyPrefs();save();
   if(tView==='kanban')renderProjects()}
 function setHourPx(v,el){S.prefs.hourPx=v;segPick(el);applyPrefs();save();renderCalendar()}
 function setBlkColw(v,el){S.prefs.blkColw=v;segPick(el);applyPrefs();save();renderCalendar()}
+function setCalTask(v,el){S.prefs.calTask=v;segPick(el);save();renderCalendar()}
 function setCalMax(v,el){S.prefs.calMax=v;segPick(el);applyPrefs();save();renderCalendar()}
 function setRoll(v,el){v=+v;S.rollOver=!!v;segPick(el);save();
   if(v){const n=rollOverdue();paint();toastMsg(n?(n+' task'+(n===1?'':'s')+' moved to today'):'Nothing to move')}
@@ -1735,6 +1771,12 @@ const ttl=s=>'<span class="t" dir="auto">'+esc(s)+'</span>';
 const liveList=id=>{const l=S.lists.find(x=>x.id===id);return !!l&&!l.archived};
 const todays=()=>S.tasks.filter(t=>liveList(t.list)&&((t.due&&t.due<=TODAY)||t.at===TODAY));
 const lists=()=>S.lists.filter(l=>!l.archived).sort((a,b)=>a.order-b.order);
+/* A task that runs on chosen weekdays IS the active project \u2014 no separate star. */
+const isProj=t=>!!(t&&t.rep&&t.rep.days&&t.rep.days.length);
+/* A project closed for today is out of the way for today, exactly like an
+   ordinary task that has just been ticked.                              */
+const doneToday=t=>isProj(t)?dayDone(t,TODAY):!!t.done;
+const hideNow=t=>!showDone&&doneToday(t);
 /* A system is just a board with a flag, so every task feature works inside it. */
 const wlists=()=>lists();
 const slists=()=>lists().filter(l=>l.sys);
@@ -1757,21 +1799,30 @@ function renderActive(){
   syncFavBtn();
   document.getElementById('doneBtn').classList.toggle('on',showDone);
   document.getElementById('doneBtn').title=showDone?'Hide completed':'Show completed';
-  const act=S.tasks.filter(t=>t.active&&liveList(t.list)&&(showDone||!t.done)).sort((a,b)=>a.done-b.done);
+  const act=S.tasks.filter(t=>isProj(t)&&liveList(t.list)&&(showDone||!t.done)).sort((a,b)=>a.done-b.done);
   pjCount.textContent=act.filter(t=>!t.done).length+(showDone&&act.some(t=>t.done)?' · '+act.filter(t=>t.done).length+' done':'');
-  activeProjects.innerHTML=act.length?act.map(t=>{const l=listOf(t.list);
-    return '<div class="row '+(t.done?'done':'')+'">'+
-    '<div class="hit" onclick="doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
+  activeProjects.innerHTML=act.length?act.map(t=>{const l=listOf(t.list),n=dayCount(t);
+    return '<div class="row">'+
     '<span class="dot" style="background:'+l[2]+'"></span>'+
+    (n?'<span class="tag">'+n+'d</span>':'')+
     '<span class=\"t\" dir=\"auto\"><span class=\"nameclick\" onclick=\"taskMenu(event,\''+t.id+'\')\">'+esc(t.title)+'</span></span>'+(t.due?'<span class="tag'+(t.due<TODAY?' late':'')+'">'+t.due.slice(5)+'</span>':'')+
-    '<button class="mini star on" onclick="event.stopPropagation();toggleActive(\''+t.id+'\')" title="Remove from active">&#9733;</button>'+
+    '<span class="tblk">'+
+      (t.block&&blockOf(t.block)
+        ? '<span class="bdot" style="background:'+blockOf(t.block).color+'"></span>'+
+          esc(blockOf(t.block).name)+' \u00b7 '+blockOf(t.block).start+'\u2013'+blockOf(t.block).end
+        : (t.time?'<span class="bdot" style="background:var(--border3)"></span>'+t.time+
+            (t.dur?' \u00b7 '+t.dur+'m':'')
+          : '<span class="bdot" style="background:var(--border3)"></span>All day'))+
+      ' \u00b7 '+repSummary(t)+'</span>'+
+    '<button class="mini" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')" title="Change when it runs">&#128197;</button>'+
     '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}).join('')
-    :'<div class="empty">Star a task in the Tasks tab to make it an active project</div>'}
-function renderTodayTasks(){const tt=todays().filter(t=>showDone||!t.done)
+    :'<div class="empty">Give a task a set of weekdays in the calendar and it shows up here</div>'}
+function renderTodayTasks(){const tt=todays().filter(t=>!hideNow(t))
     .sort((a,b)=>(a.done-b.done)||((a.q||5)-(b.q||5))||((a.due||'9')<(b.due||'9')?-1:1));
-  tCount.textContent=tt.filter(t=>!t.done).length+' open';
-  todayTasks.innerHTML=tt.length?tt.map(t=>'<div class="row trow2 '+(t.done?'done':'')+'">'+
-    '<div class="hit" onclick="event.stopPropagation();doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
+  tCount.textContent=tt.filter(t=>!doneToday(t)).length+' open';
+  todayTasks.innerHTML=tt.length?tt.map(t=>{const on=doneToday(t);
+    return '<div class="row trow2 '+(on?'done':'')+'">'+
+    '<div class="hit" onclick="event.stopPropagation();tickTask(\''+t.id+'\')">'+chk(on)+'</div>'+
     (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+(t.fav?star(true):'')+
     '<span class="tstack">'+crumbHTML(t,'tcrumb')+
       '<span class=\"t\" dir=\"auto\"><span class=\"nameclick\" onclick=\"taskMenu(event,\''+t.id+'\')\">'+esc(t.title)+'</span></span>'+
@@ -1783,31 +1834,26 @@ function renderTodayTasks(){const tt=todays().filter(t=>showDone||!t.done)
     '<button class="tag '+(t.due&&t.due<TODAY&&!t.done?'late':'act')+'" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')">'+
       (t.due?(t.due<TODAY?'overdue '+t.due.slice(5):t.due.slice(5)):'set date')+'</button>'+
     '<span class="tag">'+listOf(t.list)[1].slice(0,2)+'</span>'+
-    '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>').join('')
+    '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}).join('')
     :'<div class="empty">Nothing planned for today</div>'}
 function renderInbox(){
-  const all=S.inbox||[],items=all.filter(i=>showDone||!i.filed);
-  ibCount.textContent=all.filter(i=>!i.filed).length+(showDone&&all.some(i=>i.filed)?' \u00b7 '+all.filter(i=>i.filed).length+' filed':'');
-  inboxList.innerHTML=items.length?items.slice().sort((x,y)=>x.filed-y.filed).map(i=>
-    '<div class="row ib'+(i.filed?' filed':'')+'">'+
-    '<span class="ibdot'+(i.filed?' on':'')+'">'+(i.filed?'&#8594;':'&#9702;')+'</span>'+
+  const all=(S.inbox||[]).filter(i=>!i.filed),items=all;
+  ibCount.textContent=all.length;
+  inboxList.innerHTML=items.length?items.map(i=>
+    '<div class="row ib">'+
+    '<span class="ibdot">&#9702;</span>'+
     '<span class="t" dir="auto"><span class="nameclick" onclick="inboxMenu(event,\''+i.id+'\')">'+esc(i.t)+'</span></span>'+
-    (i.filed
-      ? '<span class="fbadge">'+esc(i.list?listOf(i.list)[1]:'filed')+'</span>'
-      : '<button class="tag act" onclick="event.stopPropagation();fileInbox(\''+i.id+'\')">file into&hellip;</button>')+
+    '<button class="tag act" onclick="event.stopPropagation();fileInbox(\''+i.id+'\')">file into&hellip;</button>'+
     '<button class="mini dots" onclick="event.stopPropagation();inboxMenu(event,\''+i.id+'\')" title="Options">&#8942;</button>'+
     '</div>').join('')
     :'<div class="empty">Inbox is clear \u2014 capture anything here and file it into a board later</div>'}
 function inboxAdd(){const v=ibAdd.value.trim();if(!v)return;
   mark('capture');S.inbox.unshift({id:uid('i'),t:v,filed:false,list:null,on:null});
   ibAdd.value='';save();paint()}
-function unfile(id){hideMenu();const i=S.inbox.find(x=>x.id===id);if(!i)return;
-  mark('unfile');i.filed=false;i.list=null;i.on=null;save();paint();
-  toastMsg('Back in the inbox \u2014 the task it created stays where it is')}
 function inboxMenu(ev,id){ev.stopPropagation();const i=S.inbox.find(x=>x.id===id);if(!i)return;
   showMenu(ev,[['&#128194;&nbsp; File into a list…','fileInbox(\''+id+'\')'],
     ['&#9998;&nbsp; Rename','renameInbox(\''+id+'\')'],
-    (i.filed?['&#8617;&nbsp; Send back to the inbox','unfile(\''+id+'\')']:null),null,
+    null,
     ['<span class="warn">Delete</span>','delInbox(\''+id+'\')']])}
 function renameInbox(id){hideMenu();const i=S.inbox.find(x=>x.id===id);if(!i)return;
   modalForm('Rename',[['t','Title','text',null,i.t]],v=>{if(!v.t.trim())return;
@@ -1875,25 +1921,33 @@ function tdMove(x,y){
   const sel=TD.kind==='task'?'.trow-t':(TD.kind==='habit'?'.hab':(TD.kind==='section'?'.secblk':(tView==='kanban'?'.col':'.pj')));
   let tgt=under&&under.closest?under.closest(sel):null;
   TD.overKind=TD.kind;
-  if(TD.kind==='task'&&under&&under.closest){
-    if(tgt&&descendants(TD.id).has(tdIdOf(tgt)))tgt=null;   /* never into its own subtree */
-    if(!tgt){const box=under.closest(tView==='kanban'?'.col':'.pj');
-      if(box){tgt=box;TD.overKind='task-to-list'}}}
+  if(TD.kind==='task'){
+    /* Dragging a task only ever reorders it among its own siblings: the target
+       must sit in the same board under the same parent. Anything else is not a
+       drop target at all, so nothing lights up and nothing moves by accident. */
+    const me=S.tasks.find(x=>x.id===TD.id),other=tgt?S.tasks.find(x=>x.id===tdIdOf(tgt)):null;
+    if(!me||!other||other.list!==me.list||(other.parent||null)!==(me.parent||null))tgt=null}
   if(!tgt&&TD.kind==='habit'&&under&&under.closest){
     const blk=under.closest('.secblk');
     if(blk){tgt=blk;TD.overKind='into-section'}}
-  const cls=TD.kind==='task'?(TD.overKind==='task-to-list'?'ldrop':'tdrop')
+  const cls=TD.kind==='task'?''                     /* a task shows only the insert line */
            :TD.kind==='habit'?(TD.overKind==='into-section'?'hdrop':'drop')
            :(TD.kind==='section'?'sdrop':'ldrop');
-  if(TD.over&&TD.over!==tgt)TD.over.classList.remove('drop','sdrop','ldrop','hdrop');
-  if(tgt&&tdIdOf(tgt)!==TD.id){tgt.classList.add(cls);TD.over=tgt}else TD.over=null;
+  if(TD.over&&TD.over!==tgt)TD.over.classList.remove('drop','sdrop','ldrop','hdrop','above','below');
+  if(tgt&&tdIdOf(tgt)!==TD.id){if(cls)tgt.classList.add(cls);TD.over=tgt}else TD.over=null;
+  TD.zone='in';
+  if(TD.over&&TD.kind==='task'&&TD.overKind==='task'){
+    /* dropping on a task only ever places it above or below \u2014 putting one
+       task inside another is a deliberate choice, made from Move to      */
+    const r=TD.over.getBoundingClientRect(),f=(y-r.top)/Math.max(1,r.height);
+    TD.zone=f<.5?'before':'after';
+    TD.over.classList.remove('above','below');
+    TD.over.classList.add(TD.zone==='before'?'above':'below')}
   if(TD.ghost&&TD.kind==='task'){
     const base=TD.ghost.getAttribute('data-base')||TD.ghost.textContent;
     TD.ghost.setAttribute('data-base',base);
-    const to=TD.over?(TD.overKind==='task-to-list'
-        ? 'to '+listOf(tdIdOf(TD.over))[1]
-        : 'inside \u201C'+((S.tasks.find(x=>x.id===tdIdOf(TD.over))||{}).title||'')+'\u201D')
-      :'';
+    const to=TD.over?((TD.zone==='after'?'after ':'before ')+
+        '\u201C'+((S.tasks.find(x=>x.id===tdIdOf(TD.over))||{}).title||'')+'\u201D'):'';
     TD.ghost.innerHTML=esc(base)+(to?'<em class="gto">'+esc(to)+'</em>':'')}
   TD.edge  = y<90 ? -1 : (y>innerHeight-110 ? 1 : 0);
   TD.edgeX = x<70 ? -1 : (x>innerWidth-70 ? 1 : 0);
@@ -1934,19 +1988,22 @@ function tdAutoScroll(){
 function tdEnd(){
   clearInterval(TD.raf);
   const kind=TD.overKind||TD.kind,src=TD.id,dst=TD.over?tdIdOf(TD.over):null;
+  const zone=TD.zone||'in';
   if(TD.ghost)TD.ghost.remove();
   document.querySelectorAll('.tdsrc').forEach(e=>e.classList.remove('tdsrc'));
-  document.querySelectorAll('.drop,.ldrop,.sdrop,.hdrop,.tdrop').forEach(e=>e.classList.remove('drop','ldrop','sdrop','hdrop','tdrop'));
+  document.querySelectorAll('.drop,.ldrop,.sdrop,.hdrop,.tdrop,.above,.below').forEach(e=>e.classList.remove('drop','ldrop','sdrop','hdrop','tdrop','above','below'));
   TD.on=false;TD.kind=null;TD.overKind=null;TD.id=null;TD.ghost=null;TD.over=null;
-  TD.edge=0;TD.edgeX=0;TD.hbox=null;TD.vbox=null;
+  TD.edge=0;TD.edgeX=0;TD.hbox=null;TD.vbox=null;TD.zone='in';
   if(!dst||dst===src)return false;
-  if(kind==='task'){if(!moveTaskUnder(src,dst))return false;selT=null}
+  const keep=scrollSnap();
+  if(kind==='task'){if(!moveTaskBeside(src,dst,zone==='after'?'after':'before'))return false;selT=null}
   else if(kind==='task-to-list'){if(!moveTaskToList(src,dst))return false;selT=null}
   else if(kind==='habit'){moveHabTo(src,dst);selH=null}
   else if(kind==='into-section'){moveHabToSection(src,dst);selH=null}
   else if(kind==='section'){orderSections(src,dst);selS=null}
   else{orderLists(src,dst);selL=null}
   buzz(12);paint();renderSelBar();if(selT)renderTaskBar();else renderListBar();
+  scrollBack(keep);
   return true}
 function tdCancel(){if(TD.timer){clearTimeout(TD.timer);TD.timer=null}
   document.querySelectorAll('.grab.arming').forEach(e=>e.classList.remove('arming'));
@@ -2081,7 +2138,14 @@ function dropSecHab(ev,id){if(!dragId)return;ev.preventDefault();ndOff();leaveSe
 const SCROLLERS=['todayTasks','todayHabits','inboxList','activeProjects','habits','calBody'];
 function scrollSnap(){
   const s={w:window.scrollY||0};
-  const b=document.querySelector('.board');if(b)s.boardLeft=b.scrollLeft;
+  const pn=document.querySelector('.pane.on');
+  if(pn){s.paneId=pn.id;s.paneTop=pn.scrollTop}
+  /* the board scrolls vertically as well as sideways, and the mind map has its
+     own scroller \u2014 both have to be remembered or a repaint jumps to the top */
+  const b=document.querySelector('.board');
+  if(b){s.boardLeft=b.scrollLeft;s.boardTop=b.scrollTop}
+  const mp=document.querySelector('.mapscroll');
+  if(mp){s.mapLeft=mp.scrollLeft;s.mapTop=mp.scrollTop}
   document.querySelectorAll('.colb').forEach((e,i)=>{s['colb'+i]=e.scrollTop});
   document.querySelectorAll('.mxqb').forEach((e,i)=>{s['mxqb'+i]=e.scrollTop});
   document.querySelectorAll('.flist,.archlist').forEach((e,i)=>{s['lst'+i]=e.scrollTop});
@@ -2090,13 +2154,26 @@ function scrollSnap(){
 function scrollBack(s){
   const put=()=>{
     const b=document.querySelector('.board');
-    if(b&&s.boardLeft)b.scrollLeft=s.boardLeft;
+    if(b){if(s.boardLeft)b.scrollLeft=s.boardLeft;if(s.boardTop)b.scrollTop=s.boardTop}
+    const mp=document.querySelector('.mapscroll');
+    if(mp){if(s.mapLeft)mp.scrollLeft=s.mapLeft;if(s.mapTop)mp.scrollTop=s.mapTop}
     document.querySelectorAll('.colb').forEach((e,i)=>{if(s['colb'+i])e.scrollTop=s['colb'+i]});
     document.querySelectorAll('.mxqb').forEach((e,i)=>{if(s['mxqb'+i])e.scrollTop=s['mxqb'+i]});
     document.querySelectorAll('.flist,.archlist').forEach((e,i)=>{if(s['lst'+i])e.scrollTop=s['lst'+i]});
     SCROLLERS.forEach(id=>{const e=document.getElementById(id);if(e&&s[id])e.scrollTop=s[id]});
+    if(s.paneId){const pn=document.getElementById(s.paneId);
+      if(pn&&s.paneTop)pn.scrollTop=s.paneTop}
     if(s.w)window.scrollTo(0,s.w)};
-  put();try{requestAnimationFrame(put)}catch(e){}}
+  /* Re-rendering briefly shortens the page, so the browser clamps the scroll
+     position to whatever fits at that instant \u2014 which is why a drop used to
+     throw you back to the top. Keep putting it back until it sticks.      */
+  put();
+  let tries=0;
+  const again=()=>{put();
+    if(++tries<6&&s.w&&Math.abs((window.scrollY||0)-s.w)>2){
+      try{requestAnimationFrame(again)}catch(e){setTimeout(again,16)}}};
+  try{requestAnimationFrame(again)}catch(e){setTimeout(again,16)}
+  setTimeout(put,60)}
 
 const GLYPH={
   done:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">'+
@@ -2205,6 +2282,33 @@ function favOK(t){
   while(p){const par=S.tasks.find(x=>x.id===p);if(!par)break;
     if(favSelf(par))return true;p=par.parent}
   return S.tasks.some(k=>k.parent===t.id&&favOK(k))}   /* keep the path to a starred child */
+/* ── priority / matrix filter ──────────────────────────────────────────
+   Several levels can be on at once; an empty set means \u201Ceverything\u201D. A task
+   whose child matches is kept so the tree above a hit never disappears.  */
+let fltR=new Set(),fltQ=new Set();
+const fltOn=()=>fltR.size||fltQ.size;
+function fltSelf(t){
+  return (!fltR.size||fltR.has(t.r||0))&&(!fltQ.size||fltQ.has(t.q||0))}
+function fltOK(t){
+  if(!fltOn())return true;
+  if(fltSelf(t))return true;
+  return S.tasks.some(k=>k.parent===t.id&&fltOK(k))}
+function fltToggle(kind,v){
+  const set=kind==='r'?fltR:fltQ;
+  set.has(v)?set.delete(v):set.add(v);
+  S.fltR=[...fltR];S.fltQ=[...fltQ];save();paint()}
+function fltClear(){fltR.clear();fltQ.clear();S.fltR=[];S.fltQ=[];save();paint()}
+function renderFltBars(){
+  const html='<span class="fltlab">Priority</span>'+
+    RMETA.map(m=>'<button class="fchip'+(fltR.has(m.r)?' on':'')+
+      '" onclick="fltToggle(\'r\','+m.r+')" title="'+m.t+'">'+
+      '<span class="rbadge r'+m.r+'">'+m.r+'</span>'+m.t+'</button>').join('')+
+    '<span class="fltsep"></span><span class="fltlab">Matrix</span>'+
+    QMETA.map(m=>'<button class="fchip'+(fltQ.has(m.q)?' on':'')+
+      '" onclick="fltToggle(\'q\','+m.q+')" title="'+m.t+'">'+
+      '<span class="qbadge">'+m.r+'</span>'+m.t+'</button>').join('')+
+    (fltOn()?'<button class="fchip clear" onclick="fltClear()">Clear</button>':'');
+  ['fltBarT','fltBarM'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=html})}
 const favLists=()=>(SYSMODE?slists():wlists()).filter(l=>SYSMODE||!favOnly||l.fav||
   S.tasks.some(t=>t.list===l.id&&t.fav)).sort(favSort);
 const star=on=>'<span class="fav'+(on?' on':'')+'">\u2665</span>';
@@ -2225,6 +2329,18 @@ function toggleFavOnly(){favOnly=!favOnly;S.favOnly=favOnly;save();paint()}
 /* ── manual ordering ───────────────────────────────────────────────────
    Tasks have no order field: they sit in S.tasks in the order they were
    made, so moving one means swapping it with the nearest sibling there. */
+/* drop next to a task: same board, same parent, placed before or after it */
+/* Reorder only. Moving a task somewhere else is what Move to is for, so a drop
+   that is not between siblings is simply ignored.                          */
+function moveTaskBeside(src,dst,zone){
+  const t=S.tasks.find(x=>x.id===src),d=S.tasks.find(x=>x.id===dst);
+  if(!t||!d||t===d)return false;
+  if(d.list!==t.list||(d.parent||null)!==(t.parent||null))return false;
+  mark('reorder task');
+  S.tasks=S.tasks.filter(x=>x.id!==src);
+  const at=S.tasks.indexOf(d);
+  S.tasks.splice(zone==='after'?at+1:at,0,t);
+  save();return true}
 function moveTaskBy(id,dir){
   const t=S.tasks.find(x=>x.id===id);if(!t)return;
   const sib=S.tasks.filter(x=>x.list===t.list&&x.parent===t.parent);
@@ -2260,7 +2376,6 @@ function taskChips(t){
       '" title="'+(t.rfrom?'Carried over from '+t.rfrom:'')+'" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')">'+
       (t.rfrom&&t.due===TODAY?'\u21B7 ':'')+t.due.slice(5)+'</button>':'')+
     (!t.done?'<button class="mini heart'+(t.fav?' on':'')+'" onclick="event.stopPropagation();toggleFavTask(\''+t.id+'\')" title="'+(t.fav?'In favourites \u2014 tap to remove':'Add to favourites')+'">'+(t.fav?'&#9829;':'&#9825;')+'</button>'+
-      '<button class="mini star'+(t.active?' on':'')+'" onclick="event.stopPropagation();toggleActive(\''+t.id+'\')" title="'+(t.active?'Active project \u2014 tap to remove':'Mark as an active project')+'">'+(t.active?'&#9733;':'&#9734;')+'</button>'+
       '<button class="mini" onclick="event.stopPropagation();addSub(\''+t.id+'\')" title="Add subtask">&#43;</button>'+
       '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button>':'')}
 function renderProjects(){
@@ -2272,20 +2387,28 @@ function renderProjects(){
   if(ab){ab.textContent='\u{1F4E6} Archived ('+na+')';ab.style.display=na?'':'none'}
   renderListBar();if(tView==='kanban')return renderBoard();
   hostEl().innerHTML=favLists().map(({id,name,color:c,icon,fav})=>{
-    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)&&favOK(t)),
+    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>!hideNow(t)&&matches(t)&&favOK(t)&&fltOK(t)),
       open=all.filter(t=>!t.done).length,kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
-    const node=t=>'<div class="row trow-t '+(t.done?'done':'')+(kids(t.id).length?' grp':'')+
-      (selT===t.id?' tsel':'')+'" id="tr-'+t.id+'" style="padding-left:'+(14+t.depth*20)+'px"'+'>'+
-      
-      '<div class="hit" onclick="event.stopPropagation();doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
+    const node=t=>{const kd=kids(t.id),shut=kd.length&&!tOpen(t.id)&&!tQ;
+      return '<div class="row trow-t '+(t.done?'done':'')+(kd.length?' grp':'')+
+      (selT===t.id?' tsel':'')+'" id="tr-'+t.id+'" data-drag="task" data-id="'+t.id+
+      '" style="padding-left:'+(14+t.depth*20)+'px">'+
+      '<button class="grab trg" data-drag="task" data-id="'+t.id+
+        '" onclick="event.stopPropagation();pickT(\''+t.id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
+      (kd.length?'<button class="fold'+(shut?'':' open')+'" onclick="event.stopPropagation();tFold(\''+t.id+
+        '\')" title="'+(shut?'Show subtasks':'Hide subtasks')+'">&#9656;</button>':'<span class="foldsp"></span>')+
+      '<div class="hit" onclick="event.stopPropagation();tickTask(\''+t.id+'\')">'+chk(doneToday(t))+'</div>'+
       (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
       '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+hl(t.title)+'</span></span>'+
-      taskChips(t)+'</div>'+kids(t.id).map(node).join('');
+      (shut?'<span class="kidn">'+kd.length+'</span>':'')+
+      taskChips(t)+'</div>'+(shut?'':kd.map(node).join(''))};
     return '<div class="pj '+((S.open[id]||(tQ&&ts.length))?'open':'')+(selL===id?' lsel':'')+
       (tQ&&!ts.length?' dim':'')+'" id="pj-'+id+'"'+
       ' draggable="'+DRAGGABLE+'" ondragstart="dragL(event,\''+id+'\')" ondragend="endL()"'+
       ' ondragover="overL(event,\''+id+'\')" ondragleave="leaveL(\''+id+'\')" ondrop="dropL(event,\''+id+'\')">'+
       '<div class="pj-h" onclick="toggle(\''+id+'\')">'+
+      '<button class="fold'+(S.open[id]?' open':'')+'" onclick="event.stopPropagation();toggle(\''+id+
+        '\')" title="'+(S.open[id]?'Collapse this board':'Open this board')+'">&#9656;</button>'+
       '<button class="grab" data-drag="list" data-id="'+id+'" onclick="event.stopPropagation();pickL(\''+id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
       '<span class="dot" style="background:'+c+'"></span>'+
       (icon?'<span class="lico">'+esc(icon)+'</span>':'')+
@@ -2305,7 +2428,9 @@ function subRows(t,d,kidsFn,pfx){
   return kidsFn(t.id).map(s=>'<div class="subrow trow-t '+(s.done?'done':'')+
     (selT===s.id?' tsel':'')+'" id="'+pfx+s.id+'" style="padding-left:'+(12+(d||0)*12)+'px"'+'>'+
     
-    '<div class="hit" onclick="event.stopPropagation();doneTask(\''+s.id+'\')">'+chk(s.done)+'</div>'+
+    '<button class="grab trg" data-drag="task" data-id="'+s.id+
+      '" onclick="event.stopPropagation();pickT(\''+s.id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
+    '<div class="hit" onclick="event.stopPropagation();tickTask(\''+s.id+'\')">'+chk(doneToday(s))+'</div>'+
     (s.r?rb(s.r):'')+(s.q?qb(s.q):'')+
     '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+s.id+'\')">'+hl(s.title)+'</span></span>'+
     taskChips(s)+'</div>'+subRows(s,(d||0)+1,kidsFn,pfx)).join('')}
@@ -2326,24 +2451,27 @@ function calCard(t,ds,pfx){
 function boardCard(t,kidsFn,pfx,opts){
   opts=opts||{};pfx=pfx||'tr-';
   const ds=kidsFn(t.id),dn=ds.filter(x=>x.done).length;
-  const l=listOf(t.list);
-  return '<div class="kcard trow-t '+(t.done?'done':'')+(selT===t.id?' tsel':'')+'" id="'+pfx+t.id+'"'+'>'+
+  const l=listOf(t.list),shut=ds.length&&!tOpen(t.id)&&!tQ;
+  return '<div class="kcard trow-t '+(t.done?'done':'')+(selT===t.id?' tsel':'')+'" id="'+pfx+t.id+
+    '" data-drag="task" data-id="'+t.id+'">'+
     (opts.crumb?crumbHTML(t,'bcrumb'):'')+
     '<div class="khead">'+
-    
-    '<div class="hit" onclick="doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
+    '<button class="grab trg" data-drag="task" data-id="'+t.id+
+      '" onclick="event.stopPropagation();pickT(\''+t.id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
+    (ds.length?'<button class="fold'+(shut?'':' open')+'" onclick="event.stopPropagation();tFold(\''+t.id+
+      '\')" title="'+(shut?'Show subtasks':'Hide subtasks')+'">&#9656;</button>':'')+
+    '<div class="hit" onclick="tickTask(\''+t.id+'\')">'+chk(doneToday(t))+'</div>'+
     (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
     '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+hl(t.title)+'</span></span>'+
     taskChips(t)+'</div>'+
     (opts.list?'<div class="bmeta"><span class="bdot" style="background:'+l[2]+'"></span>'+
       (l[3]?'<span>'+esc(l[3])+'</span>':'')+'<span class="bln" dir="auto">'+esc(l[4])+'</span></div>':'')+
     (ds.length?'<div class="kmeta">'+dn+'/'+ds.length+' subtasks</div>'+
-      '<div class="ksubs">'+subRows(t,0,kidsFn,pfx)+'</div>':'')+
+      (shut?'':'<div class="ksubs">'+subRows(t,0,kidsFn,pfx)+'</div>'):'')+
     '</div>'}
 function renderBoard(){
-  hostEl().innerHTML=(SYSMODE?'':'<div class="hbar" id="hbarTop"><div id="hbarIn"></div></div>')+
-    '<div class="board'+(SYSMODE?' sysboard':'')+'">'+favLists().map(({id,name,color:c,icon,fav})=>{
-    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>(showDone||!t.done)&&matches(t)&&favOK(t)),kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
+  hostEl().innerHTML='<div class="board'+(SYSMODE?' sysboard':'')+'">'+favLists().map(({id,name,color:c,icon,fav})=>{
+    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>!hideNow(t)&&matches(t)&&favOK(t)&&fltOK(t)),kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
     /* a match deeper in the tree whose parent was filtered out still needs a card */
     const orphanHits=tQ?ts.filter(t=>t.parent&&!ts.some(p=>p.id===t.parent)):[];
     const tops=kids(null).concat(orphanHits).sort((a,b)=>a.done-b.done||favSort(a,b));
@@ -2352,6 +2480,8 @@ function renderBoard(){
       ' draggable="'+DRAGGABLE+'" ondragstart="dragL(event,\''+id+'\')" ondragend="endL()"'+
       ' ondragover="overL(event,\''+id+'\')" ondragleave="leaveL(\''+id+'\')" ondrop="dropL(event,\''+id+'\')">'+
       '<div class="colh">'+
+      '<button class="fold'+(S.open[id]===false?'':' open')+'" onclick="event.stopPropagation();toggleCol(\''+id+
+        '\')" title="Collapse or open this board">&#9656;</button>'+
       '<button class="grab" data-drag="list" data-id="'+id+'" onclick="event.stopPropagation();pickL(\''+id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
       '<span class="dot" style="background:'+c+'"></span>'+
       (icon?'<span class="lico">'+esc(icon)+'</span>':'')+
@@ -2361,25 +2491,30 @@ function renderBoard(){
       '<button class="mini plus" onclick="event.stopPropagation();newTaskIn(\''+id+'\')" title="New task">&#43;</button>'+
       '<button class="mini dots" onclick="event.stopPropagation();listMenu(event,\''+id+'\')" title="Options">&#8942;</button></div>'+
       (SYSMODE&&purposeOf(id)?'<div class="syspurpose" onclick="editPurpose(\''+id+'\')" title="Click to edit">'+esc(purposeOf(id))+'</div>':'')+
-      '<div class="colb">'+(tops.length?tops.map(card).join('')
+      (S.open[id]===false?'':'<div class="colb">'+(tops.length?tops.map(card).join('')
         :(SYSMODE?sysStarter(id):'<div class="empty">'+(tQ?'No matches':'Empty')+'</div>'))+
-      '</div></div>'}).join('')+'</div>';
-  if(!SYSMODE)syncHBar()}
+      '</div>')+'</div>'}).join('')+'</div>';
+  }
 /* the board can be taller than the screen, so mirror its sideways scrollbar
    in a thin strip that sits above the columns and is always in view        */
-function syncHBar(){
-  const bar=document.getElementById('hbarTop'),inn=document.getElementById('hbarIn'),
-        b=document.querySelector('.board');
-  if(!bar||!inn||!b)return;
-  const fit=()=>{inn.style.width=b.scrollWidth+'px';
-    bar.style.display=b.scrollWidth>b.clientWidth+2?'block':'none'};
-  fit();
-  let lock=false;
-  bar.onscroll=()=>{if(lock)return;lock=true;b.scrollLeft=bar.scrollLeft;lock=false};
-  b.onscroll=()=>{if(lock)return;lock=true;bar.scrollLeft=b.scrollLeft;lock=false};
-  try{if(window.ResizeObserver){const ro=new ResizeObserver(fit);ro.observe(b)}}catch(e){}
-  addEventListener('resize',fit)}
-
+/* One scroller, not two. A scrolling panel is sized to end exactly above the
+   nav bar, so the page itself never grows a second scrollbar behind it.   */
+/* The board and the mind map keep their own scrollers so their sideways bar
+   stays in view; everything else simply scrolls with its pane.          */
+function fitPanes(){
+  const pane=document.querySelector('.pane.on');if(!pane)return;
+  const inner=pane.querySelector('.board,.mapscroll');
+  /* When a pane contains its own scroller, the pane stops scrolling entirely,
+     so only one vertical bar is ever on screen.                          */
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('fixed'));
+  document.querySelectorAll('.board,.mapscroll').forEach(e=>{e.style.maxHeight='none'});
+  if(!inner)return;
+  pane.classList.add('fixed');
+  const nav=document.querySelector('nav');
+  const navH=nav?nav.getBoundingClientRect().height:56;
+  const h=Math.max(240,window.innerHeight-inner.getBoundingClientRect().top-navH-8);
+  inner.style.maxHeight=h+'px'}
+addEventListener('resize',()=>{try{fitPanes()}catch(e){}});
 function bars(c,x,v,l){const mx=Math.max(...v,1);
   c.innerHTML=v.map((n,i)=>{const r=n/mx;
     const band=n===0?' z':(r>=.85?' t4':r>=.6?' t3':r>=.35?' t2':' t1');
@@ -2457,7 +2592,7 @@ function renderMatrix(){
   if(mxMode==='grid'&&mxBy()!=='quad'){mxMode='tree'}
   if(mxMode==='tree')return renderMatrixTree();
   if(mxMode==='board')return renderMatrixBoard();
-  const pool=S.tasks.filter(t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t));
+  const pool=S.tasks.filter(t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t));
   el.innerHTML=QMETA.map(m=>{
     const list=pool.filter(t=>t.q===m.q);
     const od=[],td=[],up=[],nd=[];
@@ -2493,7 +2628,7 @@ function renderQPick(){
   if(mxMode==='grid'||mxBy()==='none'){box.innerHTML='';box.style.display='none';return}
   box.style.display='';
   if(mxBy()==='rank'){
-    const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t);
+    const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t);
     const n=r=>S.tasks.filter(t=>live(t)&&(r?t.r===r:true)).length;
     box.innerHTML='<button class="qp'+(mxQ===0?' on':'')+'" onclick="mxPick(0)">'+
         '<span class="qpn">All</span><span class="qpc">'+n(0)+'</span></button>'+
@@ -2504,7 +2639,7 @@ function renderQPick(){
         '<span class="qpn">Unset</span><span class="qpc">'+
         S.tasks.filter(t=>live(t)&&!t.r).length+'</span></button>';
     return}
-  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t);
+  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t);
   const n=q=>S.tasks.filter(t=>live(t)&&(q?t.q===q:true)).length;
   box.innerHTML=
     '<button class="qp'+(mxQ===0?' on':'')+'" onclick="mxPick(0)">'+
@@ -2518,7 +2653,7 @@ function renderQPick(){
       S.tasks.filter(t=>live(t)&&!t.q).length+'</span></button>'}
 function renderMatrixTree(){
   const box=document.getElementById('matrixTree');if(!box)return;
-  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t);
+  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t);
   const hit=t=>live(t)&&(mxBy()==='none'||mxQ===0?true:(mxQ===-1?!groupKey(t):groupKey(t)===mxQ));
   /* a task is shown when it matches, or when a descendant does */
   const keep=new Set();
@@ -2551,7 +2686,7 @@ function renderMatrixTree(){
   box.innerHTML=out}
 function renderMatrixBoard(){
   const box=document.getElementById('matrixBoard');if(!box)return;
-  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t);
+  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t);
   const hit=t=>live(t)&&(mxBy()==='none'||mxQ===0?true:(mxQ===-1?!groupKey(t):groupKey(t)===mxQ));
   const label=(mxBy()==='none'||mxQ===0)?'Every task'
     :(mxQ===-1?('Tasks with no '+(mxBy()==='rank'?'priority':'quadrant')):groupMeta(mxQ).title);
@@ -2617,6 +2752,10 @@ function crumbHTML(t,cls){const p=ancestry(t);
    finishing the task itself is a separate, deliberate act.            */
 function dayDone(t,ds){return !!(t.dlog&&t.dlog[ds])}
 function dayCount(t){return t.dlog?Object.keys(t.dlog).length:0}
+/* one tick for every list: a project closes today, anything else finishes */
+function tickTask(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  if(isProj(t))return toggleDay(id,TODAY);
+  doneTask(id)}
 function toggleDay(id,ds){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   if(!t.rep||!t.rep.days||!t.rep.days.length){doneTask(id);return}  /* not a project: the normal tick */
   mark(dayDone(t,ds)?'reopen day':'day done');
@@ -2824,6 +2963,16 @@ function editBlock(id){
       if(b)Object.assign(b,{name:v.name.trim(),start:m2hm(s),end:m2hm(e),days:v.days,color:v.color});
       else S.blocks.push({id:uid('b'),name:v.name.trim(),start:m2hm(s),end:m2hm(e),days:v.days,color:v.color});
       save();paint();manageBlocks()})}
+/* Finished work piles up invisibly; this is the broom. */
+function purgeDone(){hideMenu();
+  const gone=S.tasks.filter(t=>t.done&&!S.tasks.some(x=>x.parent===t.id&&!x.done));
+  if(!gone.length){toastMsg('Nothing finished to clear');return}
+  askConfirm('Clear finished tasks',
+    gone.length+' completed task'+(gone.length>1?'s':'')+' will be deleted for good. '+
+    'Anything still holding an open subtask is left alone.',
+    ()=>{mark('clear finished');const ids=new Set(gone.map(t=>t.id));
+      S.tasks=S.tasks.filter(t=>!ids.has(t.id));save();paint();
+      toastMsg(ids.size+' cleared')},'Clear them',true)}
 function delBlock(id){const b=blockOf(id);if(!b)return;
   askConfirm('Delete block','\u201C'+esc(b.name)+'\u201D will be removed. Tasks keep their times.',
     ()=>{mark('delete block');S.blocks=S.blocks.filter(x=>x.id!==id);save();paint();manageBlocks()},
@@ -2868,6 +3017,9 @@ function hourGrid(days){
         '<div class="tgbb">'+(mine.length?(function(){
             /* one column per parent board, side by side — the Tasks board, filtered */
             const kidsFn=pid=>S.tasks.filter(x=>x.parent===pid&&(showDone||!x.done));
+            if((S.prefs&&S.prefs.calTask)==='list')
+              return '<div class="minilist">'+mine.map(t=>
+                calCard(t,ds,'gr-'+ds+'-')).join('')+'</div>';
             const cols=lists().filter(l=>mine.some(t=>t.list===l.id));
             return '<div class="miniboard">'+cols.map(l=>
               '<div class="minicol"><div class="minih">'+
@@ -3016,7 +3168,7 @@ function fClear(){fSel=null;renderFocus();showT()}
 function fType(v){fFilter=v;renderFocus();const el=document.getElementById('fSearch');
   if(el){el.focus();try{el.setSelectionRange(v.length,v.length)}catch(e){}}}
 function focusPool(){
-  if(fSrc==='projects')return S.tasks.filter(t=>t.active&&!t.done&&liveList(t.list));
+  if(fSrc==='projects')return S.tasks.filter(t=>isProj(t)&&!t.done&&liveList(t.list));
   return S.tasks.filter(t=>!t.done&&liveList(t.list)).sort((a,b)=>((a.q||5)-(b.q||5))||
     (((b.at===TODAY||b.due===TODAY)?1:0)-((a.at===TODAY||a.due===TODAY)?1:0))||
     ((a.due||'9')<(b.due||'9')?-1:1))}
@@ -3034,7 +3186,7 @@ function renderFocus(){renderPomo();fToday.textContent=(S.focus[TODAY]||0)+' ses
         '<button onclick="fSource(\'tasks\')"><b>&#128203; A task</b><span>'+
           S.tasks.filter(t=>!t.done).length+' open across your lists</span></button>'+
         '<button onclick="fSource(\'projects\')"><b>&#11088; An active project</b><span>'+
-          S.tasks.filter(t=>t.active&&!t.done).length+' starred on Today</span></button>'+
+          S.tasks.filter(t=>isProj(t)&&!t.done).length+' running on set days</span></button>'+
       '</div>';return}
   const pool=focusPool().filter(t=>!fFilter||t.title.toLowerCase().includes(fFilter.toLowerCase()));
   box.innerHTML='<div class="fhead"><button class="fback" onclick="fBack()">&#8249; Back</button>'+
@@ -3058,7 +3210,8 @@ function renderFocus(){renderPomo();fToday.textContent=(S.focus[TODAY]||0)+' ses
 function paint(){const sc=scrollSnap();
   if(pulse)setTimeout(()=>{pulse=null},420);
   renderHead();renderActive();renderTodayTasks();renderInbox();renderTodayHabits();
-  renderProjects();renderSystems();renderHabits();renderMatrix();renderCalendar();renderStats();renderFocus();syncUndo();
+  renderFltBars();renderWeek();renderProjects();renderSystems();renderHabits();renderMatrix();renderCalendar();renderStats();renderFocus();syncUndo();
+  fitPanes();try{requestAnimationFrame(fitPanes)}catch(e){}
   scrollBack(sc)}
 
 /* ── Habit actions ── */
@@ -3141,6 +3294,7 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
     ['<span class="qlab">'+(cur?'<span class="qbadge sm" style="background:'+cur.c+'">'+cur.r+'</span>':'&#9873;&nbsp;')+
       'Matrix</span><span class="arr">&#8250;</span>',null,subm],
     ['&#43;&nbsp; Add subtask','addSub(\''+id+'\')'],
+    [(t.wk?'&#128197;&nbsp; Take off this week':'&#128197;&nbsp; Plan for this week'),'planWeek(\''+id+'\')'],
     ...((S.lists.find(x=>x.id===t.list)||{}).sys?
       [[(t.item?'&#9678;&nbsp; Turn into a branch':'&#9679;&nbsp; Turn into an item'),
         'setBranch(\''+id+'\','+(t.item?'true':'false')+')']]:[]),
@@ -3148,7 +3302,6 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
     ['&#8593;&nbsp; Move up','moveTaskBy(\''+id+'\',-1)'],
     ['&#8595;&nbsp; Move down','moveTaskBy(\''+id+'\',1)'],
     ['<span class="qlab">&#128194;&nbsp; Move to</span><span class="arr">&#8250;</span>',id,null,'mv'],
-    [(t.active?'&#9733; Remove from active':'&#9734; Make active project'),'toggleActive(\''+id+'\')'],
     ['&#128197;&nbsp; Schedule\u2026','scheduleTask(\''+id+'\')'],
     [(t.at===TODAY||(t.due&&t.due<=TODAY))?'Remove from today':'Plan for today',
       (t.at===TODAY||(t.due&&t.due<=TODAY))?'unplan(\''+id+'\')':'planToday(\''+id+'\')'],null,
@@ -3198,14 +3351,15 @@ function flyLeafHover(el){flyHover(()=>flyClear(flyLevelOf(el)))}
 /* ── the cascading picker behind "Move to" ──────────────────────────── */
 function mvRows(listId,parentId,skipId){
   const bad=skipId?descendants(skipId):new Set();
-  const kids=S.tasks.filter(t=>t.list===listId&&t.parent===(parentId||null)&&!bad.has(t.id));
+  /* finished tasks are not somewhere you move work to */
+  const kids=S.tasks.filter(t=>t.list===listId&&t.parent===(parentId||null)&&!bad.has(t.id)&&!t.done);
   const here=parentId?('<button onmouseenter="flyLeafHover(this)" onclick="mvHere(\''+listId+'\',\''+parentId+'\')">'+
       '&#8627;&nbsp; Put it inside this task</button><hr>')
     :('<button onmouseenter="flyLeafHover(this)" onclick="mvHere(\''+listId+'\',\'\')">'+
       '&#8595;&nbsp; Top level of this board</button>'+(kids.length?'<hr>':''));
   return '<div class="flyin">'+here+
     (kids.length?kids.map(t=>{
-      const n=S.tasks.filter(x=>x.parent===t.id&&!bad.has(x.id)).length;
+      const n=S.tasks.filter(x=>x.parent===t.id&&!bad.has(x.id)&&!x.done).length;
       const sk=(MV&&MV.id)?'\''+MV.id+'\'':'null';
       return '<button class="mvrow" onmouseenter="mvHover(this,\''+listId+'\',\''+t.id+'\','+sk+')"'+
         ' onmouseleave="flyHold()"'+
@@ -3217,12 +3371,12 @@ function mvRows(listId,parentId,skipId){
 function flyLevelOf(el){const p=el.closest?el.closest('.flyout'):null;
   return p?(+p.dataset.lvl+1):0}
 function mvDrill(el,listId,parentId,skipId,hasKids){
-  if(el.classList.contains('flyparent'))return;
+  /* always rebuild: reusing an open panel is how stale boards and tasks
+     kept showing up after something had been moved or renamed           */
   flyOpen(el,mvRows(listId,parentId,skipId),flyLevelOf(el))}
 function mvHover(el,listId,parentId,skipId){flyHover(()=>mvDrill(el,listId,parentId,skipId))}
 function mvStartHover(el,id){flyHover(()=>mvStart(el,id))}
 function mvStart(el,id){
-  if(el.classList.contains('flyparent'))return;
   MV={id};
   flyOpen(el,'<div class="flyin"><div class="submh">Which board?</div>'+
     lists().map(l=>'<button class="mvrow" onmouseenter="mvHover(this,\''+l.id+'\',\'\',\''+id+'\')"'+
@@ -3437,7 +3591,8 @@ function fileInbox(id){hideMenu();const i=S.inbox.find(x=>x.id===id);if(!i)retur
       S.tasks.push({id:uid('t'),list,title:i.t,due:v.due||null,
         parent:par?par.id:null,depth:par?(par.depth||0)+1:0,
         done:false,at:null,active:false,q:+v.q||0});
-      i.filed=true;i.list=list;i.on=TODAY;S.open[list]=true;save();paint();
+      /* the inbox is a staging area: once something is filed it leaves */
+      S.inbox=S.inbox.filter(x=>x.id!==i.id);S.open[list]=true;save();paint();
       toastMsg('Filed under '+(par?par.title:listOf(list)[1]))});
   renderTree(startList,'');
   const ls=document.getElementById('mf-list');
@@ -3512,7 +3667,7 @@ function planToday(id){const t=S.tasks.find(x=>x.id===id);mark('plan');
     t.at=TODAY;t.due=TODAY;
   }
   save();paint();hideMenu()}
-function toggleActive(id){const t=S.tasks.find(x=>x.id===id);mark(t.active?'remove active':'make active');t.active=!t.active;save();paint();hideMenu()}
+/* toggleActive is gone: a task is an active project when it runs on set days. */
 function unplan(id){const t=S.tasks.find(x=>x.id===id);mark('remove from today');
   t.at=null;
   if(t.due&&t.due<=TODAY)t.due=t.pdue||null;
@@ -3847,7 +4002,8 @@ function renderMap(){
         'px;top:'+(L.rootCY-11)+'px" onclick="addBranch(\''+l.id+
         '\',null)" title="Add a first-level branch">&#43;</button>'+
       L.nodes.map(n=>mapNode(n,c)).join('')+
-    '</div></div>'}
+    '</div></div>';
+  fitPanes()}
 function renderSysPick(){
   const bar=document.getElementById('sysPick');if(!bar)return;
   const arr=slists();
@@ -3983,7 +4139,41 @@ function delList(id){hideMenu();const l=S.lists.find(x=>x.id===id);if(!l)return;
         'Every task in “'+esc(l.name)+'” will be removed.',finish,'Delete tasks',true);
       else finish()},
     null)}
-function toggle(id){S.open[id]=!S.open[id];save();document.getElementById('pj-'+id).classList.toggle('open')}
+/* ── This week ─────────────────────────────────────────────────────────
+   Twenty slots, four across. The cap is the point: once they are full the
+   only way to plan more is to finish something.                        */
+const WKMAX=20;
+const wkList=()=>S.tasks.filter(t=>t.wk&&!t.done&&liveList(t.list))
+  .sort((a,b)=>((a.r||9)-(b.r||9))||((a.q||9)-(b.q||9)));
+function planWeek(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  if(!t.wk&&wkList().length>=WKMAX){
+    toastMsg('This week is full \u2014 finish one of the '+WKMAX+' first');hideMenu();return}
+  mark(t.wk?'off this week':'plan for this week');
+  if(t.wk)delete t.wk;else t.wk=true;
+  save();paint();hideMenu()}
+function renderWeek(){
+  const box=document.getElementById('weekGrid');if(!box)return;
+  const ts=wkList(),n=ts.length;
+  const cnt=document.getElementById('weekCount');
+  if(cnt)cnt.textContent=n+'/'+WKMAX;
+  let out=ts.map(t=>{const l=listOf(t.list);
+    return '<div class="wkcell" id="wk-'+t.id+'">'+
+      '<div class="hit" onclick="event.stopPropagation();doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
+      '<div class="wkmain">'+
+        '<span class="wkt" dir="auto" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</span>'+
+        '<span class="wkmeta"><span class="bdot" style="background:'+l[2]+'"></span>'+esc(l[1])+'</span>'+
+      '</div>'+
+      (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
+      '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button>'+
+      '</div>'}).join('');
+  for(let i=n;i<WKMAX;i++)out+='<div class="wkcell empty"><span>'+(i+1)+'</span></div>';
+  box.innerHTML=out}
+/* each parent task folds on its own; boards keep their own toggle */
+const tOpen=id=>S.open['t:'+id]!==false;
+function tFold(id){S.open['t:'+id]=!tOpen(id);save();paint()}
+function pickT(id){if(MD&&MD.moved)return;selT=(selT===id?null:id);paint();renderSelBar()}
+function toggle(id){S.open[id]=!S.open[id];save();paint()}
+function toggleCol(id){S.open[id]=(S.open[id]===false);save();paint()}
 /* ── moving tasks between parents and boards ───────────────────────── */
 function descendants(id){const out=new Set([id]);let grew=true;
   while(grew){grew=false;S.tasks.forEach(t=>{if(t.parent&&out.has(t.parent)&&!out.has(t.id)){out.add(t.id);grew=true}})}
@@ -4106,7 +4296,9 @@ let PAGE='today';
 function go(p){document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
   document.getElementById('p-'+p).classList.add('on');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
-  PAGE=p;syncFavBtn();window.scrollTo(0,0)}
+  PAGE=p;syncFavBtn();
+  const pn=document.getElementById('p-'+p);if(pn)pn.scrollTop=0;
+  try{fitPanes();requestAnimationFrame(fitPanes)}catch(e){}}
 /* the favourites filter only means anything on Tasks and Priorities */
 function syncFavBtn(){
   ['favBtnT','favBtnM'].forEach(k=>{const fb=document.getElementById(k);if(!fb)return;
@@ -4132,7 +4324,7 @@ function renderTarget(){const box=document.getElementById('ftargetBox');if(!box)
     (sel.q?qb(sel.q):'')+
     '<span class="ftname" dir="auto">'+esc(sel.title)+'</span>'+
     '<button class="ftx" onclick="fClear()" title="Clear target">&#10005;</button></div>'+
-    '<div class="ftmeta" dir="auto">'+esc(l[1])+(sel.active?' &middot; active project':'')+'</div>'}
+    '<div class="ftmeta" dir="auto">'+esc(l[1])+(isProj(sel)?' &middot; active project':'')+'</div>'}
 function toggleTimer(){if(tid){clearInterval(tid);tid=null}else{tid=setInterval(()=>{left--;
   if(left<=0){clearInterval(tid);tid=null;finish()}showT()},1000)}showT()}
 function finish(){if(ph==='work'){S.focus[TODAY]=(S.focus[TODAY]||0)+1;save();
