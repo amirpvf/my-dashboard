@@ -528,6 +528,13 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
 .bdot{width:.42em;height:.42em;border-radius:50%;flex:0 0 auto}
 .tstack{flex:1 1 auto;min-width:6rem;display:flex;flex-direction:column;gap:1px;overflow:hidden}
 .tstack .t{flex:none}
+.pjcrumb,.tcrumb{font-size:.62rem;color:var(--faint);line-height:1.35;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.tline{display:flex;align-items:baseline;gap:7px;min-width:0}
+.tline .tblk{flex:0 0 auto;white-space:nowrap}
+.tline .t{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.pjrow{align-items:flex-start}
+.pjrow .tblk{width:100%;padding-left:1px}
 .tcrumb{font-size:.6rem;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tblk{display:flex;align-items:center;gap:4px;font-size:.62rem;color:var(--dim);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1231,7 +1238,7 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-09-19 · b90';
+const BUILD='2026-09-19 · b93';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='',favOnly=false;
@@ -1275,7 +1282,7 @@ async function load(){try{S=JSON.parse(await DB.get(KEY))}catch(e){S=seed();awai
   S.lists.forEach(l=>{if(/^U000[0-9A-F]{5}/.test(l.name)){const seed=LISTS.find(x=>x[0]===l.id);if(seed)l.name=seed[1]}});
   S.habits.forEach(h=>{if(CMAP[h.color])h.color=CMAP[h.color];if(ICONMAP[h.icon])h.icon=ICONMAP[h.icon];
     if(h.since===undefined){const ks=Object.keys(h.log);h.since=ks.length?ks.sort()[0]:null}});S.tasks.forEach(t=>{if(t.q===undefined)t.q=0});tView=S.tView||'list';
-  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);sysView=S.sysView||'map';sysSel=S.sysSel||null;
+  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);ensureInbox();sysView=S.sysView||'map';sysSel=S.sysSel||null;
   if(S.rollOver===undefined)S.rollOver=true;
   S.sync=S.sync||{};
   const moved=rollOverdue();
@@ -1529,7 +1536,7 @@ async function doPasteRestore(){
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
       S.tasks.forEach(t=>{if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);ensureInbox();sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
       await save();paint();closeModal();
       toastMsg('Restored \u2014 press Undo to revert')},'Restore',false)}
 
@@ -1619,7 +1626,7 @@ async function restoreBackup(ev){
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
       S.tasks.forEach(t=>{if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);ensureInbox();sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
       await save();paint();closeModal();toastMsg('Restored \u2014 press Undo to revert')},
     'Restore',false)}
 
@@ -1778,7 +1785,9 @@ const isProj=t=>!!(t&&t.rep&&t.rep.days&&t.rep.days.length);
 const doneToday=t=>isProj(t)?dayDone(t,TODAY):!!t.done;
 const hideNow=t=>!showDone&&doneToday(t);
 /* A system is just a board with a flag, so every task feature works inside it. */
-const wlists=()=>lists();
+const IBX='inbox';
+const UNSEC='unsec';
+const wlists=()=>lists().filter(l=>l.id!==IBX&&l.id!==UNSEC);
 const slists=()=>lists().filter(l=>l.sys);
 let SYSMODE=false;                       /* true while the Systems pane renders */
 let sysView='map',sysSel=null,mapZoom=1;
@@ -1802,10 +1811,10 @@ function renderActive(){
   const act=S.tasks.filter(t=>isProj(t)&&liveList(t.list)&&(showDone||!t.done)).sort((a,b)=>a.done-b.done);
   pjCount.textContent=act.filter(t=>!t.done).length+(showDone&&act.some(t=>t.done)?' · '+act.filter(t=>t.done).length+' done':'');
   activeProjects.innerHTML=act.length?act.map(t=>{const l=listOf(t.list),n=dayCount(t);
-    return '<div class="row">'+
+    return '<div class="row pjrow">'+
     '<span class="dot" style="background:'+l[2]+'"></span>'+
     (n?'<span class="tag">'+n+'d</span>':'')+
-    '<span class=\"t\" dir=\"auto\"><span class=\"nameclick\" onclick=\"taskMenu(event,\''+t.id+'\')\">'+esc(t.title)+'</span></span>'+(t.due?'<span class="tag'+(t.due<TODAY?' late':'')+'">'+t.due.slice(5)+'</span>':'')+
+    '<span class="tstack">'+crumbHTML(t,'pjcrumb',true)+'<span class="tline">'+
     '<span class="tblk">'+
       (t.block&&blockOf(t.block)
         ? '<span class="bdot" style="background:'+blockOf(t.block).color+'"></span>'+
@@ -1814,6 +1823,8 @@ function renderActive(){
             (t.dur?' \u00b7 '+t.dur+'m':'')
           : '<span class="bdot" style="background:var(--border3)"></span>All day'))+
       ' \u00b7 '+repSummary(t)+'</span>'+
+    '<span class=\"t\" dir=\"auto\"><span class=\"nameclick\" onclick=\"taskMenu(event,\''+t.id+'\')\">'+esc(t.title)+'</span></span>'+
+    '</span></span>'+
     '<button class="mini" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')" title="Change when it runs">&#128197;</button>'+
     '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}).join('')
     :'<div class="empty">Give a task a set of weekdays in the calendar and it shows up here</div>'}
@@ -1824,34 +1835,42 @@ function renderTodayTasks(){const tt=todays().filter(t=>!hideNow(t))
     return '<div class="row trow2 '+(on?'done':'')+'">'+
     '<div class="hit" onclick="event.stopPropagation();tickTask(\''+t.id+'\')">'+chk(on)+'</div>'+
     (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+(t.fav?star(true):'')+
-    '<span class="tstack">'+crumbHTML(t,'tcrumb')+
-      '<span class=\"t\" dir=\"auto\"><span class=\"nameclick\" onclick=\"taskMenu(event,\''+t.id+'\')\">'+esc(t.title)+'</span></span>'+
+    '<span class="tstack">'+crumbHTML(t,'tcrumb',true)+'<span class="tline">'+
       (t.block&&blockOf(t.block)
         ? '<span class="tblk"><span class="bdot" style="background:'+blockOf(t.block).color+'"></span>'+
           esc(blockOf(t.block).name)+' \u00b7 '+blockOf(t.block).start+'</span>'
-        : (t.time?'<span class="tblk"><span class="bdot" style="background:var(--border3)"></span>'+t.time+'</span>':''))+
-    '</span>'+
+        : (t.time?'<span class="tblk"><span class="bdot" style="background:var(--border3)"></span>'+t.time+'</span>'
+          :'<span class="tblk"><span class="bdot" style="background:var(--border3)"></span>All day</span>'))+
+      '<span class=\"t\" dir=\"auto\"><span class=\"nameclick\" onclick=\"taskMenu(event,\''+t.id+'\')\">'+esc(t.title)+'</span></span>'+
+    '</span></span>'+
     '<button class="tag '+(t.due&&t.due<TODAY&&!t.done?'late':'act')+'" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')">'+
       (t.due?(t.due<TODAY?'overdue '+t.due.slice(5):t.due.slice(5)):'set date')+'</button>'+
     '<span class="tag">'+listOf(t.list)[1].slice(0,2)+'</span>'+
     '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}).join('')
     :'<div class="empty">Nothing planned for today</div>'}
 function renderInbox(){
-  const all=(S.inbox||[]).filter(i=>!i.filed),items=all;
-  ibCount.textContent=all.length;
+  const items=inboxItems();
+  ibCount.textContent=items.length;
   inboxList.innerHTML=items.length?items.map(i=>
-    '<div class="row ib">'+
-    '<span class="ibdot">&#9702;</span>'+
-    '<span class="t" dir="auto"><span class="nameclick" onclick="inboxMenu(event,\''+i.id+'\')">'+esc(i.t)+'</span></span>'+
-    '<button class="tag act" onclick="event.stopPropagation();fileInbox(\''+i.id+'\')">file into&hellip;</button>'+
+    '<div class="row ib" id="ib-'+i.id+'">'+
+    '<div class="hit" onclick="event.stopPropagation();doneTask(\''+i.id+'\')">'+chk(i.done)+'</div>'+
+    '<span class="t" dir="auto"><span class="nameclick" onclick="inboxMenu(event,\''+i.id+'\')">'+esc(i.title)+'</span></span>'+
+    '<button class="tag act" onclick="event.stopPropagation();mvStart(this,\''+i.id+'\')">Move to&hellip;</button>'+
     '<button class="mini dots" onclick="event.stopPropagation();inboxMenu(event,\''+i.id+'\')" title="Options">&#8942;</button>'+
     '</div>').join('')
     :'<div class="empty">Inbox is clear \u2014 capture anything here and file it into a board later</div>'}
 function inboxAdd(){const v=ibAdd.value.trim();if(!v)return;
-  mark('capture');S.inbox.unshift({id:uid('i'),t:v,filed:false,list:null,on:null});
+  mark('capture');ensureInbox();
+  S.tasks.unshift({id:uid('t'),list:IBX,title:v,parent:null,depth:0,done:false,at:null,q:0,r:0});
   ibAdd.value='';save();paint()}
-function inboxMenu(ev,id){ev.stopPropagation();const i=S.inbox.find(x=>x.id===id);if(!i)return;
-  showMenu(ev,[['&#128194;&nbsp; File into a list…','fileInbox(\''+id+'\')'],
+/* The inbox is a staging area, so a note only needs two things: a better
+   name, and somewhere to go. */
+function inboxMenu(ev,id){ev.stopPropagation();
+  showMenu(ev,[
+    ['<span class="qlab">&#128194;&nbsp; Move to</span><span class="arr">&#8250;</span>',id,null,'mv'],
+    ['&#9998;&nbsp; Rename','renameTask(\''+id+'\')']])}
+function inboxMenuOld(ev,id){ev.stopPropagation();const i=S.inbox.find(x=>x.id===id);if(!i)return;
+  showMenu(ev,[['&#128194;&nbsp; File into a list…','fileInbox(\''+id+'\',event)'],
     ['&#9998;&nbsp; Rename','renameInbox(\''+id+'\')'],
     null,
     ['<span class="warn">Delete</span>','delInbox(\''+id+'\')']])}
@@ -2745,7 +2764,9 @@ function untimedOn(ds){return tasksOn(ds).filter(t=>calVisible(t)&&(t.time==null
 function ancestry(t){const p=[];let q=t.parent;
   while(q){const u=S.tasks.find(x=>x.id===q);if(!u)break;p.unshift(u.title);q=u.parent}
   return p}
-function crumbHTML(t,cls){const p=ancestry(t);
+function crumbHTML(t,cls,withBoard){
+  const p=ancestry(t);
+  if(withBoard)p.unshift(listOf(t.list)[1]);
   return p.length?'<div class="'+(cls||'crumb')+'" dir="auto" title="'+esc(p.join(' \u203A '))+'">'+
     esc(p.join(' \u203A '))+'</div>':''}
 /* A project spans days. Ticking it in the calendar closes that day only;
@@ -3376,10 +3397,10 @@ function mvDrill(el,listId,parentId,skipId,hasKids){
   flyOpen(el,mvRows(listId,parentId,skipId),flyLevelOf(el))}
 function mvHover(el,listId,parentId,skipId){flyHover(()=>mvDrill(el,listId,parentId,skipId))}
 function mvStartHover(el,id){flyHover(()=>mvStart(el,id))}
-function mvStart(el,id){
-  MV={id};
+function mvStart(el,id,kind){
+  MV={id,kind:kind||'task'};
   flyOpen(el,'<div class="flyin"><div class="submh">Which board?</div>'+
-    lists().map(l=>'<button class="mvrow" onmouseenter="mvHover(this,\''+l.id+'\',\'\',\''+id+'\')"'+
+    lists().filter(l=>l.id!==IBX&&l.id!==UNSEC).map(l=>'<button class="mvrow" onmouseenter="mvHover(this,\''+l.id+'\',\'\',\''+id+'\')"'+
       ' onmouseleave="flyHold()"'+
       ' onclick="event.stopPropagation();mvDrill(this,\''+l.id+'\',\'\',\''+id+'\',1)">'+
       '<span class="bdot" style="background:'+l.color+'"></span>'+
@@ -3387,6 +3408,7 @@ function mvStart(el,id){
       '<span class="mvt" dir="auto">'+esc(l.name)+'</span><span class="arr">&#8250;</span></button>').join('')+
     '</div>',0)}
 function mvHere(listId,parentId){
+  if(MV&&MV.kind==='inbox')return inboxHere(listId,parentId);
   const t=S.tasks.find(x=>x.id===(MV&&MV.id));if(!t)return;
   const par=parentId?S.tasks.find(x=>x.id===parentId):null;
   if(par&&descendants(t.id).has(par.id)){toastMsg('A task cannot move inside its own subtask');return}
@@ -3578,7 +3600,22 @@ function editHabit(id,presetSec){hideMenu();const h=id?S.habits.find(x=>x.id===i
     else S.habits.push({id:uid('h'),name:v.name.trim(),icon:(v.icon||'\u2B50').trim(),sec:v.sec,color:v.color,days:v.days,type:v.type,goal:Math.max(1,+v.goal||1),step:Math.max(1,+v.step||1),unit:v.unit,target:+v.target||0,archived:false,order:tail,since:TODAY,log:{}});
     save();paint()},h?()=>{closeModal();delHabit(h.id)}:null,'Delete')}
 
-function fileInbox(id){hideMenu();const i=S.inbox.find(x=>x.id===id);if(!i)return;
+/* An inbox note is filed exactly the way a task is moved: pick the board, then
+   drill down to the task it belongs under \u2014 or stop at the board itself. */
+function inboxHere(listId,parentId){
+  const i=S.inbox.find(x=>x.id===(MV&&MV.id));if(!i)return;
+  const par=parentId?S.tasks.find(x=>x.id===parentId):null;
+  const list=par?par.list:listId;
+  mark('file to list');
+  S.tasks.push({id:uid('t'),list,title:i.t,due:null,parent:par?par.id:null,
+    depth:par?(par.depth||0)+1:0,done:false,at:null,q:0,r:0});
+  S.inbox=S.inbox.filter(x=>x.id!==i.id);
+  S.open[list]=true;save();paint();flyClear(0);hideMenu();
+  toastMsg('Filed '+(par?('under \u201C'+par.title+'\u201D'):('into '+listOf(list)[1])))}
+function fileInbox(id,ev){hideMenu();const i=S.inbox.find(x=>x.id===id);if(!i)return;
+  const anchor=(ev&&ev.currentTarget)||document.getElementById('ib-'+id)||inboxList;
+  return mvStart(anchor,id,'inbox')}
+function fileInboxOld(id){const i=S.inbox.find(x=>x.id===id);if(!i)return;
   const startList=(i.list&&S.lists.some(l=>l.id===i.list))?i.list:lists()[0].id;
   modalForm('File \u201C'+esc(i.t)+'\u201D',
     [['list','List / board','select',lists().map(l=>[l.id,(l.icon?l.icon+' ':'')+l.name]),startList],
@@ -4172,6 +4209,24 @@ function renderWeek(){
 const tOpen=id=>S.open['t:'+id]!==false;
 function tFold(id){S.open['t:'+id]=!tOpen(id);save();paint()}
 function pickT(id){if(MD&&MD.moved)return;selT=(selT===id?null:id);paint();renderSelBar()}
+/* The inbox is an ordinary board that the Tasks tab hides. Filing something is
+   then literally Move to \u2014 same menu, same wording, same behaviour. Older
+   saves kept notes in their own array, so those are converted once.      */
+function ensureInbox(){
+  if(!S.lists.some(l=>l.id===IBX))
+    S.lists.push({id:IBX,name:'\uD83D\uDCE5 Inbox',color:'#949BAA',
+      order:Math.min(0,...S.lists.map(l=>l.order))-1});
+  if(!S.lists.some(l=>l.id===UNSEC))
+    S.lists.push({id:UNSEC,name:'No section',color:'#B9B9B6',
+      order:Math.min(0,...S.lists.map(l=>l.order))-1});
+  /* quick adds used to land in Today's Picks; send them to No section instead */
+  if(!S.quickList||S.quickList===QUICK.id)S.quickList=UNSEC;
+  const old=S.inbox||[];
+  if(old.length){
+    old.filter(i=>!i.filed).forEach(i=>S.tasks.push({id:uid('t'),list:IBX,title:i.t,
+      parent:null,depth:0,done:false,at:null,q:0,r:0}));
+    S.inbox=[]}}
+const inboxItems=()=>S.tasks.filter(t=>t.list===IBX&&!t.parent&&!t.done);
 function toggle(id){S.open[id]=!S.open[id];save();paint()}
 function toggleCol(id){S.open[id]=(S.open[id]===false);save();paint()}
 /* ── moving tasks between parents and boards ───────────────────────── */
@@ -4277,15 +4332,18 @@ function newTaskIn(list){hideMenu();const l=S.lists.find(x=>x.id===list);if(!l)r
       S.open[list]=true;save();paint();toastMsg('Added to '+listOf(list)[1])});
   const el=document.getElementById('mf-title');if(el)el.focus()}
 function quickAdd(){const v=qAdd.value.trim();if(!v)return;
-  const list=(S.lists.some(l=>l.id===S.quickList)?S.quickList:QUICK.id);
-  const dated=S.quickPlan==='today';
+  /* it lands in today with no board of its own \u2014 Move to gives it one later */
+  ensureInbox();
+  const list=(S.lists.some(l=>l.id===S.quickList)?S.quickList:UNSEC);
+  const dated=S.quickPlan!=='none';
   mark('add task');
   S.tasks.push({id:uid('t'),list,title:v,due:dated?TODAY:null,parent:null,depth:0,
     done:false,at:dated?TODAY:null,active:false,q:S.quickQ||0});
   qAdd.value='';save();paint()}
 function quickSettings(ev){if(ev)ev.stopPropagation();
   modalForm('Today\u2019s tasks',
-    [['list','New tasks go to','select',lists().map(l=>[l.id,(l.icon?l.icon+' ':'')+l.name]),S.quickList],
+    [['list','New tasks go to','select',[[UNSEC,'\u2014 No section \u2014']]
+       .concat(wlists().map(l=>[l.id,(l.icon?l.icon+' ':'')+l.name])),S.quickList||UNSEC],
      ['plan','Date them','select',[['today','Set to today'],['none','Leave undated']],S.quickPlan],
      ['q','Default priority','select',[['0','— none —']].concat(QMETA.map(m=>[String(m.q),m.r+' · '+m.t])),String(S.quickQ||0)]],
     v=>{mark('quick-add settings');S.quickList=v.list;S.quickPlan=v.plan;S.quickQ=+v.q||0;save();paint();
