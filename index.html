@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><title>Personal dashboard</title><meta name="robots" content="noindex,nofollow">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>html{font-size:calc(16px * var(--fs))}
@@ -26,7 +26,7 @@
   --colw:268px;       /* kanban column width, set in Settings */
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+html,body{height:100%;height:100dvh}
 body{background:var(--page);color:var(--text);
   font-family:Inter,Vazirmatn,-apple-system,system-ui,sans-serif;
   direction:ltr;font-variant-numeric:tabular-nums;padding:0;line-height:1.55;
@@ -632,6 +632,22 @@ nav svg{width:1.2em;height:1.2em}
 .pane.on{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;
   padding-bottom:78px;scrollbar-gutter:stable}
 .pane.on.fixed{overflow:hidden;padding-bottom:0}
+/* A phone's toolbars resize the viewport as you scroll, which makes a locked
+   full-height shell jump and sometimes refuse to scroll at all. On narrow
+   screens the page scrolls normally again and every pane simply grows.   */
+@media(max-width:760px){
+  html,body{height:auto;min-height:100%;overflow:visible}
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+  .wrap{height:auto;display:block;overflow:visible;padding:18px 14px 0}
+  .pane.on,.pane.on.fixed{overflow:visible;height:auto;padding-bottom:0;
+    scrollbar-gutter:auto}
+  .board,.mapscroll{max-height:none!important}
+  .board{overflow-x:auto;overflow-y:visible}
+  nav{padding-bottom:env(safe-area-inset-bottom,0px)}
+  .wkgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fltbar{gap:5px}
+  .fchip{font-size:.7rem;padding:3px 7px}
+}
 .wknav{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;
   border-top:1px solid var(--line);background:var(--soft)}
 .wknav button{color:var(--dim);font-size:.95em;padding:2px 8px;border-radius:3px}
@@ -1238,7 +1254,7 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-09-19 · b93';
+const BUILD='2026-09-20 · b94';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='',favOnly=false;
@@ -2156,7 +2172,7 @@ function dropSecHab(ev,id){if(!dragId)return;ev.preventDefault();ndOff();leaveSe
 /* ── keep every scroll position across a repaint ── */
 const SCROLLERS=['todayTasks','todayHabits','inboxList','activeProjects','habits','calBody'];
 function scrollSnap(){
-  const s={w:window.scrollY||0};
+  const s={w:window.scrollY||0,docTop:document.documentElement.scrollTop||0};
   const pn=document.querySelector('.pane.on');
   if(pn){s.paneId=pn.id;s.paneTop=pn.scrollTop}
   /* the board scrolls vertically as well as sideways, and the mind map has its
@@ -2182,6 +2198,7 @@ function scrollBack(s){
     SCROLLERS.forEach(id=>{const e=document.getElementById(id);if(e&&s[id])e.scrollTop=s[id]});
     if(s.paneId){const pn=document.getElementById(s.paneId);
       if(pn&&s.paneTop)pn.scrollTop=s.paneTop}
+    if(s.docTop)document.documentElement.scrollTop=s.docTop;
     if(s.w)window.scrollTo(0,s.w)};
   /* Re-rendering briefly shortens the page, so the browser clamps the scroll
      position to whatever fits at that instant \u2014 which is why a drop used to
@@ -2521,6 +2538,10 @@ function renderBoard(){
 /* The board and the mind map keep their own scrollers so their sideways bar
    stays in view; everything else simply scrolls with its pane.          */
 function fitPanes(){
+  if(window.innerWidth<=760){            /* phones scroll the page, not a pane */
+    document.querySelectorAll('.pane').forEach(p=>p.classList.remove('fixed'));
+    document.querySelectorAll('.board,.mapscroll').forEach(e=>{e.style.maxHeight=''});
+    return}
   const pane=document.querySelector('.pane.on');if(!pane)return;
   const inner=pane.querySelector('.board,.mapscroll');
   /* When a pane contains its own scroller, the pane stops scrolling entirely,
