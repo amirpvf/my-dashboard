@@ -530,6 +530,13 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
 .tstack .t{flex:none}
 .pjcrumb,.tcrumb{font-size:.62rem;color:var(--faint);line-height:1.35;overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
+.mrow{padding-top:5px;padding-bottom:5px}
+.h2r{display:inline-flex;align-items:center;gap:6px}
+.dvseg{display:inline-flex;border:1px solid var(--border2);border-radius:7px;overflow:hidden}
+.dvseg button{font-size:.66rem;padding:2px 8px;color:var(--faint);background:transparent;
+  border:0;cursor:pointer;font-weight:500}
+.dvseg button.on{color:var(--text);background:var(--hover)}
+.mrow .t{font-size:.82rem}
 .tline{display:flex;align-items:baseline;gap:7px;min-width:0}
 .tline .tblk{flex:0 0 auto;white-space:nowrap}
 .tline .t{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
@@ -862,6 +869,9 @@ html[data-theme="dark"] .cell.out{color:var(--faint)}
 .wkt{font-size:.72rem;line-height:1.25;cursor:pointer;overflow:hidden;text-overflow:ellipsis;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .wkmeta{display:none}
+.wkcrumb{font-size:.58rem;color:var(--faint);line-height:1.3;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.wkmain{display:flex;flex-direction:column;gap:1px}
 .wkcell .mini.dots{opacity:0}
 .wkcell:hover .mini.dots{opacity:.7}
 @media(max-width:900px){.wkgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -1088,14 +1098,22 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
           <div class="wkgrid" id="weekGrid"></div>
         </div>
         <div class="card">
-          <h2>Active projects <small id="pjCount"></small></h2>
+          <h2><span>Projects <small id="pjCount"></small></span><span id="dvPj"></span></h2>
           <div class="scroll" id="activeProjects"></div>
         </div>
         <div class="card">
           <h2><span><span class="nameclick" onclick="quickSettings(event)">Tasks</span> <small id="tCount"></small></span>
-            <button class="mini dots" onclick="quickSettings(event)" title="Quick-add options">&#8942;</button></h2>
+            <span class="h2r"><span id="dvTt"></span>
+            <button class="mini dots" onclick="quickSettings(event)" title="Quick-add options">&#8942;</button></span></h2>
           <div class="scroll" id="todayTasks"></div>
           <div class="add"><input id="qAdd" placeholder="Add a task for today"><button onclick="quickAdd()">Add</button></div>
+        </div>
+        <div class="card">
+          <h2><span>Mini tasks <small id="miniCount"></small></span>
+            <span class="h2r"><span id="dvMini"></span>
+            <button class="skipday" onclick="miniPick(event)" title="Pull one in from a board or the inbox">&#43; From my tasks</button></span></h2>
+          <div class="scroll" id="miniList"></div>
+          <div class="add"><input id="mAdd" placeholder="A small thing, straight in"><button onclick="miniAdd()">Add</button></div>
         </div>
         <div class="card">
           <h2>Inbox <small id="ibCount"></small></h2>
@@ -1119,7 +1137,8 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
         <div class="tsearch"><span class="tsi">&#8981;</span>
           <input id="tQuery" placeholder="Search tasks" oninput="taskSearch(this.value)">
           <button id="tClear" onclick="taskSearch('')" style="display:none" title="Clear">&#10005;</button></div>
-        <div class="nav2"><button class="favtog" id="favBtnT" onclick="toggleFavOnly()" title="Show favourites only">&#9825; Favourites</button>
+        <div class="nav2"><button class="favtog" id="projBtn" onclick="toggleProjOnly()" title="Show active projects only">&#8635; Projects</button>
+          <button class="favtog" id="favBtnT" onclick="toggleFavOnly()" title="Show favourites only">&#9825; Favourites</button>
           <button onclick="newList()">+ New list</button>
           <button id="archBoards" onclick="openListArchive()" style="display:none">&#128230; Archived (0)</button>
           <button id="tv-list" class="on" onclick="taskView('list')">List</button>
@@ -1254,12 +1273,20 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-09-20 · b94';
+const BUILD='2026-09-20 · b97';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='',favOnly=false;
 const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const TODAY=iso(new Date());
+const TOMORROW=(()=>{const d=new Date();d.setDate(d.getDate()+1);return iso(d)})();
+/* each Today card can look one day ahead on its own */
+let DV={pj:'today',tt:'today',mini:'today'};
+const dvDay=k=>DV[k]==='tomorrow'?TOMORROW:TODAY;
+function dvSet(k,v){DV[k]=v;S.dv=DV;save();paint()}
+const dvSeg=k=>'<span class="dvseg">'+
+  '<button class="'+(DV[k]!=='tomorrow'?'on':'')+'" onclick="dvSet(\''+k+'\',\'today\')">Today</button>'+
+  '<button class="'+(DV[k]==='tomorrow'?'on':'')+'" onclick="dvSet(\''+k+'\',\'tomorrow\')">Tomorrow</button></span>';
 const uid=(()=>{let i=0;return p=>p+(++i)+Math.random().toString(36).slice(2,5)})();
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const stampISO=n=>{const s=String(n);return s.slice(0,4)+'-'+s.slice(4,6)+'-'+s.slice(6,8)};
@@ -1298,7 +1325,7 @@ async function load(){try{S=JSON.parse(await DB.get(KEY))}catch(e){S=seed();awai
   S.lists.forEach(l=>{if(/^U000[0-9A-F]{5}/.test(l.name)){const seed=LISTS.find(x=>x[0]===l.id);if(seed)l.name=seed[1]}});
   S.habits.forEach(h=>{if(CMAP[h.color])h.color=CMAP[h.color];if(ICONMAP[h.icon])h.icon=ICONMAP[h.icon];
     if(h.since===undefined){const ks=Object.keys(h.log);h.since=ks.length?ks.sort()[0]:null}});S.tasks.forEach(t=>{if(t.q===undefined)t.q=0});tView=S.tView||'list';
-  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);ensureInbox();sysView=S.sysView||'map';sysSel=S.sysSel||null;
+  showDone=!!S.showDone;mxMode=S.mxMode||'grid';mxQ=S.mxQ||0;calView=S.calView||'month';favOnly=!!S.favOnly;projOnly=!!S.projOnly;DV=Object.assign({pj:'today',tt:'today',mini:'today'},S.dv||{});fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);ensureInbox();sysView=S.sysView||'map';sysSel=S.sysSel||null;
   if(S.rollOver===undefined)S.rollOver=true;
   S.sync=S.sync||{};
   const moved=rollOverdue();
@@ -1552,7 +1579,7 @@ async function doPasteRestore(){
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
       S.tasks.forEach(t=>{if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);ensureInbox();sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;projOnly=!!S.projOnly;DV=Object.assign({pj:'today',tt:'today',mini:'today'},S.dv||{});fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);ensureInbox();sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
       await save();paint();closeModal();
       toastMsg('Restored \u2014 press Undo to revert')},'Restore',false)}
 
@@ -1642,7 +1669,7 @@ async function restoreBackup(ev){
       if(!Array.isArray(S.lists)||!S.lists.length)S.lists=LISTS.map(([id,name,color],i)=>({id,name,color,order:i}));
       S.prefs=S.prefs||{scale:1,theme:'system'};
       S.tasks.forEach(t=>{if(t.q===undefined)t.q=0});
-      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);ensureInbox();sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
+      showDone=!!S.showDone;tView=S.tView||'list';favOnly=!!S.favOnly;projOnly=!!S.projOnly;DV=Object.assign({pj:'today',tt:'today',mini:'today'},S.dv||{});fltR=new Set(S.fltR||[]);fltQ=new Set(S.fltQ||[]);ensureInbox();sysView=S.sysView||'map';sysSel=S.sysSel||null;applyPrefs();
       await save();paint();closeModal();toastMsg('Restored \u2014 press Undo to revert')},
     'Restore',false)}
 
@@ -1799,7 +1826,9 @@ const isProj=t=>!!(t&&t.rep&&t.rep.days&&t.rep.days.length);
 /* A project closed for today is out of the way for today, exactly like an
    ordinary task that has just been ticked.                              */
 const doneToday=t=>isProj(t)?dayDone(t,TODAY):!!t.done;
-const hideNow=t=>!showDone&&doneToday(t);
+/* A project has no deadline to miss: it simply comes back on its days. */
+const isLate=t=>!!(t&&t.due&&t.due<TODAY&&!t.done&&!isProj(t));
+const hideNow=t=>!showDone&&(projOnly?!!t.done:doneToday(t));
 /* A system is just a board with a flag, so every task feature works inside it. */
 const IBX='inbox';
 const UNSEC='unsec';
@@ -1824,10 +1853,17 @@ function renderActive(){
   syncFavBtn();
   document.getElementById('doneBtn').classList.toggle('on',showDone);
   document.getElementById('doneBtn').title=showDone?'Hide completed':'Show completed';
-  const act=S.tasks.filter(t=>isProj(t)&&liveList(t.list)&&(showDone||!t.done)).sort((a,b)=>a.done-b.done);
+  /* only what this weekday actually calls for \u2014 a Saturday project is not
+     today's problem on a Sunday                                          */
+  const D=dvDay('pj');
+  const act=S.tasks.filter(t=>isProj(t)&&liveList(t.list)&&!t.done&&repeatsOn(t,D))
+    .sort((a,b)=>(dayDone(a,D)?1:0)-(dayDone(b,D)?1:0));
+  const dvp=document.getElementById('dvPj');if(dvp)dvp.innerHTML=dvSeg('pj');
   pjCount.textContent=act.filter(t=>!t.done).length+(showDone&&act.some(t=>t.done)?' · '+act.filter(t=>t.done).length+' done':'');
   activeProjects.innerHTML=act.length?act.map(t=>{const l=listOf(t.list),n=dayCount(t);
-    return '<div class="row pjrow">'+
+    const on=dayDone(t,D);
+    return '<div class="row pjrow'+(on?' done':'')+'">'+
+    '<div class="hit" onclick="event.stopPropagation();toggleDay(\''+t.id+'\',\''+D+'\')" title="Closes that day only">'+chk(on)+'</div>'+
     '<span class="dot" style="background:'+l[2]+'"></span>'+
     (n?'<span class="tag">'+n+'d</span>':'')+
     '<span class="tstack">'+crumbHTML(t,'pjcrumb',true)+'<span class="tline">'+
@@ -1843,8 +1879,13 @@ function renderActive(){
     '</span></span>'+
     '<button class="mini" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')" title="Change when it runs">&#128197;</button>'+
     '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}).join('')
-    :'<div class="empty">Give a task a set of weekdays in the calendar and it shows up here</div>'}
-function renderTodayTasks(){const tt=todays().filter(t=>!hideNow(t))
+    :'<div class="empty">Nothing scheduled for '+(D===TODAY?'today':'tomorrow')+
+      ' \u2014 projects appear here on the weekdays you gave them</div>'}
+function renderTodayTasks(){
+  const D=dvDay('tt');
+  const dvt=document.getElementById('dvTt');if(dvt)dvt.innerHTML=dvSeg('tt');
+  const src=D===TODAY?todays():S.tasks.filter(t=>liveList(t.list)&&(t.due===D||t.at===D));
+  const tt=src.filter(t=>!hideNow(t)&&!isProj(t))
     .sort((a,b)=>(a.done-b.done)||((a.q||5)-(b.q||5))||((a.due||'9')<(b.due||'9')?-1:1));
   tCount.textContent=tt.filter(t=>!doneToday(t)).length+' open';
   todayTasks.innerHTML=tt.length?tt.map(t=>{const on=doneToday(t);
@@ -1859,8 +1900,8 @@ function renderTodayTasks(){const tt=todays().filter(t=>!hideNow(t))
           :'<span class="tblk"><span class="bdot" style="background:var(--border3)"></span>All day</span>'))+
       '<span class=\"t\" dir=\"auto\"><span class=\"nameclick\" onclick=\"taskMenu(event,\''+t.id+'\')\">'+esc(t.title)+'</span></span>'+
     '</span></span>'+
-    '<button class="tag '+(t.due&&t.due<TODAY&&!t.done?'late':'act')+'" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')">'+
-      (t.due?(t.due<TODAY?'overdue '+t.due.slice(5):t.due.slice(5)):'set date')+'</button>'+
+    '<button class="tag '+(isLate(t)?'late':'act')+'" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')">'+
+      (t.due?(isLate(t)?'overdue '+t.due.slice(5):t.due.slice(5)):'set date')+'</button>'+
     '<span class="tag">'+listOf(t.list)[1].slice(0,2)+'</span>'+
     '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}).join('')
     :'<div class="empty">Nothing planned for today</div>'}
@@ -1884,6 +1925,7 @@ function inboxAdd(){const v=ibAdd.value.trim();if(!v)return;
 function inboxMenu(ev,id){ev.stopPropagation();
   showMenu(ev,[
     ['<span class="qlab">&#128194;&nbsp; Move to</span><span class="arr">&#8250;</span>',id,null,'mv'],
+    ['&#9702;&nbsp; Make it a mini task','toggleMini(\''+id+'\')'],
     ['&#9998;&nbsp; Rename','renameTask(\''+id+'\')']])}
 function inboxMenuOld(ev,id){ev.stopPropagation();const i=S.inbox.find(x=>x.id===id);if(!i)return;
   showMenu(ev,[['&#128194;&nbsp; File into a list…','fileInbox(\''+id+'\',event)'],
@@ -2170,7 +2212,7 @@ function dropSecHab(ev,id){if(!dragId)return;ev.preventDefault();ndOff();leaveSe
   moveHabToSection(dragId,id);dragId=null;selH=null;paint();renderSelBar()}
 
 /* ── keep every scroll position across a repaint ── */
-const SCROLLERS=['todayTasks','todayHabits','inboxList','activeProjects','habits','calBody'];
+const SCROLLERS=['todayTasks','todayHabits','inboxList','activeProjects','miniList','habits','calBody'];
 function scrollSnap(){
   const s={w:window.scrollY||0,docTop:document.documentElement.scrollTop||0};
   const pn=document.querySelector('.pane.on');
@@ -2321,7 +2363,15 @@ function favOK(t){
 /* ── priority / matrix filter ──────────────────────────────────────────
    Several levels can be on at once; an empty set means \u201Ceverything\u201D. A task
    whose child matches is kept so the tree above a hit never disappears.  */
-let fltR=new Set(),fltQ=new Set();
+let fltR=new Set(),fltQ=new Set(),projOnly=false;
+function toggleProjOnly(){projOnly=!projOnly;S.projOnly=projOnly;save();paint()}
+/* Inside the projects filter the tick means the real one: the whole thing is
+   finished, and that always asks first.                                  */
+function tickHere(id){return projOnly?finishTask(id):tickTask(id)}
+function projOK(t){
+  if(!projOnly)return true;
+  if(isProj(t))return true;
+  return S.tasks.some(k=>k.parent===t.id&&projOK(k))}
 const fltOn=()=>fltR.size||fltQ.size;
 function fltSelf(t){
   return (!fltR.size||fltR.has(t.r||0))&&(!fltQ.size||fltQ.has(t.q||0))}
@@ -2334,6 +2384,14 @@ function fltToggle(kind,v){
   set.has(v)?set.delete(v):set.add(v);
   S.fltR=[...fltR];S.fltQ=[...fltQ];save();paint()}
 function fltClear(){fltR.clear();fltQ.clear();S.fltR=[];S.fltQ=[];save();paint()}
+function clearAllPriorities(){
+  const n=S.tasks.filter(t=>t.r||t.q).length;
+  if(!n){toastMsg('No priorities set');return}
+  askConfirm('Clear every priority',
+    n+' task'+(n===1?'':'s')+' will lose both their 1\u20134 priority and their matrix '+
+    'quadrant. Undo can bring them back.',
+    ()=>{mark('clear priorities');S.tasks.forEach(t=>{t.r=0;t.q=0});save();paint();
+      toastMsg('Cleared on '+n+' task'+(n===1?'':'s'))},'Clear them',true)}
 function renderFltBars(){
   const html='<span class="fltlab">Priority</span>'+
     RMETA.map(m=>'<button class="fchip'+(fltR.has(m.r)?' on':'')+
@@ -2343,7 +2401,9 @@ function renderFltBars(){
     QMETA.map(m=>'<button class="fchip'+(fltQ.has(m.q)?' on':'')+
       '" onclick="fltToggle(\'q\','+m.q+')" title="'+m.t+'">'+
       '<span class="qbadge">'+m.r+'</span>'+m.t+'</button>').join('')+
-    (fltOn()?'<button class="fchip clear" onclick="fltClear()">Clear</button>':'');
+    (fltOn()?'<button class="fchip clear" onclick="fltClear()">Clear filter</button>':'')+
+    (S.tasks.some(t=>t.r||t.q)?'<button class="fchip clear" onclick="clearAllPriorities()">'+
+      '&#128465; Clear all priorities</button>':'');
   ['fltBarT','fltBarM'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=html})}
 const favLists=()=>(SYSMODE?slists():wlists()).filter(l=>SYSMODE||!favOnly||l.fav||
   S.tasks.some(t=>t.list===l.id&&t.fav)).sort(favSort);
@@ -2408,7 +2468,7 @@ function taskView(v){tView=v;S.tView=v;save();
 function taskChips(t){
   return (t.rep?'<span class="tag rep" title="Repeats '+esc(repSummary(t))+'">&#8635;&#8202;'+esc(repChip(t))+'</span>':'')+
     (t.time?'<span class="tag tm">'+t.time+'</span>':'')+
-    (t.due?'<button class="tag '+(t.due<TODAY&&!t.done?'late':(t.rfrom?'moved':'act'))+
+    (t.due?'<button class="tag '+(isLate(t)?'late':(t.rfrom?'moved':'act'))+
       '" title="'+(t.rfrom?'Carried over from '+t.rfrom:'')+'" onclick="event.stopPropagation();scheduleTask(\''+t.id+'\')">'+
       (t.rfrom&&t.due===TODAY?'\u21B7 ':'')+t.due.slice(5)+'</button>':'')+
     (!t.done?'<button class="mini heart'+(t.fav?' on':'')+'" onclick="event.stopPropagation();toggleFavTask(\''+t.id+'\')" title="'+(t.fav?'In favourites \u2014 tap to remove':'Add to favourites')+'">'+(t.fav?'&#9829;':'&#9825;')+'</button>'+
@@ -2423,7 +2483,7 @@ function renderProjects(){
   if(ab){ab.textContent='\u{1F4E6} Archived ('+na+')';ab.style.display=na?'':'none'}
   renderListBar();if(tView==='kanban')return renderBoard();
   hostEl().innerHTML=favLists().map(({id,name,color:c,icon,fav})=>{
-    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>!hideNow(t)&&matches(t)&&favOK(t)&&fltOK(t)),
+    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>!hideNow(t)&&matches(t)&&favOK(t)&&fltOK(t)&&projOK(t)),
       open=all.filter(t=>!t.done).length,kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
     const node=t=>{const kd=kids(t.id),shut=kd.length&&!tOpen(t.id)&&!tQ;
       return '<div class="row trow-t '+(t.done?'done':'')+(kd.length?' grp':'')+
@@ -2433,7 +2493,7 @@ function renderProjects(){
         '" onclick="event.stopPropagation();pickT(\''+t.id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
       (kd.length?'<button class="fold'+(shut?'':' open')+'" onclick="event.stopPropagation();tFold(\''+t.id+
         '\')" title="'+(shut?'Show subtasks':'Hide subtasks')+'">&#9656;</button>':'<span class="foldsp"></span>')+
-      '<div class="hit" onclick="event.stopPropagation();tickTask(\''+t.id+'\')">'+chk(doneToday(t))+'</div>'+
+      '<div class="hit" onclick="event.stopPropagation();tickHere(\''+t.id+'\')">'+chk(projOnly?t.done:doneToday(t))+'</div>'+
       (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
       '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+hl(t.title)+'</span></span>'+
       (shut?'<span class="kidn">'+kd.length+'</span>':'')+
@@ -2496,7 +2556,7 @@ function boardCard(t,kidsFn,pfx,opts){
       '" onclick="event.stopPropagation();pickT(\''+t.id+'\')" title="Hold to drag, or tap to move">&#9782;</button>'+
     (ds.length?'<button class="fold'+(shut?'':' open')+'" onclick="event.stopPropagation();tFold(\''+t.id+
       '\')" title="'+(shut?'Show subtasks':'Hide subtasks')+'">&#9656;</button>':'')+
-    '<div class="hit" onclick="tickTask(\''+t.id+'\')">'+chk(doneToday(t))+'</div>'+
+    '<div class="hit" onclick="tickHere(\''+t.id+'\')">'+chk(projOnly?t.done:doneToday(t))+'</div>'+
     (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
     '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+hl(t.title)+'</span></span>'+
     taskChips(t)+'</div>'+
@@ -2507,7 +2567,7 @@ function boardCard(t,kidsFn,pfx,opts){
     '</div>'}
 function renderBoard(){
   hostEl().innerHTML='<div class="board'+(SYSMODE?' sysboard':'')+'">'+favLists().map(({id,name,color:c,icon,fav})=>{
-    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>!hideNow(t)&&matches(t)&&favOK(t)&&fltOK(t)),kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
+    const all=S.tasks.filter(t=>t.list===id),ts=all.filter(t=>!hideNow(t)&&matches(t)&&favOK(t)&&fltOK(t)&&projOK(t)),kids=p=>ts.filter(t=>t.parent===p).sort(favSort);
     /* a match deeper in the tree whose parent was filtered out still needs a card */
     const orphanHits=tQ?ts.filter(t=>t.parent&&!ts.some(p=>p.id===t.parent)):[];
     const tops=kids(null).concat(orphanHits).sort((a,b)=>a.done-b.done||favSort(a,b));
@@ -2632,7 +2692,7 @@ function renderMatrix(){
   if(mxMode==='grid'&&mxBy()!=='quad'){mxMode='tree'}
   if(mxMode==='tree')return renderMatrixTree();
   if(mxMode==='board')return renderMatrixBoard();
-  const pool=S.tasks.filter(t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t));
+  const pool=S.tasks.filter(t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t)&&projOK(t));
   el.innerHTML=QMETA.map(m=>{
     const list=pool.filter(t=>t.q===m.q);
     const od=[],td=[],up=[],nd=[];
@@ -2645,7 +2705,7 @@ function renderMatrix(){
         '<span class="cv'+(open?' o':'')+'">&#9656;</span><span class="gl">'+lab+'</span>'+
         '<span class="n">'+arr.length+'</span></button>'+
         (open?'<div>'+arr.sort((a,b)=>(a.done-b.done)||thenSort(a,b)||((a.due||'9')<(b.due||'9')?-1:1)).map(t=>{
-          const l=listOf(t.list),late=t.due&&t.due<TODAY&&!t.done;
+          const l=listOf(t.list),late=isLate(t);
           return '<div class="mxrow '+(t.done?'done':'')+'">'+
             '<div class="hit" onclick="doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
             (t.r?rb(t.r):'')+
@@ -2668,7 +2728,7 @@ function renderQPick(){
   if(mxMode==='grid'||mxBy()==='none'){box.innerHTML='';box.style.display='none';return}
   box.style.display='';
   if(mxBy()==='rank'){
-    const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t);
+    const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t)&&projOK(t);
     const n=r=>S.tasks.filter(t=>live(t)&&(r?t.r===r:true)).length;
     box.innerHTML='<button class="qp'+(mxQ===0?' on':'')+'" onclick="mxPick(0)">'+
         '<span class="qpn">All</span><span class="qpc">'+n(0)+'</span></button>'+
@@ -2679,7 +2739,7 @@ function renderQPick(){
         '<span class="qpn">Unset</span><span class="qpc">'+
         S.tasks.filter(t=>live(t)&&!t.r).length+'</span></button>';
     return}
-  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t);
+  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t)&&projOK(t);
   const n=q=>S.tasks.filter(t=>live(t)&&(q?t.q===q:true)).length;
   box.innerHTML=
     '<button class="qp'+(mxQ===0?' on':'')+'" onclick="mxPick(0)">'+
@@ -2693,7 +2753,7 @@ function renderQPick(){
       S.tasks.filter(t=>live(t)&&!t.q).length+'</span></button>'}
 function renderMatrixTree(){
   const box=document.getElementById('matrixTree');if(!box)return;
-  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t);
+  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t)&&projOK(t);
   const hit=t=>live(t)&&(mxBy()==='none'||mxQ===0?true:(mxQ===-1?!groupKey(t):groupKey(t)===mxQ));
   /* a task is shown when it matches, or when a descendant does */
   const keep=new Set();
@@ -2714,7 +2774,7 @@ function renderMatrixTree(){
         '<div class="hit" onclick="doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
         (t.q?qb(t.q):(on?'<span class="qbadge sm none">\u2013</span>':'')) +
         '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</span></span>'+
-        (t.due?'<span class="tag'+(t.due<TODAY&&!t.done?' late':'')+'">'+
+        (t.due?'<span class="tag'+(isLate(t)?' late':'')+'">'+
           (t.due===TODAY?'Today':t.due.slice(5))+'</span>':'')+
         '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button>'+
         '</div>'+kids(t.id).map(node).join('')};
@@ -2726,7 +2786,7 @@ function renderMatrixTree(){
   box.innerHTML=out}
 function renderMatrixBoard(){
   const box=document.getElementById('matrixBoard');if(!box)return;
-  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t);
+  const live=t=>liveList(t.list)&&(showDone||!t.done)&&favOK(t)&&fltOK(t)&&projOK(t);
   const hit=t=>live(t)&&(mxBy()==='none'||mxQ===0?true:(mxQ===-1?!groupKey(t):groupKey(t)===mxQ));
   const label=(mxBy()==='none'||mxQ===0)?'Every task'
     :(mxQ===-1?('Tasks with no '+(mxBy()==='rank'?'priority':'quadrant')):groupMeta(mxQ).title);
@@ -2751,7 +2811,7 @@ function renderMatrixBoard(){
         '<div class="khead"><div class="hit" onclick="doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
         (t.q?qb(t.q):'')+
         '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</span></span>'+
-        (t.due?'<span class="tag'+(t.due<TODAY&&!t.done?' late':'')+'">'+
+        (t.due?'<span class="tag'+(isLate(t)?' late':'')+'">'+
           (t.due===TODAY?'Today':t.due.slice(5))+'</span>':'')+
         '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button>'+
         '</div></div>').join('')+'</div></div>'}).join('')+'</div>';
@@ -3175,7 +3235,7 @@ function renderMonth(){
     const evs=tasksOn(ds);
     html+='<div class="cell'+(out?' out':'')+(ds===TODAY?' tod':'')+'" onclick="calDay(\''+ds+'\')">'+
       '<span class="dn">'+d.getDate()+'</span>'+
-      evs.slice(0,4).map(t=>'<div class="ev'+(t.done?' done':'')+((t.due&&t.due<TODAY&&!t.done)?' late':'')+'" dir="auto" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</div>').join('')+
+      evs.slice(0,4).map(t=>'<div class="ev'+(t.done?' done':'')+(isLate(t)?' late':'')+'" dir="auto" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</div>').join('')+
       (evs.length>4?'<div class="ev" style="border:none;color:var(--faint)">+'+(evs.length-4)+'</div>':'')+'</div>';
     if(i>=34&&d.getMonth()!==m&&d>first)break}
   html+='</div>';calBody.innerHTML=html}
@@ -3188,7 +3248,7 @@ function renderWeekCal(){
   return;
   let html='<div class="wkrow">'+days.map(d=>{const ds=iso(d),evs=tasksOn(ds);
     return '<div class="wkcol'+(ds===TODAY?' tod':'')+'"><h4>'+DFULL[(d.getDay()+1)%7]+' '+d.getDate()+'</h4>'+
-      evs.map(t=>'<div class="ev'+(t.done?' done':'')+((t.due&&t.due<TODAY&&!t.done)?' late':'')+'" dir="auto" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</div>').join('')+'</div>'}).join('')+'</div>';
+      evs.map(t=>'<div class="ev'+(t.done?' done':'')+(isLate(t)?' late':'')+'" dir="auto" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</div>').join('')+'</div>'}).join('')+'</div>';
   calBody.innerHTML=html}
 function calShift(d){calMonth=new Date(calMonth);
   if(calView==='month')calMonth.setMonth(calMonth.getMonth()+d);
@@ -3241,7 +3301,7 @@ function renderFocus(){renderPomo();fToday.textContent=(S.focus[TODAY]||0)+' ses
       return '<button class="fitem'+(on?' on':'')+'" onclick="fPick(\''+t.id+'\')">'+
         (t.q?qb(t.q):'<span class="dot" style="background:'+l[2]+'"></span>')+
         '<span class="t" dir="auto">'+esc(t.title)+'</span>'+
-        (t.due?'<span class="tag'+(t.due<TODAY?' late':'')+'">'+t.due.slice(5)+'</span>':'')+
+        (t.due?'<span class="tag'+(isLate(t)?' late':'')+'">'+t.due.slice(5)+'</span>':'')+
         '<span class="fl" dir="auto">'+esc(l[1])+'</span>'+
         (on?'<span class="ck">&#10003;</span>':'')+'</button>'}).join('')+
       (pool.length>120?'<div class="ftrunc">Showing the first 120 \u2014 use the filter to narrow it down</div>':'')
@@ -3252,7 +3312,7 @@ function renderFocus(){renderPomo();fToday.textContent=(S.focus[TODAY]||0)+' ses
 function paint(){const sc=scrollSnap();
   if(pulse)setTimeout(()=>{pulse=null},420);
   renderHead();renderActive();renderTodayTasks();renderInbox();renderTodayHabits();
-  renderFltBars();renderWeek();renderProjects();renderSystems();renderHabits();renderMatrix();renderCalendar();renderStats();renderFocus();syncUndo();
+  renderFltBars();syncFavBtn();renderWeek();renderMini();renderProjects();renderSystems();renderHabits();renderMatrix();renderCalendar();renderStats();renderFocus();syncUndo();
   fitPanes();try{requestAnimationFrame(fitPanes)}catch(e){}
   scrollBack(sc)}
 
@@ -3337,6 +3397,7 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
       'Matrix</span><span class="arr">&#8250;</span>',null,subm],
     ['&#43;&nbsp; Add subtask','addSub(\''+id+'\')'],
     [(t.wk?'&#128197;&nbsp; Take off this week':'&#128197;&nbsp; Plan for this week'),'planWeek(\''+id+'\')'],
+    [(t.mini?'&#9679;&nbsp; Out of mini tasks':'&#9702;&nbsp; Make it a mini task'),'toggleMini(\''+id+'\')'],
     ...((S.lists.find(x=>x.id===t.list)||{}).sys?
       [[(t.item?'&#9678;&nbsp; Turn into a branch':'&#9679;&nbsp; Turn into an item'),
         'setBranch(\''+id+'\','+(t.item?'true':'false')+')']]:[]),
@@ -4218,14 +4279,64 @@ function renderWeek(){
     return '<div class="wkcell" id="wk-'+t.id+'">'+
       '<div class="hit" onclick="event.stopPropagation();doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
       '<div class="wkmain">'+
+        crumbHTML(t,'wkcrumb',true)+
         '<span class="wkt" dir="auto" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</span>'+
-        '<span class="wkmeta"><span class="bdot" style="background:'+l[2]+'"></span>'+esc(l[1])+'</span>'+
       '</div>'+
       (t.r?rb(t.r):'')+(t.q?qb(t.q):'')+
       '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button>'+
       '</div>'}).join('');
   for(let i=n;i<WKMAX;i++)out+='<div class="wkcell empty"><span>'+(i+1)+'</span></div>';
   box.innerHTML=out}
+/* ── Mini tasks ────────────────────────────────────────────────────────
+   The small stuff that would clutter a board: typed straight in, or pulled
+   across from a board or the inbox. Ticking one closes it for good.    */
+const miniList=()=>{const D=dvDay('mini');
+  return S.tasks.filter(t=>t.mini&&!t.done&&liveList(t.list)&&
+    (D===TODAY?(!t.mdue||t.mdue<=TODAY):t.mdue===D))};
+function miniAdd(){const v=mAdd.value.trim();if(!v)return;
+  mark('mini task');ensureInbox();
+  S.tasks.push({id:uid('t'),list:UNSEC,title:v,parent:null,depth:0,
+    done:false,at:null,q:0,r:0,mini:true,mdue:dvDay('mini')});
+  mAdd.value='';save();paint()}
+function toggleMini(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  mark(t.mini?'off mini':'to mini');
+  if(t.mini){delete t.mini;delete t.mdue}else{t.mini=true;t.mdue=dvDay('mini')}
+  save();paint();hideMenu()}
+function miniPick(ev){if(ev)ev.stopPropagation();
+  const pool=S.tasks.filter(t=>!t.done&&!t.mini&&liveList(t.list)
+      &&!S.tasks.some(k=>k.parent===t.id&&!k.done))
+    .sort((a,b)=>(a.list===IBX?-1:0)-(b.list===IBX?-1:0));
+  if(!pool.length){toastMsg('Nothing small enough to pull in');return}
+  modal.innerHTML='<h3>Pull into mini tasks</h3>'+
+    '<p class="askmsg">Anything without open subtasks, from any board or the inbox.</p>'+
+    '<input id="miniQ" class="fsearch" placeholder="Filter\u2026" oninput="miniDraw(this.value)">'+
+    '<div class="flist" id="miniPool"></div>'+
+    '<div class="mact"><button class="cancel" onclick="closeModal()">Close</button></div>';
+  veil.classList.add('on');miniDraw('')}
+function miniDraw(q){
+  const box=document.getElementById('miniPool');if(!box)return;
+  const pool=S.tasks.filter(t=>!t.done&&!t.mini&&liveList(t.list)
+      &&!S.tasks.some(k=>k.parent===t.id&&!k.done)
+      &&(!q||norm(t.title).includes(norm(q))));
+  box.innerHTML=pool.length?pool.slice(0,120).map(t=>{const l=listOf(t.list);
+    return '<button class="fitem" onclick="toggleMini(\''+t.id+'\');miniDraw(document.getElementById(\'miniQ\').value)">'+
+      '<span class="dot" style="background:'+l[2]+'"></span>'+
+      '<span class="t" dir="auto">'+esc(t.title)+'</span>'+
+      '<span class="fl" dir="auto">'+esc(t.list===IBX?'Inbox':l[1])+'</span></button>'}).join('')
+    :'<div class="empty">Nothing matches</div>'}
+function renderMini(){
+  const box=document.getElementById('miniList');if(!box)return;
+  const ts=miniList();
+  const dvm=document.getElementById('dvMini');if(dvm)dvm.innerHTML=dvSeg('mini');
+  const c=document.getElementById('miniCount');if(c)c.textContent=ts.length||'';
+  box.innerHTML=ts.length?ts.map(t=>
+    '<div class="row mrow">'+
+    '<div class="hit" onclick="event.stopPropagation();doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
+    '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</span></span>'+
+    '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button>'+
+    '</div>').join('')
+    :'<div class="empty">Nothing small waiting \u2014 type one in, or pull one across</div>'}
+
 /* each parent task folds on its own; boards keep their own toggle */
 const tOpen=id=>S.open['t:'+id]!==false;
 function tFold(id){S.open['t:'+id]=!tOpen(id);save();paint()}
@@ -4370,6 +4481,7 @@ function quickSettings(ev){if(ev)ev.stopPropagation();
     v=>{mark('quick-add settings');S.quickList=v.list;S.quickPlan=v.plan;S.quickQ=+v.q||0;save();paint();
       toastMsg('Quick adds now go to '+listOf(v.list)[1])})}
 qAdd.addEventListener('keydown',e=>{if(e.key==='Enter')quickAdd()});
+mAdd.addEventListener('keydown',e=>{if(e.key==='Enter')miniAdd()});
 ibAdd.addEventListener('keydown',e=>{if(e.key==='Enter')inboxAdd()});
 let PAGE='today';
 function go(p){document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
@@ -4380,6 +4492,9 @@ function go(p){document.querySelectorAll('.pane').forEach(x=>x.classList.remove(
   try{fitPanes();requestAnimationFrame(fitPanes)}catch(e){}}
 /* the favourites filter only means anything on Tasks and Priorities */
 function syncFavBtn(){
+  const pb=document.getElementById('projBtn');
+  if(pb){pb.classList.toggle('on',projOnly);
+    pb.title=projOnly?'Show every task':'Show active projects only'}
   ['favBtnT','favBtnM'].forEach(k=>{const fb=document.getElementById(k);if(!fb)return;
     fb.classList.toggle('on',favOnly);
     fb.innerHTML=(favOnly?'&#9829;':'&#9825;')+' Favourites';
