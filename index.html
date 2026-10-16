@@ -569,7 +569,7 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
 .wknow{font-size:.66rem;padding:3px 9px;border:1px solid var(--border2);border-radius:999px;
   background:transparent;color:var(--dim);cursor:pointer}
 .wknow:hover{border-color:var(--brass);color:var(--text)}
-.rolegrid{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,1fr);gap:10px;
+.rolegrid{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(var(--rolew,150px),1fr);gap:10px;
   overflow-x:auto;padding:2px 2px 6px}
 .rcol{display:flex;flex-direction:column;gap:4px;min-width:0}
 .rhead{display:flex;align-items:center;gap:6px;font-size:.76rem;font-weight:600;padding:2px 2px 4px;
@@ -586,7 +586,7 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
   color:var(--faint);font-size:.8rem;cursor:pointer}
 .rslot:hover{border-color:var(--brass);color:var(--text)}
 .rslot.off{cursor:default;opacity:.5}
-.daygrid{display:grid;grid-template-columns:repeat(7,minmax(170px,1fr));gap:10px;overflow-x:auto;
+.daygrid{display:grid;grid-template-columns:repeat(7,minmax(var(--dayw,170px),1fr));gap:10px;overflow-x:auto;
   padding-bottom:6px}
 .dcol{display:flex;flex-direction:column;gap:4px;min-width:0;padding:10px 8px;border:1px solid var(--line);
   border-radius:var(--r);background:var(--card)}
@@ -652,9 +652,9 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
 .wrow .mini.dots,.mrow2 .mini.dots,.rcell .mini.dots{opacity:.45}
 .wrow:hover .mini.dots,.mrow2:hover .mini.dots,.rcell:hover .mini.dots{opacity:1}
 @media(max-width:760px){
-  .daygrid{grid-template-columns:repeat(7,minmax(220px,82vw));scroll-snap-type:x mandatory}
+  .daygrid{grid-template-columns:repeat(7,minmax(max(var(--dayw,170px),220px),82vw));scroll-snap-type:x mandatory}
   .dcol{scroll-snap-align:start}
-  .rolegrid{grid-auto-columns:minmax(170px,70vw)}
+  .rolegrid{grid-auto-columns:minmax(max(var(--rolew,150px),170px),70vw)}
 }
 .h2r{display:inline-flex;align-items:center;gap:6px}
 .dvseg{display:inline-flex;border:1px solid var(--border2);border-radius:7px;overflow:hidden}
@@ -1403,7 +1403,7 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-10-16 · b108';
+const BUILD='2026-10-16 · b109';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='',favOnly=false;
@@ -1624,6 +1624,8 @@ function applyPrefs(){const q=S.prefs||{scale:1,theme:'system'};
   document.documentElement.style.setProperty('--colw',(q.colw||268)+'px');
   document.documentElement.style.setProperty('--hourpx',(q.hourPx||52)+'px');
   document.documentElement.style.setProperty('--blkcolw',(q.blkColw||190)+'px');
+  document.documentElement.style.setProperty('--rolew',(q.roleW||150)+'px');
+  document.documentElement.style.setProperty('--dayw',(q.dayW||170)+'px');
   document.documentElement.style.setProperty('--calmax',(q.calMax||'260')+'px');
   const dark=q.theme==='dark'||(q.theme==='system'&&sysDark());
   document.documentElement.dataset.theme=dark?'dark':'light'}
@@ -1824,6 +1826,12 @@ function drawSettings(){
       segRow('Board column width','segColw',
         [['232','Narrow'],['268','Default'],['320','Wide'],['400','Extra wide']],q.colw||268,'setColw',
         'Wider columns keep long titles on one line.')+
+      segRow('Weekly \u00b7 role columns','segRoleW',
+        [['130','Narrow'],['150','Default'],['200','Wide'],['260','Extra wide']],q.roleW||150,'setRoleW',
+        'The boxes for each role at the top of Weekly.')+
+      segRow('Weekly \u00b7 day columns','segDayW',
+        [['150','Narrow'],['170','Default'],['220','Wide'],['280','Extra wide']],q.dayW||170,'setDayW',
+        'The seven days. Wider than the screen allows, they scroll sideways.')+
       segRow('Completed items','segDone',
         [['1','Show'],['0','Hide']],showDone?1:0,'setDoneVis')+
     '</div>';
@@ -1900,6 +1908,8 @@ function segPick(el){if(!el||!el.parentNode||!el.parentNode.querySelectorAll)ret
   el.classList.add('on')}
 function setScale(v,el){S.prefs.scale=v;segPick(el);applyPrefs();save()}
 function setTheme(v,el){S.prefs.theme=v;segPick(el);applyPrefs();save()}
+function setRoleW(v,el){S.prefs.roleW=v;segPick(el);applyPrefs();save()}
+function setDayW(v,el){S.prefs.dayW=v;segPick(el);applyPrefs();save()}
 function setColw(v,el){S.prefs.colw=v;segPick(el);applyPrefs();save();
   if(tView==='kanban')renderProjects()}
 function setHourPx(v,el){S.prefs.hourPx=v;segPick(el);applyPrefs();save();renderCalendar()}
