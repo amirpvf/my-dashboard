@@ -611,6 +611,7 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
 .ptick.on{background:var(--teal)}
 .wrow.proj.dayon{background:var(--hover)}
 .tag.wkt{color:var(--brass);background:var(--accBg);border:1px solid var(--accLine);cursor:pointer;font-weight:600}
+.tag.wkt.nx{background:transparent;border-style:dashed}
 .tag.wkm{color:var(--dim);background:var(--hover)}
 .nwtree{max-height:46vh}
 .nwtree .fitem{flex-wrap:wrap}
@@ -1403,7 +1404,7 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-10-16 · b109';
+const BUILD='2026-10-23 · b110';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='',favOnly=false;
@@ -2620,9 +2621,13 @@ function taskView(v){tView=v;S.tView=v;save();
   renderProjects()}
 function taskChips(t){
   const ws=!t.done&&wkState(t.id);
-  return (ws&&ws.on?'<button class="tag wkt" onclick="event.stopPropagation();go(\'today\')" '+
-      'title="'+ws.on+' of its '+ws.leaves.length+' subtasks are planned for this week">&#10003;&#8202;'+ws.on+'/'+ws.leaves.length+'</button>':'')+
-    (t.wk&&!t.done?'<button class="tag wkt" onclick="event.stopPropagation();go(\'today\')" '+
+  return (ws&&ws.on0?'<button class="tag wkt" onclick="event.stopPropagation();wkGo(0)" '+
+      'title="'+ws.on0+' of its '+ws.leaves.length+' subtasks are planned for this week">&#10003;&#8202;'+ws.on0+'/'+ws.leaves.length+'</button>':'')+
+    (ws&&ws.on1?'<button class="tag wkt nx" onclick="event.stopPropagation();wkGo(1)" '+
+      'title="'+ws.on1+' of its '+ws.leaves.length+' subtasks are planned for next week">&#10003;&#8202;Next '+ws.on1+'/'+ws.leaves.length+'</button>':'')+
+    (isNext(t)&&!t.done?'<button class="tag wkt nx" onclick="event.stopPropagation();wkGo(1)" '+
+      'title="Planned for next week'+(t.day?' \u00b7 on '+wdName(t.day):'')+' \u2014 open Weekly">&#10003;&#8202;Next'+(t.day?' '+wdName(t.day):' wk')+'</button>':'')+
+    (t.wk&&!isNext(t)&&!t.done?'<button class="tag wkt" onclick="event.stopPropagation();wkGo(0)" '+
       'title="Planned for this week'+(t.day&&t.day>=TODAY?' \u00b7 on '+wdName(t.day):'')+' \u2014 open Weekly">'+
       '&#10003;&#8202;'+(t.day&&t.day>=TODAY?(t.day===TODAY?'Today':wdName(t.day)):'Week')+'</button>':'')+
     (t.mini&&!t.done?'<span class="tag wkm" title="Mini task">&#9702;&#8202;Mini</span>':'')+
@@ -3548,32 +3553,42 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
       (t.q===m.q?'<span class="ck">&#10003;</span>':'')+'</button>').join('')+
       (t.q?'<hr><button onclick="setQ(\''+id+'\',0)">Clear priority</button>':'')+'</div></div>';
   const proj=!!(t.rep&&t.rep.days&&t.rep.days.length);
+  const today=(t.at===TODAY||(t.due&&t.due<=TODAY));
+  const wkLabel=nxt=>{const w=wkState(id,nxt),W=nxt?'next week':'this week';
+    if(w)return w.on===w.leaves.length?'Take its '+w.on+' subtask'+(w.on===1?'':'s')+' off '+W
+      :'Plan its '+(w.leaves.length-w.on)+' subtask'+(w.leaves.length-w.on===1?'':'s')+' for '+W;
+    return onWeek(t,nxt)?'Take off '+W:(t.wk?'Move to '+W:'Plan for '+W)};
+  const sys=(S.lists.find(x=>x.id===t.list)||{}).sys;
   showMenu(ev,[
+    /* the task itself */
     (proj?['<span class="dmi ok">&#10003;</span> '+(t.done?'Reopen the task':'Finish the whole task')+
       (dayCount(t)?' <span style="color:var(--faint);font-size:.72rem">('+dayCount(t)+'d done)</span>':''),
       'finishTask(\''+id+'\')']:null),
-    (proj?null:null),
     ['&#9998;&nbsp; Rename','renameTask(\''+id+'\')'],
+    ['&#43;&nbsp; Add subtask','addSub(\''+id+'\')'],
+    null,
+    /* when it happens */
+    ['&#9728;&nbsp; '+(today?'Remove from today':'Plan for today'),
+      today?'unplan(\''+id+'\')':'planToday(\''+id+'\')'],
+    ['&#128197;&nbsp; '+wkLabel(false),'planWeek(\''+id+'\',false)'],
+    ['&#128467;&nbsp; '+wkLabel(true),'planWeek(\''+id+'\',true)'],
+    [(t.mini?'&#9679;&nbsp; Out of mini tasks':'&#9702;&nbsp; Make it a mini task'),'toggleMini(\''+id+'\')'],
+    ['&#9200;&nbsp; Schedule…','scheduleTask(\''+id+'\')'],
+    null,
+    /* how it is marked */
     ['<span class="qlab">'+(t.r?rb(t.r):'&#9733;&nbsp;')+
       'Priority</span><span class="arr">&#8250;</span>',null,rsub],
     ['<span class="qlab">'+(cur?'<span class="qbadge sm" style="background:'+cur.c+'">'+cur.r+'</span>':'&#9873;&nbsp;')+
       'Matrix</span><span class="arr">&#8250;</span>',null,subm],
-    ['&#43;&nbsp; Add subtask','addSub(\''+id+'\')'],
-    [(()=>{const w=wkState(id);
-        if(w)return w.on===w.leaves.length?'&#128197;&nbsp; Take its '+w.on+' subtasks off this week'
-          :'&#128197;&nbsp; Plan its '+(w.leaves.length-w.on)+' subtask'+(w.leaves.length-w.on===1?'':'s')+' for this week';
-        return t.wk?'&#128197;&nbsp; Take off this week':'&#128197;&nbsp; Plan for this week'})(),'planWeek(\''+id+'\')'],
-    [(t.mini?'&#9679;&nbsp; Out of mini tasks':'&#9702;&nbsp; Make it a mini task'),'toggleMini(\''+id+'\')'],
-    ...((S.lists.find(x=>x.id===t.list)||{}).sys?
-      [[(t.item?'&#9678;&nbsp; Turn into a branch':'&#9679;&nbsp; Turn into an item'),
+    ['♥&nbsp; '+(t.fav?'Remove from favourites':'Add to favourites'),'toggleFavTask(\''+id+'\')'],
+    ...(sys?[[(t.item?'&#9678;&nbsp; Turn into a branch':'&#9679;&nbsp; Turn into an item'),
         'setBranch(\''+id+'\','+(t.item?'true':'false')+')']]:[]),
-    ['\u2665&nbsp; '+(t.fav?'Remove from favourites':'Add to favourites'),'toggleFavTask(\''+id+'\')'],
+    null,
+    /* where it sits */
     ['&#8593;&nbsp; Move up','moveTaskBy(\''+id+'\',-1)'],
     ['&#8595;&nbsp; Move down','moveTaskBy(\''+id+'\',1)'],
     ['<span class="qlab">&#128194;&nbsp; Move to</span><span class="arr">&#8250;</span>',id,null,'mv'],
-    ['&#128197;&nbsp; Schedule\u2026','scheduleTask(\''+id+'\')'],
-    [(t.at===TODAY||(t.due&&t.due<=TODAY))?'Remove from today':'Plan for today',
-      (t.at===TODAY||(t.due&&t.due<=TODAY))?'unplan(\''+id+'\')':'planToday(\''+id+'\')'],null,
+    null,
     ['<span class="warn">Delete this task only</span>'+
       (S.tasks.some(x=>x.parent===id)?' <span style="color:var(--faint);font-size:.72rem">(keeps subtasks)</span>':''),
       'delOnly(\''+id+'\')'],
@@ -4448,7 +4463,7 @@ const weekRange=off=>{const d=weekDays(off||0);return [d[0],d[6]]};
    it; this week and the weeks ahead show the open plan as it stands.     */
 function weekTasks(listId,off){off=off||0;const [a,b]=weekRange(off);
   return S.tasks.filter(t=>t.wk&&liveList(t.list)&&(!listId||t.list===listId)&&
-      (t.done?(t.at&&t.at>=a&&t.at<=b):off>=0))
+      (t.done?(t.at&&t.at>=a&&t.at<=b):(off>=0&&(!t.wfrom||t.wfrom<=a))))
     .sort((x,y)=>(x.done-y.done)||((x.wko||0)-(y.wko||0)))}
 const wkList=()=>weekTasks().filter(t=>!t.done);
 const wdName=ds=>new Intl.DateTimeFormat('en-GB',{weekday:'short'}).format(new Date(ds+'T12:00:00'));
@@ -4458,27 +4473,45 @@ const dmName=ds=>new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short'}).
 function wkLeaves(id){const ds=descendants(id);
   return S.tasks.filter(x=>x.id!==id&&ds.has(x.id)&&!x.done&&!isProj(x)&&
     !S.tasks.some(k=>k.parent===x.id&&!k.done))}
-function wkState(id){const L=wkLeaves(id);
-  return L.length?{leaves:L,on:L.filter(x=>x.wk).length}:null}
-function planWeek(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;hideMenu();
-  const st=wkState(id);
+/* A task can also be planned ahead for next week (t.wfrom = that week's
+   first day). It stays out of this week and joins the plan when its week
+   comes; the week after that, it is part of the living list as usual.   */
+const NWK=()=>weekDays(1)[0];
+const isNext=t=>!!(t.wk&&t.wfrom&&t.wfrom>weekDays(0)[0]);
+const onWeek=(t,nxt)=>!!t.wk&&(nxt?isNext(t):!isNext(t));
+function unWeek(x){delete x.wk;delete x.wko;delete x.day;delete x.dord;delete x.wfrom}
+function toWeek(x,nxt){x.wk=true;
+  if(nxt){x.wfrom=NWK();if(x.day&&x.day<x.wfrom){delete x.day;delete x.dord}}
+  else{delete x.wfrom;if(x.day&&x.day>weekDays(0)[6]){delete x.day;delete x.dord}}}
+function wkFits(x,nxt){const o=nxt?1:0,all=weekTasks(null,o);if(all.includes(x))return true;
+  return all.length<WKMAX&&weekTasks(x.list,o).length<ROLESLOT}
+function wkState(id,nxt){const L=wkLeaves(id);if(!L.length)return null;
+  const on0=L.filter(x=>onWeek(x,false)).length,on1=L.filter(x=>onWeek(x,true)).length;
+  return {leaves:L,on:nxt?on1:on0,on0,on1}}
+function planWeek(id,nxt){nxt=!!nxt;const t=S.tasks.find(x=>x.id===id);if(!t)return;hideMenu();
+  const W=nxt?'next week':'this week',st=wkState(id,nxt);
   if(st){
-    if(st.on===st.leaves.length){mark('off this week');
-      st.leaves.forEach(x=>{delete x.wk;delete x.wko;delete x.day;delete x.dord});save();paint();
-      toastMsg(st.on+' subtask'+(st.on===1?'':'s')+' taken off the week');return}
-    mark('plan for this week');let added=0,left=0,n=Date.now();
-    if(t.wk){delete t.wk;delete t.wko;delete t.day;delete t.dord}   /* the container itself leaves the week */
-    st.leaves.filter(x=>!x.wk).forEach(x=>{
-      if(weekTasks().length>=WKMAX||weekTasks(x.list).length>=ROLESLOT){left++;return}
-      x.wk=true;x.wko=n++;added++});
+    if(st.on===st.leaves.length){mark('off '+W);
+      st.leaves.forEach(unWeek);save();paint();
+      toastMsg(st.on+' subtask'+(st.on===1?'':'s')+' taken off '+W);return}
+    mark('plan for '+W);let added=0,left=0,n=Date.now();
+    if(t.wk)unWeek(t);                  /* the container itself leaves the week */
+    st.leaves.filter(x=>!onWeek(x,nxt)).forEach(x=>{
+      if(!wkFits(x,nxt)){left++;return}
+      const was=x.wk;toWeek(x,nxt);if(!was)x.wko=n++;added++});
     save();paint();
-    toastMsg(added+' subtask'+(added===1?'':'s')+' of \u201C'+t.title+'\u201D planned'+
-      (left?' \u2014 '+left+' left out, the week or role is full':''));
+    toastMsg(added+' subtask'+(added===1?'':'s')+' of “'+t.title+'” planned for '+W+
+      (left?' — '+left+' left out, the week or role is full':''));
     return}
-  if(t.wk){mark('off this week');delete t.wk;delete t.wko;delete t.day;delete t.dord;save();paint();return}
-  if(weekTasks().length>=WKMAX){toastMsg('This week already holds '+WKMAX+' \u2014 finish one first');return}
-  if(weekTasks(t.list).length>=ROLESLOT){toastMsg('This role already has '+ROLESLOT+' for the week');return}
-  mark('plan for this week');t.wk=true;t.wko=Date.now();save();paint()}
+  if(onWeek(t,nxt)){mark('off '+W);unWeek(t);save();paint();return}
+  if(!wkFits(t,nxt)){
+    toastMsg(weekTasks(null,nxt?1:0).length>=WKMAX?(nxt?'Next week':'This week')+' already holds '+WKMAX:
+      'This role already has '+ROLESLOT+' for '+W);return}
+  const moving=!!t.wk;mark('plan for '+W);toWeek(t,nxt);if(!moving)t.wko=Date.now();save();paint();
+  if(moving)toastMsg('“'+t.title+'” moved to '+W)}
+function offWeek(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  mark('off the week');unWeek(t);save();paint()}
+function wkGo(o){WKOFF=o;paint();go('today')}
 
 /* ── a day's contents ── */
 const dayTasks=ds=>S.tasks.filter(t=>t.wk&&t.day===ds&&liveList(t.list)&&(!t.done||t.at>=ds))
@@ -4498,6 +4531,7 @@ const roomOn=ds=>ds>=TODAY&&incoming(ds).length+dayTasks(ds).length+dayProjects(
 function assignDay(id,ds){const t=S.tasks.find(x=>x.id===id);if(!t)return false;
   if(!roomOn(ds)){toastMsg('No open priority left on '+wdName(ds));return false}
   mark('put on a day');
+  if(t.wfrom&&ds<t.wfrom)delete t.wfrom;
   t.day=ds;t.dord=Math.max(0,...dayTasks(ds).filter(x=>x!==t).map(x=>x.dord||0))+1;
   save();paint();return true}
 function unassignDay(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
@@ -4521,6 +4555,7 @@ function unlockSlot(ds){if(ds<TODAY)return;const n=unlockN(ds);if(n>=2)return;
 /* run once on load: open work from earlier days moves to today, the ones
    already worked on first, then the rest in their old order            */
 function rollDays(){
+  const ws=weekDays(0)[0];S.tasks.forEach(t=>{if(t.wfrom&&t.wfrom<=ws)delete t.wfrom});
   const late=S.tasks.filter(t=>t.wk&&t.day&&t.day<TODAY&&!t.done);
   if(!late.length)return 0;
   const w=t=>(t.wlog&&t.wlog[t.day])?0:1;
@@ -4545,7 +4580,8 @@ function pickDay(ds){if(ds<TODAY)return;if(!roomOn(ds)){toastMsg('No open priori
     '<div class="mact"><button class="cancel" onclick="closeModal()">Done</button></div>';
   veil.classList.add('on');drawPickDay()}
 function drawPickDay(){const box=document.getElementById('pdList');if(!box)return;
-  const pool=wkList().filter(t=>t.day!==PD);
+  const pool=S.tasks.filter(t=>t.wk&&!t.done&&liveList(t.list)&&(!t.wfrom||t.wfrom<=PD)&&t.day!==PD)
+    .sort((x,y)=>(x.wko||0)-(y.wko||0));
   box.innerHTML=pool.length?pool.map(t=>{const l=listOf(t.list);
     return '<button class="fitem" onclick="pdPick(\''+t.id+'\')">'+
       '<span class="dot" style="background:'+l[2]+'"></span>'+
@@ -4566,11 +4602,11 @@ function dayPickFor(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)retu
 /* ── a new task straight into the week ─────────────────────────────────
    Type what it is, then say where it lives in the role: directly in the
    role, or under any of its tasks. It is created there and planned.    */
-let NW=null;
-function newWeekTask(listId){
-  if(weekTasks().length>=WKMAX){toastMsg('This week already holds '+WKMAX+' \u2014 finish one first');return}
-  if(weekTasks(listId).length>=ROLESLOT){toastMsg('This role already has '+ROLESLOT+' for the week');return}
-  NW=listId;const l=listOf(listId);
+let NW=null,NWO=0;
+function newWeekTask(listId){const o=Math.max(0,WKOFF);
+  if(weekTasks(null,o).length>=WKMAX){toastMsg('This week already holds '+WKMAX+' \u2014 finish one first');return}
+  if(weekTasks(listId,o).length>=ROLESLOT){toastMsg('This role already has '+ROLESLOT+' for the week');return}
+  NW=listId;NWO=o;const l=listOf(listId);
   modal.innerHTML='<h3>New task \u00b7 '+esc(l[1])+'</h3>'+
     '<input id="nwName" class="fsearch" placeholder="What needs doing?" dir="auto" '+
       'onkeydown="if(event.key===\'Enter\')nwCreate(null)">'+
@@ -4592,7 +4628,7 @@ function drawNewWeek(q){const box=document.getElementById('nwList');if(!box)retu
     hit.map(([t,d])=>'<button class="fitem" style="padding-left:'+(12+(q?0:d*16))+'px" onclick="nwCreate(\''+t.id+'\')">'+
       (q?crumbHTML(t,'wkcrumb'):'')+
       '<span class="t" dir="auto">'+(d&&!q?'\u21B3 ':'')+esc(t.title)+'</span>'+
-      (t.wk?'<span class="fl">in the week</span>':'')+'</button>').join('')+
+      (t.wk?'<span class="fl">'+(isNext(t)?'next week':'in the week')+'</span>':'')+'</button>').join('')+
     (q&&!hit.length?'<div class="empty">No task in this role matches</div>':'')}
 function nwCreate(parentId){
   const name=((document.getElementById('nwName')||{}).value||'').trim();
@@ -4601,13 +4637,14 @@ function nwCreate(parentId){
   mark('new task for the week');
   const t={id:uid('t'),list:NW,title:name,parent:par?par.id:null,depth:par?(par.depth||0)+1:0,
     done:false,at:null,q:0,r:0,wk:true,wko:Date.now()};
+  if(NWO>0)t.wfrom=weekDays(NWO)[0];
   if(par){/* keep it right after its last sibling so the Roles tree reads naturally */
     const ds=descendants(par.id);let at=-1;S.tasks.forEach((x,i)=>{if(ds.has(x.id))at=i});
     S.tasks.splice(at+1,0,t)}
   else S.tasks.push(t);
   S.open[NW]=true;if(par)S.open['t:'+par.id]=true;
   save();closeModal();paint();
-  toastMsg('\u201C'+name+'\u201D added'+(par?' under \u201C'+par.title+'\u201D':'')+' and planned for the week')}
+  toastMsg('\u201C'+name+'\u201D added'+(par?' under \u201C'+par.title+'\u201D':'')+' and planned for '+(NWO>0?(NWO===1?'next week':'that week'):'the week'))}
 function pickRole(listId){PR=listId;const l=listOf(listId);
   modal.innerHTML='<h3>'+esc(l[1])+' · this week</h3>'+
     '<input id="prQ" class="fsearch" placeholder="Filter…" oninput="drawPickRole(this.value)">'+
@@ -4616,14 +4653,14 @@ function pickRole(listId){PR=listId;const l=listOf(listId);
   veil.classList.add('on');drawPickRole('')}
 function drawPickRole(q){const box=document.getElementById('prList');if(!box)return;
   const pool=S.tasks.filter(t=>{if(t.list!==PR||t.done||t.wk||isProj(t))return false;
-    const w=wkState(t.id);if(w&&w.on===w.leaves.length)return false;
+    const w=wkState(t.id,WKOFF>0);if(w&&w.on===w.leaves.length)return false;
     return !q||norm(t.title).includes(norm(q))});
   box.innerHTML=pool.length?pool.slice(0,150).map(t=>
     '<button class="fitem" onclick="prPick(\''+t.id+'\')">'+
       crumbHTML(t,'wkcrumb')+'<span class="t" dir="auto">'+esc(t.title)+'</span></button>').join('')
     :'<div class="empty">Nothing open in this role'+(q?' matches':'')+'</div>'}
-function prPick(id){planWeek(id);
-  if(weekTasks(PR).length>=ROLESLOT||weekTasks().length>=WKMAX){closeModal();return}
+function prPick(id){const o=WKOFF>0?1:0;planWeek(id,o>0);
+  if(weekTasks(PR,o).length>=ROLESLOT||weekTasks(null,o).length>=WKMAX){closeModal();return}
   drawPickRole((document.getElementById('prQ')||{}).value||'')}
 const dayMini=ds=>S.tasks.filter(t=>{if(!t.mini||!liveList(t.list))return false;
   const start=t.mdue||TODAY;
@@ -4665,7 +4702,7 @@ function toMini(id,ds){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)retur
   if(dayMini(ds).length>=MINIMAX){toastMsg('Three mini tasks a day \u2014 '+(ds===TODAY?'today':'tomorrow')+' is full');return}
   mark('to mini');
   /* a mini task lives outside the week plan, so it frees its slot there */
-  delete t.wk;delete t.wko;delete t.day;delete t.dord;
+  unWeek(t);
   t.mini=true;t.mdue=ds;save();paint();
   toastMsg('\u201C'+t.title+'\u201D is a mini task '+(ds===TODAY?'today':'tomorrow'))}
 function weekMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id);if(!t)return;
@@ -4677,8 +4714,11 @@ function weekMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
     null,
     ['&#128197;&nbsp; '+(t.day?'Move to another day…':'Put on a day…'),'dayPickFor(\''+id+'\')'],
     ...(t.day?[['&#8617;&nbsp; Off its day','unassignDay(\''+id+'\')']]:[]),
+    (isNext(t)?['&#8617;&nbsp; Bring into this week','planWeek(\''+id+'\',false)']
+      :['&#8618;&nbsp; Push to next week','planWeek(\''+id+'\',true)']),
     ['&#9998;&nbsp; Rename','renameTask(\''+id+'\')'],
-    ['<span class="warn">Take off this week</span>','planWeek(\''+id+'\')']])}
+    null,
+    ['<span class="warn">Take off '+(isNext(t)?'next week':'this week')+'</span>','offWeek(\''+id+'\')']])}
 function prioMenu(ev,id){ev.stopPropagation();
   showMenu(ev,[
     ['&#8593;&nbsp; Higher priority','dayMove(\''+id+'\',-1)'],
@@ -4777,7 +4817,7 @@ function renderWeekly(){
     (WKOFF<0?(-WKOFF)+' weeks ago':'In '+WKOFF+' weeks');
   const nw=document.getElementById('wkNow');if(nw)nw.style.visibility=WKOFF?'visible':'hidden';
   /* the meter always counts the live plan against the 35 limit */
-  const live=weekTasks().length;
+  const live=weekTasks(null,Math.max(0,WKOFF)).length;
   const c=document.getElementById('weekCount');if(c)c.textContent=live+' / '+WKMAX;
   const fl=document.getElementById('wkFill');
   if(fl){fl.style.width=Math.min(100,live/WKMAX*100)+'%';
