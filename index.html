@@ -576,6 +576,15 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
   border-bottom:1px solid var(--line);margin-bottom:2px}
 .rhead .rn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rhead small{font-weight:500;color:var(--faint);font-size:.64rem}
+.rgoal{display:flex;align-items:center;gap:6px;padding:5px 6px 5px 8px;margin-bottom:2px;border:1px dashed var(--accLine);
+  border-radius:8px;background:var(--accBg)}
+.rgoal .hit{flex:none;display:flex;align-items:center}
+.rgoal textarea{flex:1;min-width:0;border:0;background:transparent;color:var(--head);resize:none;outline:none;padding:0;
+  overflow:hidden;display:block;font-family:'Instrument Serif',Vazirmatn,Georgia,serif;font-style:italic;
+  font-size:1.02rem;line-height:1.25;min-height:1.25em;letter-spacing:.005em}
+.rgoal textarea.fa{font-family:Vazirmatn,Inter,sans-serif;font-style:normal;font-weight:500;font-size:.8rem;line-height:1.6;min-height:1.6em}
+.rgoal textarea::placeholder{color:var(--faint);font-style:italic}
+.rgoal.done textarea{text-decoration:line-through;color:var(--faint)}
 .rcell{display:flex;align-items:center;gap:5px;min-height:30px;padding:3px 5px;border:1px solid var(--line);
   border-radius:7px;background:var(--card)}
 .rcell.done .rt{text-decoration:line-through;color:var(--faint)}
@@ -633,9 +642,16 @@ html[data-theme="dark"] .minih .nm{color:rgba(20,20,20,.85)}
 .plock{border:1px solid var(--line);background:var(--hover);color:var(--faint);cursor:pointer}
 .plock.can{color:var(--text);border-color:var(--accLine);background:var(--accBg)}
 .plock:disabled{cursor:default}
+.prelock{display:block;margin:2px 0 4px auto;padding:1px 6px;border:0;background:transparent;color:var(--faint);font-size:.68rem;cursor:pointer;border-radius:5px}
+.prelock:hover{color:var(--text);background:var(--hover)}
 .mrow2{display:flex;align-items:center;gap:5px;min-height:28px;padding:2px 5px;border:1px solid var(--line);
   border-radius:7px;font-size:.72rem}
 .mrow2.done .pt{text-decoration:line-through;color:var(--faint)}
+.mic{width:13px;height:13px;vertical-align:-2px;display:inline-block;opacity:.85}
+.mrow2 .pt,.mrow .t .nameclick{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mpar{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.6rem;color:var(--faint)}
+.mrow .t{display:flex;align-items:baseline;gap:6px;min-width:0}
+.mrow .mpar{font-size:.68rem}
 .mslot{min-height:28px;border:1px dashed var(--border2);border-radius:7px;background:transparent;
   color:var(--faint);cursor:pointer;font-size:.8rem}
 .mslot.off{cursor:default;opacity:.5}
@@ -1171,6 +1187,180 @@ html[data-theme="dark"] .sf .seg button.on{color:#16212C}
 .iconbtn:hover{background:var(--hover);color:var(--text)}
 .iconbtn.on{background:var(--accBg);border-color:var(--accLine);color:var(--accHover)}
 .iconbtn svg{width:1.45em;height:1.45em}
+/* ── Coaching ── */
+:root{--co1:#5F8A6E;--co2:#4F6A9E;--co3:#8B5578;--co4:#A9812F}
+html[data-theme="dark"]{--co1:#7FAF8E;--co2:#7C97CC;--co3:#B77EA3;--co4:#D0A650}
+.cobar0{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.cobar0 h1{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:1.9rem;color:var(--head);line-height:1}
+#coSeg{max-width:420px;flex:1 1 300px}
+.cocard{padding:20px 22px}
+.cocard h2{margin-bottom:6px}
+.cohead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.codate{font-size:.72rem;color:var(--faint)}
+.cohead h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:1.7rem;color:var(--head);margin:0}
+.cohead h2 span{font-family:Inter,Vazirmatn,sans-serif;font-size:.86rem;color:var(--dim)}
+.conav{display:flex;gap:4px}
+.conav button{border:1px solid var(--line);border-radius:6px;padding:4px 10px;font-size:.78rem}
+.conav button:hover{border-color:var(--border3)}
+.conav button:disabled{opacity:.35;cursor:default}
+.cohalf{display:flex;gap:4px;background:var(--hover);padding:3px;border-radius:9px;margin-bottom:6px}
+.cohalf button{flex:1;padding:7px 0;border-radius:7px;font-size:.8rem;color:var(--dim)}
+.cohalf button.on{background:var(--card);color:var(--text);font-weight:600;box-shadow:var(--shadow)}
+.cohalf button i{font-style:normal;color:var(--teal)}
+.coquote{margin:12px 0 4px;padding:10px 14px;border-left:3px solid var(--brass);background:var(--accBg);border-radius:0 8px 8px 0}
+.coquote small{display:block;font-size:.64rem;color:var(--dim);letter-spacing:.02em}
+.copart{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
+.copart h3{font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 4px}
+.cota,.coin{width:100%;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit;
+  font-size:.84rem;line-height:1.6;color:var(--text);outline:none}
+.cota{resize:none;overflow:hidden;min-height:84px;display:block}
+.cota.sm{min-height:58px}
+.cota:focus,.coin:focus{border-color:var(--accLine);background:var(--card)}
+.coin{padding:7px 11px;margin-top:6px}
+.cosel{width:auto;margin:0}
+.corow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.colab{font-size:.74rem;color:var(--dim);min-width:58px}
+.colab.off{opacity:.4}
+.colab2{display:block;font-size:.76rem;color:var(--dim);margin:12px 0 0}
+.codots{display:flex;gap:5px}
+.codots button{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border3);background:transparent}
+.codots button.on{background:var(--brass);border-color:var(--brass)}
+.codots button:hover{border-color:var(--brass)}
+.cotick{display:flex;align-items:center;gap:7px;padding:4px 10px 4px 6px;border:1px solid var(--line);border-radius:8px;font-size:.8rem;margin-right:6px}
+.cotick.on{border-color:var(--teal);color:var(--teal)}
+.cohint{font-size:.7rem;color:var(--faint);margin:6px 0 8px;line-height:1.5}
+.cohrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cobtn{border:1px solid var(--line);border-radius:7px;padding:5px 12px;font-size:.76rem;color:var(--text);background:var(--card)}
+.cobtn:hover{border-color:var(--border3)}
+.cobtn.warn{color:var(--rose)}
+.codone{display:block;width:100%;margin-top:18px;padding:11px;border-radius:9px;border:1px solid var(--accLine);background:var(--accBg);
+  color:var(--accHover);font-weight:600;font-size:.86rem}
+.codone.on{background:transparent;border-color:var(--teal);color:var(--teal)}
+.codone.pm:not(.on){border-color:color-mix(in srgb,var(--violet) 45%,transparent);background:color-mix(in srgb,var(--violet) 12%,transparent);color:var(--violet)}
+.cogrid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.cogrid2 .card{margin-bottom:18px}
+.cobar{display:grid;grid-template-columns:200px 1fr 54px;gap:8px;align-items:center;font-size:.72rem;margin:6px 0}
+.cotrack{height:7px;background:var(--hover);border-radius:6px;overflow:hidden}
+.cotrack div{height:100%;background:var(--brass);border-radius:6px}
+.cobar em{font-style:normal;color:var(--faint);text-align:right}
+.cogh{font-size:.64rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:14px 0 4px}
+.cobq{display:flex;align-items:center;gap:8px;padding:6px 4px;border-bottom:1px solid var(--line);font-size:.8rem}
+.cobq span{flex:1;min-width:0;cursor:text;line-height:1.45}
+.costar{color:var(--faint);font-size:.95rem}.costar.on{color:#E3A008}
+.cocnt{min-width:24px;padding:1px 7px;border-radius:999px;background:var(--hover);font-size:.68rem;color:var(--dim)}
+.coadd{display:flex;gap:6px;align-items:center;margin:10px 0 4px}
+.coadd .coin{margin:0}
+.coguide p{font-size:.82rem;line-height:1.6;margin:6px 0}
+.coguide h2{margin-top:16px}
+.modal.cowide{max-width:560px}
+.copl{max-height:46vh;overflow-y:auto;margin:8px 0;padding-right:4px}
+.copq{display:flex;gap:8px;align-items:flex-start;width:100%;text-align:left;padding:6px 6px;border-radius:6px;font-size:.8rem;line-height:1.45}
+.copq:hover{background:var(--hover)}
+.copq.on{background:var(--accBg)}
+.copc{width:16px;height:16px;flex:none;border:1.5px solid var(--border3);border-radius:4px;display:grid;place-items:center;font-size:.66rem;color:var(--accHover);margin-top:2px}
+.copq.on .copc{border-color:var(--accLine)}
+.cocount{flex:1;font-size:.72rem;color:var(--faint);align-self:center}
+.coqh{font-family:'Instrument Serif',Vazirmatn,Georgia,serif;font-size:1.1rem;color:var(--head);margin:-8px 0 10px}
+.cohist{max-height:52vh;overflow-y:auto}
+.cohi{padding:8px 0;border-bottom:1px solid var(--line);font-size:.82rem;line-height:1.55}
+.cohd{font-size:.64rem;color:var(--faint);margin-bottom:2px}
+@media(max-width:860px){.cogrid2{grid-template-columns:1fr}}
+@media(max-width:520px){.cocard{padding:16px 14px}.cobar{grid-template-columns:110px 1fr 40px}}
+nav{overflow-x:auto;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
+nav button{min-width:56px}
+
+/* bilingual */
+.fa{font-family:Vazirmatn,Inter,sans-serif;direction:rtl}
+.bi{display:grid;grid-template-columns:1fr 1fr;gap:6px 22px;align-items:start}
+.bi .en{text-align:left}
+.bi .fa{text-align:right;line-height:1.75}
+.cxh3{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:0 0 6px;flex:1}
+.cxh3 span{font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.cxh3 .fa{font-size:.76rem;letter-spacing:0;text-transform:none}
+.cohrow .cxh3{margin:0}
+.cohrow{gap:12px;margin-bottom:6px}
+#coSeg button .fa{font-size:.72rem;opacity:.8;margin-left:3px}
+.cxfad{font-size:.8rem;color:var(--dim);margin-top:2px}
+.cogh{display:flex;justify-content:space-between}
+.cogh .fa{letter-spacing:0;text-transform:none;font-size:.72rem}
+.coquote .cxmini .cxchip{font-size:.66rem;padding:1px 7px}
+.coquote div{font-size:.9rem;color:var(--head)}
+/* wheels */
+.cxsel{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:4px 0 8px}
+.cxwt{margin-left:auto}
+.cxchip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:.74rem;
+  background:color-mix(in srgb,var(--cc) 30%,var(--card));border:1px solid color-mix(in srgb,var(--cc) 70%,transparent);color:var(--text)}
+.cxchip .fa{font-size:.74rem}
+.cxchip i{font-style:normal;font-size:.6rem;opacity:.55}
+.cxchip em{font-style:normal;font-weight:700;font-size:.68rem}
+.cxwheel{max-width:760px;margin:6px auto 0;overflow-x:auto}
+.cxwheel svg{width:100%;min-width:520px;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
+.cxwclose{display:flex;justify-content:center;margin-top:8px}
+.cxwheel.anim svg{animation:cxin .24s ease-out}
+@keyframes cxin{from{opacity:.4;transform:scale(.96)}to{opacity:1;transform:none}}
+.cxwheel.focus svg{min-width:0}
+.cxcore{cursor:pointer}
+.cxcore circle{stroke:#fff;stroke-width:2}
+.cxcore.on circle{stroke:#1f1f1f;stroke-width:3}
+.cxwct{fill:#222;font-weight:700;font-family:Inter,sans-serif}
+.cxwct.fa{font-family:Vazirmatn,sans-serif}
+.cxwch{fill:#444;font-family:Inter,Vazirmatn,sans-serif}
+.cxwheel.picking .cxws{cursor:zoom-in}
+.cxwtools{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 2px}
+.cxwtools .cobtn{display:inline-flex;align-items:center;gap:5px}
+.cxwtools .cobtn.on{border-color:var(--accLine);background:var(--accBg);color:var(--accHover)}
+.cxwtools .cohint{margin:0 0 0 4px}
+.cxqrow{display:flex;gap:9px;align-items:flex-start;margin:12px 0 6px}
+.cxqrow .hit{flex:none;margin-top:1px}
+.cxqrow .bi{flex:1;margin:0}
+.cxqrow.on .bi{color:var(--teal)}
+.cxws{stroke:#fff;stroke-width:1;cursor:pointer;transition:filter .12s}
+.cxws:hover{filter:brightness(.93)}
+.cxws.on{stroke:#1f1f1f;stroke-width:2.2}
+.cxwl{pointer-events:none;fill:#2a2a2a;font-family:Inter,sans-serif}
+.cxwl .fa{font-family:Vazirmatn,sans-serif}
+.cxwl.on{font-weight:700;fill:#111}
+.cxwc{font-size:12px;font-weight:600;fill:var(--dim)}
+.cxwc.fa{font-family:Vazirmatn,sans-serif}
+/* practice */
+.cxpracs{display:grid;gap:8px}
+.cxprac{display:block;width:100%;text-align:left;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--soft);font-size:.86rem;line-height:1.5;color:var(--text)}
+.cxprac:hover{border-color:var(--border3)}
+.cxprac.on{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 10%,var(--card));box-shadow:0 0 0 1px var(--teal)}
+.cxtag{display:block;font-size:.62rem;color:var(--faint);margin-bottom:4px;letter-spacing:.03em}
+.cxok{display:block;margin-top:6px;font-size:.7rem;color:var(--teal);font-weight:600}
+.cxpr{font-size:.92rem;color:var(--head)}
+.cxq{font-size:.86rem;margin:12px 0 6px;color:var(--head)}
+.cxq b{font-weight:600}
+/* competency */
+.cxcomp{position:relative;border:1px solid color-mix(in srgb,var(--cc) 55%,transparent);border-left:4px solid var(--cc);border-radius:10px;padding:12px 14px 10px 48px;margin:4px 0 8px;
+  background:color-mix(in srgb,var(--cc) 6%,var(--card))}
+.cxcn{position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--cc);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.82rem}
+.cxct{font-weight:700;font-size:.95rem;color:var(--head)}
+.cxct .fa{font-weight:700}
+.cxdef{font-size:.74rem;color:var(--dim);margin:4px 0 8px}
+.cxsubs{display:grid;gap:6px}
+.cxsub{display:flex;gap:9px;align-items:flex-start;padding:7px 9px;border-radius:8px;background:var(--card);border:1px solid var(--line);font-size:.8rem;line-height:1.5}
+.cxsub .bi{flex:1}
+.cxsub.on{border-color:var(--teal)}
+.cxsub .hit{flex:none;margin-top:2px}
+.cxsn{flex:none;font-size:.66rem;font-weight:700;color:var(--cc);padding-top:2px;min-width:26px}
+/* month */
+.cxmw{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:12px 0 4px;font-size:.64rem;color:var(--faint);text-align:center}
+.cxmg{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cxmc{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:62px;padding:6px 7px;border:1px solid var(--line);border-left:3px solid var(--cc);border-radius:8px;background:var(--card);text-align:left}
+.cxmc.off{border:0;background:transparent}
+.cxmc.today{box-shadow:0 0 0 1.5px var(--brass)}
+.cxmc.sel{background:var(--accBg)}
+.cxmn{font-size:.82rem;font-weight:600;color:var(--head)}
+.cxmb{font-size:.6rem;color:var(--cc);font-weight:700}
+.cxmd{display:flex;gap:3px;margin-top:auto}
+.cxmd i{width:7px;height:7px;border-radius:50%;border:1px solid var(--border3)}
+.cxmd i.on{background:var(--teal);border-color:var(--teal)}
+.cxqt{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
+.cxqt .fa{text-align:right;font-size:.8rem}
+.cobq .cxqt{cursor:text}
+@media(max-width:640px){.bi{grid-template-columns:1fr;gap:2px}.cxmc{min-height:50px;padding:4px}.cxmb{font-size:.54rem}}
 </style>
 <style>
 body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
@@ -1361,6 +1551,11 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
     <div class="card"><h2>Tasks completed, last 14 days</h2><div class="chart c-task" id="cTask"></div><div class="xax" id="xTask"></div></div>
     <div class="card"><h2>Longest streaks</h2><div class="lead" id="lead"></div></div>
   </div>
+
+  <div class="pane" id="p-coaching">
+    <div class="cobar0"><div><h1>Coaching</h1><div class="cxfad" dir="rtl">کوچینگ روزانه</div></div><div class="seg" id="coSeg"></div></div>
+    <div id="coachBox"></div>
+  </div>
 </div>
 
 <div class="menu" id="menu"></div>
@@ -1375,6 +1570,7 @@ body.auth-locked>:not(#authGate):not(script):not(style){display:none!important}
   <button data-p="systems" onclick="go('systems')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M5 8.2v3.3h14V8.2M12 11.5v4.3"/></svg>Systems</button>
   <button data-p="calendar" onclick="go('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Calendar</button>
   <button data-p="focus" onclick="go('focus')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>Focus</button>
+  <button data-p="coaching" onclick="go('coaching')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v2M12 19v2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4L7 17M17 7l1.4-1.4"/><circle cx="12" cy="12" r="3.6"/></svg>Coaching</button>
   <button data-p="stats" onclick="go('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 19V10M12 19V5M19 19v-6"/></svg>Stats</button>
 </nav>
 
@@ -1404,7 +1600,7 @@ const rb=r=>{const m=rOf(r);return m?'<span class="rbadge r'+m.r+
 function setR(id,r){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('priority');t.r=(t.r===r?0:r);save();paint();hideMenu()}
 let KEY='dashboard-private-v1';
-const BUILD='2026-10-23 · b110';
+const BUILD='2026-11-06 · b125';
 const COARSE=(()=>{try{return window.matchMedia&&matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 const DRAGGABLE=COARSE?'false':'true';
 let S=null,UNDO=[],weekOff=0,showArch=false,calMonth=null,calView='month',tView='list',showDone=false,selH=null,tQ='',favOnly=false;
@@ -3010,6 +3206,9 @@ function untimedOn(ds){return tasksOn(ds).filter(t=>calVisible(t)&&(t.time==null
 function ancestry(t){const p=[];let q=t.parent;
   while(q){const u=S.tasks.find(x=>x.id===q);if(!u)break;p.unshift(u.title);q=u.parent}
   return p}
+/* the tasks a mini task sits under, on its own line, small */
+function miniPar(t){const p=ancestry(t);
+  return p.length?'<span class="mpar" dir="auto" title="'+esc(p.join(' \u203A '))+'">'+esc(p.join(' \u203A '))+'</span>':'<span class="mpar"></span>'}
 function crumbHTML(t,cls,withBoard){
   const p=ancestry(t);
   if(withBoard)p.unshift(listOf(t.list)[1]);
@@ -3474,15 +3673,568 @@ function renderFocus(){renderPomo();fToday.textContent=(S.focus[TODAY]||0)+' ses
         ? 'No active projects yet \u2014 star a task on the Today page.'
         : 'Nothing matches that filter.')+'</div>')+'</div>'}
 
-function paint(){const sc=scrollSnap();
+function paint(){const sc=scrollSnap();try{syncDue()}catch(e){}
   if(pulse)setTimeout(()=>{pulse=null},420);
   renderHead();
   if(document.getElementById('activeProjects'))renderActive();
   renderTodayTasks();renderInbox();
   if(document.getElementById('todayHabits'))renderTodayHabits();
-  renderFltBars();syncFavBtn();renderWeekly();renderProjects();renderSystems();renderHabits();renderMatrix();renderCalendar();renderStats();renderFocus();syncUndo();
+  renderFltBars();syncFavBtn();renderWeekly();renderProjects();renderSystems();renderHabits();renderMatrix();renderCalendar();renderStats();renderFocus();try{renderCoach()}catch(e){console.error(e)}syncUndo();
   fitPanes();try{requestAnimationFrame(fitPanes)}catch(e){}
   scrollBack(sc)}
+
+/* ══════════ Coaching ══════════
+   Bilingual daily practice. Morning: energy, one word, feelings and needs
+   from the two wheels, a coaching practice picked from three, and the
+   competency of the day. Evening: reflection. The competencies run on the
+   calendar month, so every sub-competency is practised once a month.     */
+const CX_COMP={
+ 1:{en:'Demonstrates Ethical Practice',fa:'عمل اخلاقی را نشان می‌دهد',
+   den:'Understands and consistently applies coaching ethics and standards of coaching.',
+   dfa:'اخلاق کوچینگ و استانداردهای کوچینگ را درک می‌کند و به طور مداوم به کار می‌برد.',
+   s:[['Demonstrates personal integrity and honesty in interactions with clients, sponsors and relevant stakeholders','صداقت و یکپارچگی شخصی را در تعامل با مراجعین، حامیان مالی و ذینفعان مربوطه نشان می‌دهد.'],
+      ['Is sensitive to clients’ identity, environment, experiences, values and beliefs','نسبت به هویت، محیط، تجربیات، ارزش‌ها و باورهای مراجعین حساس است.'],
+      ['Uses language appropriate and respectful to clients, sponsors and relevant stakeholders','از زبان مناسب و محترمانه برای مراجعین، حامیان مالی و ذینفعان مربوطه استفاده می‌کند.'],
+      ['Abides by the ICF Code of Ethics and upholds the ICF Core Values','از منشور اخلاقی ICF پیروی می‌کند و ارزش‌های اصلی ICF را نیز حفظ می‌کند.'],
+      ['Maintains confidentiality with client information per stakeholder agreements and pertinent laws','محرمانگی اطلاعات مراجعین را بر اساس توافقات ذینفعان و قوانین مربوطه حفظ می‌کند.'],
+      ['Maintains the distinctions between coaching, consulting, psychotherapy and other support professions','تمایز میان کوچینگ، مشاوره، روان‌درمانی و سایر حرفه‌های حمایتی را حفظ می‌کند.'],
+      ['Refers clients to other support professionals, as appropriate','در صورت لزوم، مراجعین کوچینگ خود را به سایر متخصصان پشتیبانی (مانند روانشناس) ارجاع می‌دهد.']]},
+ 2:{en:'Embodies a Coaching Mindset',fa:'تجسم (نشان دادن) طرز فکر کوچینگ',
+   den:'Develops and maintains a mindset that is open, curious, flexible and client-centered.',
+   dfa:'ذهنیتی را پرورش داده و حفظ می‌کند که پذیرا، کنجکاو، انعطاف‌پذیر و مراجع‌محور است.',
+   s:[['Acknowledges that clients are responsible for their own choices','تصدیق می‌کند که مراجعین مسئول انتخاب‌های خود هستند.'],
+      ['Engages in ongoing learning and development as a coach','به عنوان کوچ، درگیر یادگیری و توسعهٔ مداوم خود است.'],
+      ['Develops an ongoing reflective practice to enhance one’s coaching','تمرین بازتاب (انعکاس) را به طور مستمر برای تقویت کوچینگ خود ایجاد می‌کند.'],
+      ['Remains aware of and open to the influence of biases, context and culture on self and others','از تأثیر سوگیری‌ها، زمینه و فرهنگ بر خود و دیگران آگاه است و در برابر آن گشوده است.'],
+      ['Uses awareness of self and one’s intuition to benefit clients','از آگاهی از خود و شهود خود برای سود رساندن به مراجعین استفاده می‌کند.'],
+      ['Develops and maintains the ability to manage one’s emotions','توانایی مدیریت احساسات خود را توسعه داده و حفظ می‌کند.'],
+      ['Maintains emotional, physical, and mental well-being in preparation for, throughout, and following each session','قبل، حین و بعد از هر جلسه، بهزیستی عاطفی، جسمی و ذهنی خود را در شرایط خوبی نگه می‌دارد.'],
+      ['Seeks help from outside sources when necessary','در صورت لزوم از منابع بیرونی کمک می‌گیرد.'],
+      ['Nurtures openness and curiosity in oneself, the client, and the coaching process','گشودگی و کنجکاوی را در خود، مراجع و فرایند کوچینگ پرورش می‌دهد.'],
+      ['Remains aware of the influence of one’s thoughts and behaviors on the client and others','همواره از تأثیر افکار و رفتارهای خود بر مراجع و دیگران آگاه می‌ماند.']]},
+ 3:{en:'Establishes and Maintains Agreements',fa:'توافق‌ها را ایجاد و حفظ می‌کند',
+   den:'Partners with the client and relevant stakeholders to create clear agreements about the coaching relationship, process, plans and goals.',
+   dfa:'با مراجع و ذینفعان مربوطه همراهی می‌کند تا توافقات واضحی دربارهٔ رابطهٔ کوچینگ، فرایند، برنامه‌ها و اهداف ایجاد کنند.',
+   s:[['Describes one’s coaching philosophy and clearly defines what coaching is and is not','فلسفهٔ کوچینگ خود را شرح می‌دهد و به وضوح تعریف می‌کند که کوچینگ چه هست و چه نیست.'],
+      ['Reaches agreement about what is and is not appropriate in the relationship, what is offered, and the responsibilities of each side','دربارهٔ اینکه چه چیزی در رابطهٔ کوچینگ مناسب است و چه نیست، چه ارائه می‌شود و مسئولیت‌های هر طرف، به توافق می‌رسد.'],
+      ['Reaches agreement about the guidelines and specific parameters of the coaching relationship','دربارهٔ دستورالعمل‌ها و پارامترهای خاص رابطهٔ کوچینگ (زمان، هزینه، مدت، خاتمه، محرمانگی) به توافق می‌رسد.'],
+      ['Partners with the client and relevant stakeholders to establish an overall coaching plan and goals','با مراجع و ذینفعان مربوطه برای ایجاد یک برنامه و اهداف کلی کوچینگ همراهی می‌کند.'],
+      ['Partners with the client to determine client-coach compatibility','برای تعیین سازگاری بین مراجع و کوچ با مراجع همراه می‌شود.'],
+      ['Partners with the client to identify or reconfirm what they want to accomplish in the session','با مراجع همراهی می‌کند تا آنچه را می‌خواهد در جلسه به دست آورد، شناسایی یا تأیید مجدد کند.'],
+      ['Partners with the client to define what they believe they need to address or resolve to achieve it','با مراجع همراهی می‌کند تا آنچه را باور دارد برای رسیدن به خواسته‌اش لازم است انجام دهد یا حل کند، شناسایی کند.'],
+      ['Partners with the client to define or reconfirm measures of success','با مراجع همراه می‌شود تا معیارهای موفقیت را تعریف یا تأیید مجدد کند.'],
+      ['Partners with the client to manage the time and focus of the session','برای مدیریت زمان و تمرکز جلسه با مراجع همراهی می‌کند.'],
+      ['Continues coaching in the direction of the client’s desired outcome unless the client indicates otherwise','کوچینگ را همسو با نتیجهٔ مطلوب مراجع ادامه می‌دهد، تا زمانی که مراجع مسیر دیگری را نشان دهد.'],
+      ['Partners with the client to close the coaching relationship in a way that respects the client and the experience','با مراجع همراهی می‌کند تا رابطهٔ کوچینگ را به شکلی به سرانجام برساند که به مراجع و تجربهٔ کوچینگ احترام گذاشته شود.'],
+      ['Revisits the coaching agreement when necessary to ensure the approach is meeting the client’s needs','در صورت لزوم، توافق کوچینگ را بازبینی می‌کند تا مطمئن شود رویکرد کوچینگ نیازهای مراجع را برآورده می‌کند.']]},
+ 4:{en:'Cultivates Trust and Safety',fa:'اعتماد و امنیت را پرورش می‌دهد',
+   den:'Partners with the client to create a safe, supportive environment that allows the client to share freely. Maintains a relationship of mutual respect and trust.',
+   dfa:'برای ایجاد محیطی امن و حمایتی که به مراجع امکان می‌دهد آزادانه خود را ابراز کند، با او همراه می‌شود. رابطه‌ای بر پایهٔ احترام و اعتماد متقابل را حفظ می‌کند.',
+   s:[['Seeks to understand the client within their context: identity, environment, experiences, values and beliefs','به دنبال درک مراجع در بستر اوست؛ هویت، محیط، تجربیات، ارزش‌ها و باورهای او.'],
+      ['Demonstrates respect for the client’s identity, perceptions, style and language and adapts one’s coaching','به هویت، ادراکات، سبک و زبان مراجع احترام می‌گذارد و کوچینگ خود را با او تطبیق می‌دهد.'],
+      ['Acknowledges and respects the client’s unique talents, insights and work in the coaching process','استعدادها، بینش‌ها و تلاش‌های منحصربه‌فرد مراجع را تصدیق می‌کند و به آن‌ها احترام می‌گذارد.'],
+      ['Shows support, empathy and concern for the client','حمایت، همدلی و دغدغه‌مندی را نسبت به مراجع نشان می‌دهد.'],
+      ['Acknowledges and supports the client’s expression of feelings, perceptions, concerns, beliefs and suggestions','بیان احساسات، ادراکات، نگرانی‌ها، باورها و پیشنهادهای مراجع را تصدیق می‌کند و از آن حمایت می‌کند.'],
+      ['Demonstrates openness and transparency as a way to display vulnerability and build trust','گشودگی و شفافیت را به عنوان راهی برای نشان دادن آسیب‌پذیری و ایجاد اعتماد نشان می‌دهد.']]},
+ 5:{en:'Maintains Presence',fa:'حضور را حفظ می‌کند',
+   den:'Is fully conscious and present with the client, employing a style that is open, flexible, grounded and confident.',
+   dfa:'کاملاً آگاه و حواس‌جمع در کنار مراجع حضور دارد و از سبکی گشوده، انعطاف‌پذیر، مستدل و مطمئن استفاده می‌کند.',
+   s:[['Remains focused, observant, empathetic and responsive to the client','متمرکز، هوشیار، همدل و پاسخگو نسبت به مراجع باقی می‌ماند.'],
+      ['Demonstrates curiosity during the coaching process','در طول فرایند کوچینگ کنجکاوی نشان می‌دهد.'],
+      ['Remains aware of what is emerging for self and client in the present moment','از آنچه در لحظهٔ اکنون برای خود و مراجع در حال ظهور است، آگاه می‌ماند.'],
+      ['Manages one’s emotions to stay present with the client','احساسات خود را برای حضور در کنار مراجع مدیریت می‌کند.'],
+      ['Demonstrates confidence in working with strong client emotions','در کار با احساسات قوی مراجع، اطمینان و آرامش نشان می‌دهد.'],
+      ['Is comfortable working in a space of not knowing','با کار کردن در فضای ندانستن راحت است.'],
+      ['Creates or allows space for silence, pause or reflection','فضایی برای سکوت، مکث یا تأمل ایجاد می‌کند یا اجازه می‌دهد.']]},
+ 6:{en:'Listens Actively',fa:'به طور فعال گوش می‌دهد',
+   den:'Focuses on what the client is and is not saying to fully understand what is being communicated and to support client self-expression.',
+   dfa:'بر آنچه مراجع می‌گوید و آنچه نمی‌گوید متمرکز است تا پیام او را در بستر زندگی‌اش کامل درک کند و از خودابرازی او حمایت کند.',
+   s:[['Considers the client’s context, identity, environment, experiences, values and beliefs to understand better','زمینه، هویت، محیط، تجربیات، ارزش‌ها و باورهای مراجع را در نظر می‌گیرد تا درک خود را از پیام او افزایش دهد.'],
+      ['Reflects or summarizes what the client is communicating to ensure clarity and understanding','برای اطمینان از وضوح و درک، گفته‌های مراجع را بازتاب می‌دهد یا خلاصه می‌کند.'],
+      ['Recognizes and inquires when there is more to what the client is communicating','تشخیص می‌دهد چه زمانی چیزی بیش از آنچه گفته می‌شود وجود دارد و دربارهٔ آن پرس‌وجو می‌کند.'],
+      ['Notices, acknowledges and explores the client’s emotions, energy shifts, non-verbal cues or other behaviors','به عواطف، تغییرات انرژی، نشانه‌های غیرکلامی و سایر رفتارهای مراجع توجه می‌کند، آن‌ها را تصدیق می‌کند و کاوش می‌کند.'],
+      ['Integrates the client’s words, tone of voice and body language to determine the full meaning','کلمات، لحن صدا و زبان بدن مراجع را یکپارچه می‌کند تا معنای کامل پیام را دریابد.'],
+      ['Notices trends in the client’s behaviors and emotions across sessions to discern themes and patterns','به روند رفتارها و احساسات مراجع در طول جلسات توجه می‌کند تا تم‌ها و الگوها را تشخیص دهد.']]},
+ 7:{en:'Evokes Awareness',fa:'بیداری آگاهی',
+   den:'Facilitates client insight and learning by using tools and techniques such as powerful questioning, silence, metaphor or analogy.',
+   dfa:'بینش و یادگیری مراجع را با ابزارها و تکنیک‌هایی مانند پرسش قدرتمند، سکوت، استعاره یا قیاس تسهیل می‌کند.',
+   s:[['Considers client experience when deciding what might be most useful','هنگام تصمیم‌گیری دربارهٔ اینکه چه چیزی مفیدتر است، تجربهٔ مراجع را در نظر می‌گیرد.'],
+      ['Challenges the client as a way to evoke awareness or insight','از به چالش کشیدن مراجع برای برانگیختن آگاهی یا بینش استفاده می‌کند.'],
+      ['Asks questions about the client, such as their way of thinking, values, needs, wants and beliefs','دربارهٔ خود مراجع سؤال می‌پرسد؛ طرز فکر، ارزش‌ها، نیازها، خواسته‌ها و باورهای او.'],
+      ['Asks questions that help the client explore beyond current thinking','سؤال‌هایی می‌پرسد که به مراجع کمک می‌کند فراتر از تفکر فعلی خود کاوش کند.'],
+      ['Invites the client to share more about their experience in the moment','از مراجع دعوت می‌کند تجربهٔ خود را در لحظهٔ اکنون بیشتر به اشتراک بگذارد.'],
+      ['Notices what is working to enhance client progress','توجه می‌کند چه چیزی برای پیشرفت مراجع کار می‌کند.'],
+      ['Adjusts the coaching approach in response to the client’s needs','رویکرد کوچینگ را در پاسخ به نیازهای مراجع تنظیم می‌کند.'],
+      ['Helps the client identify factors that influence current and future patterns of behavior, thinking or emotion','به مراجع کمک می‌کند عواملی را که بر الگوهای رفتار، تفکر یا احساس کنونی و آینده‌اش اثر می‌گذارند، شناسایی کند.'],
+      ['Invites the client to generate ideas about how they can move forward and what they are willing or able to do','از مراجع دعوت می‌کند دربارهٔ چگونگی حرکت رو به جلو و آنچه مایل یا قادر به انجامش است، ایده‌پردازی کند.'],
+      ['Supports the client in reframing perspectives','از مراجع در چارچوب‌بندی دوبارهٔ دیدگاه‌هایش حمایت می‌کند.'],
+      ['Shares observations, knowledge, insights and feelings, without attachment, that may create new insights','مشاهدات، دانش، بینش‌ها و احساساتی را که می‌تواند بینش تازه بسازد، بدون دلبستگی به نتیجه به اشتراک می‌گذارد.']]},
+ 8:{en:'Facilitates Client Growth',fa:'رشد مراجع را تسهیل می‌کند',
+   den:'Partners with the client to transform learning and insight into action. Promotes client autonomy in the coaching process.',
+   dfa:'با مراجع همراه می‌شود تا یادگیری و بینش را به عمل تبدیل کند. استقلال مراجع را در فرایند کوچینگ ارتقا می‌دهد.',
+   s:[['Works with the client to integrate new awareness, insight or learning into their worldview and behaviors','با مراجع کار می‌کند تا آگاهی، بینش یا یادگیری جدید را در جهان‌بینی و رفتارهای او ادغام کنند.'],
+      ['Partners with the client to design goals, actions and accountability measures that expand new learning','با مراجع برای طراحی اهداف، اقدامات و معیارهای پاسخگویی که یادگیری جدید را گسترش می‌دهد، شریک می‌شود.'],
+      ['Acknowledges and supports client autonomy in the design of goals, actions and methods of accountability','استقلال مراجع را در طراحی اهداف، اقدامات و روش‌های پاسخگویی تصدیق می‌کند و از آن حمایت می‌کند.'],
+      ['Supports the client in identifying potential results or learning from identified action steps','از مراجع در شناسایی نتایج یا یادگیری‌های بالقوهٔ گام‌های اقدام پشتیبانی می‌کند.'],
+      ['Invites the client to consider how to move forward, including resources, support and potential barriers','از مراجع دعوت می‌کند چگونگی حرکت رو به جلو را، شامل منابع، حمایت‌ها و موانع احتمالی، بررسی کند.'],
+      ['Partners with the client to summarize learning and insight within or between sessions','با مراجع همراه می‌شود تا یادگیری و بینش را در جلسات یا بین جلسات خلاصه کند.'],
+      ['Partners with the client to integrate learning and sustain progress throughout the coaching engagement','با مراجع همکاری می‌کند تا یادگیری را یکپارچه و پیشرفت را در کل همکاری کوچینگ پایدار کند.'],
+      ['Acknowledges the client’s progress and successes','پیشرفت و موفقیت‌های مراجع را تصدیق می‌کند.'],
+      ['Partners with the client to close the session','برای بستن جلسه با مراجع همراه می‌شود.']]}};
+/* 30 days of related sub-competencies, in the order of the model:
+   foundation, relationship, communication, growth.                       */
+const CX_GROUPS=[[1,[1,4]],[1,[2,3]],[1,[5,6,7]],
+  [2,[2,3,8]],[2,[4,10]],[2,[5,6,7]],[2,[1,9]],
+  [3,[1,2,3]],[3,[4,5]],[3,[6,7,8]],[3,[9,10]],[3,[11,12]],
+  [4,[1,2]],[4,[3,4]],[4,[5,6]],
+  [5,[1,2]],[5,[3,4]],[5,[5,6,7]],
+  [6,[1,2]],[6,[3,4]],[6,[5,6]],
+  [7,[1,7]],[7,[3,4]],[7,[2,10]],[7,[5,8]],[7,[6,9,11]],
+  [8,[1,2,3]],[8,[4,5]],[8,[6,7]],[8,[8,9]]];
+/* The two wheels: [english, persian, colour, [[middle en, fa, [[outer en, fa],…]],…]] */
+const CX_FEEL=[
+ ['Happy','شاد','#F3D54E',[['Playful','بازیگوش',[['Aroused','برانگیخته'],['Cheeky','شیطون']]],['Content','راضی',[['Free','آزاد'],['Joyful','شادمان']]],
+   ['Interested','علاقه‌مند',[['Curious','کنجکاو'],['Inquisitive','پرسشگر']]],['Proud','مفتخر',[['Successful','موفق'],['Confident','مطمئن']]],
+   ['Accepted','پذیرفته‌شده',[['Respected','محترم'],['Valued','ارزشمند']]],['Powerful','توانمند',[['Courageous','شجاع'],['Creative','خلاق']]],
+   ['Peaceful','آرام',[['Loving','پرمهر'],['Thankful','سپاسگزار']]],['Trusting','با اعتماد',[['Sensitive','حساس'],['Intimate','صمیمی']]],
+   ['Optimistic','خوش‌بین',[['Hopeful','امیدوار'],['Inspired','الهام‌گرفته']]]]],
+ ['Sad','غمگین','#7FB0E0',[['Lonely','تنها',[['Isolated','منزوی'],['Abandoned','رهاشده']]],['Vulnerable','آسیب‌پذیر',[['Victimised','قربانی'],['Fragile','شکننده']]],
+   ['Despair','نومید',[['Grief','سوگوار'],['Powerless','درمانده']]],['Guilty','گناهکار',[['Ashamed','شرمسار'],['Remorseful','پشیمان']]],
+   ['Depressed','افسرده',[['Empty','تهی'],['Inferior','حقیر']]],['Hurt','رنجیده',[['Disappointed','دلسرد'],['Embarrassed','خجالت‌زده']]]]],
+ ['Disgusted','منزجر','#A9A9A9',[['Disapproving','ناپسندانگار',[['Judgmental','قضاوتگر'],['Embarrassed','شرمنده']]],['Disappointed','سرخورده',[['Appalled','بهت‌زده'],['Revolted','بیزار']]],
+   ['Awful','حال‌بد',[['Nauseated','دل‌آشوب'],['Detestable','نفرت‌انگیز']]],['Repelled','پس‌زده',[['Horrified','هراسان'],['Hesitant','مردد']]]]],
+ ['Angry','خشمگین','#EC8484',[['Let down','وارفته',[['Betrayed','خیانت‌دیده'],['Resentful','کینه‌به‌دل']]],['Humiliated','تحقیرشده',[['Disrespected','بی‌حرمت‌شده'],['Ridiculed','مسخره‌شده']]],
+   ['Bitter','تلخ',[['Indignant','برآشفته'],['Violated','پایمال‌شده']]],['Mad','عصبانی',[['Furious','برافروخته'],['Jealous','حسود']]],
+   ['Aggressive','پرخاشگر',[['Provoked','تحریک‌شده'],['Hostile','خصمانه']]],['Frustrated','کلافه',[['Infuriated','از کوره دررفته'],['Annoyed','آزرده']]],
+   ['Distant','دور',[['Withdrawn','کناره‌گیر'],['Numb','بی‌حس']]],['Critical','منتقد',[['Sceptical','بدبین'],['Dismissive','بی‌اعتنا']]]]],
+ ['Fearful','ترسیده','#F6B56B',[['Scared','ترسان',[['Helpless','بی‌پناه'],['Frightened','وحشت‌زده']]],['Anxious','مضطرب',[['Overwhelmed','غرق‌شده'],['Worried','نگران']]],
+   ['Insecure','ناامن',[['Inadequate','ناکافی'],['Inferior','کم‌ارزش']]],['Weak','ضعیف',[['Worthless','بی‌ارزش'],['Insignificant','ناچیز']]],
+   ['Rejected','طردشده',[['Excluded','کنارگذاشته'],['Persecuted','آزاردیده']]],['Threatened','تهدیدشده',[['Nervous','عصبی'],['Exposed','بی‌دفاع']]]]],
+ ['Bad','بد','#79C9A6',[['Bored','بی‌حوصله',[['Indifferent','بی‌تفاوت'],['Apathetic','بی‌انگیزه']]],['Busy','پرمشغله',[['Pressured','تحت فشار'],['Rushed','شتاب‌زده']]],
+   ['Stressed','پراسترس',[['Overwhelmed','درهم‌کوبیده'],['Out of control','از کنترل خارج']]],['Tired','خسته',[['Sleepy','خواب‌آلود'],['Unfocused','بی‌تمرکز']]]]],
+ ['Surprised','شگفت‌زده','#B9A4E0',[['Startled','یکه‌خورده',[['Shocked','شوکه'],['Dismayed','پریشان']]],['Confused','سردرگم',[['Disillusioned','دلزده'],['Perplexed','گیج']]],
+   ['Amazed','حیرت‌زده',[['Astonished','متحیر'],['Awe','مبهوت']]],['Excited','هیجان‌زده',[['Eager','مشتاق'],['Energetic','پرانرژی']]]]]];
+const CX_NEED=[
+ ['Life','زندگی','#E05A5A',[['Joy','شادی',[['Humor','شوخ‌طبعی'],['Celebration','جشن']]],['Beauty','زیبایی',[['Aesthetics','زیبایی‌شناسی'],['Appreciation','تحسین']]],
+   ['Awareness','آگاهی',[['Presence','حضور'],['Consciousness','هشیاری']]],['Gratefulness','سپاسگزاری',[['Mourning','سوگواری'],['Remembrance','یادبود']]]]],
+ ['Mutuality','دوسویگی','#F2C46B',[['Care','مراقبت',[['Hospitality','مهمان‌نوازی'],['Nurturance','پرورش']]],['Cooperation','همکاری',[['Help','کمک'],['Support','حمایت']]],
+   ['Community','اجتماع',[['Service','خدمت'],['Fellowship','همراهی']]],['Contribution','مشارکت',[['Giving','بخشیدن'],['Generosity','سخاوت']]]]],
+ ['Worth','ارزشمندی','#F5DC6A',[['Value','ارزش',[['To Matter','مهم بودن'],['Affirmation','تأیید']]],['Recognition','دیده‌شدن',[['Gratitude','سپاس'],['Appreciation','قدردانی']]],
+   ['Respect','احترام',[['Admiration','تحسین'],['Acknowledgment','تصدیق']]],['Success','موفقیت',[['Achievement','دستاورد'],['Accomplishment','به‌سرانجام‌رساندن']]]]],
+ ['Authenticity','اصالت','#E3EC8A',[['Significance','معناداری',[['Purpose','هدف'],['Meaning','معنا']]],['Expression','ابراز',[['Creativity','خلاقیت'],['Originality','اصیل بودن']]],
+   ['Inspiration','الهام',[['Congruence','همخوانی'],['Genuineness','بی‌ریایی']]],['Uniqueness','یگانگی',[['To Be Known','شناخته‌شدن'],['To Be Understood','فهمیده‌شدن']]]]],
+ ['Love','عشق','#5DBB7E',[['Connection','پیوند',[['Communion','هم‌نوایی'],['Fellowship','رفاقت']]],['Intimacy','صمیمیت',[['Affection','محبت'],['Closeness','نزدیکی']]],
+   ['Inclusion','دربرگرفته‌شدن',[['Acceptance','پذیرش'],['Belonging','تعلق']]],['Empathy','همدلی',[['Understanding','درک‌شدن'],['Compassion','شفقت']]]]],
+ ['Capability','توانمندی','#6CC2A8',[['Knowledge','دانش',[['To Know','دانستن'],['To Understand','فهمیدن']]],['Competence','شایستگی',[['Confidence','اعتمادبه‌نفس'],['Proficiency','مهارت']]],
+   ['Learning','یادگیری',[['Growth','رشد'],['Comprehension','درک']]],['Awareness','بینش',[['Wisdom','خرد'],['Clarity','وضوح']]]]],
+ ['Trust','اعتماد','#8FD0E8',[['Stability','ثبات',[['Safety','ایمنی'],['Security','امنیت']]],['Commitment','تعهد',[['Fidelity','پایبندی'],['Assurance','اطمینان']]],
+   ['Predictability','پیش‌بینی‌پذیری',[['Order','نظم'],['Dependability','قابل‌اتکا بودن']]],['Reliability','اعتمادپذیری',[['Consistency','پیوستگی'],['Loyalty','وفاداری']]]]],
+ ['Fulfillment','کامیابی','#9DB4E6',[['Exploration','کاوش',[['Adventure','ماجراجویی'],['Discovery','کشف']]],['Aliveness','سرزندگی',[['Excitement','هیجان'],['Experience','تجربه']]],
+   ['Diversion','سرگرمی',[['Pleasure','لذت'],['Fun & Play','تفریح و بازی']]],['Stimulation','شور',[['Spontaneity','خودانگیختگی'],['Challenge','چالش']]]]],
+ ['Well-Being','بهزیستی','#6F8FD8',[['Comfort','آسایش',[['Protection','محافظت'],['Relief','تسکین']]],['Rejuvenation','تجدید قوا',[['Healing','شفا'],['Rest-Relaxation','استراحت و آرامش']]],
+   ['Sustenance','تأمین',[['Nutrition','تغذیه'],['Nourishment','خوراک جان']]],['Health','سلامت',[['Energy','انرژی'],['Vitality','نشاط']]]]],
+ ['Autonomy','خودمختاری','#A98ED6',[['Privacy','حریم خصوصی',[['Space','فضا'],['Solitude','خلوت']]],['Strength','قدرت',[['Courage','شجاعت'],['Leadership','رهبری']]],
+   ['Freedom','آزادی',[['Liberty','رهایی'],['Choice','انتخاب']]],['Independence','استقلال',[['Control','کنترل'],['Self-Determination','خودتعیین‌گری']]]]],
+ ['Harmony','هماهنگی','#EE8FC0',[['Unity','وحدت',[['Consensus','اجماع'],['Accord','توافق']]],['Balance','تعادل',[['Ease','آسودگی'],['Equanimity','آرامش درون']]],
+   ['Consideration','ملاحظه',[['Warmth','گرمی'],['Kindness','مهربانی']]],['Peace','صلح',[['Tranquility','آرامش'],['Serenity','صفا']]]]],
+ ['Wholeness','یکپارچگی','#F2A3C9',[['Responsibility','مسئولیت‌پذیری',[['Accountability','پاسخگویی'],['Accuracy','دقت']]],['Civility','نزاکت',[['Courteousness','ادب'],['Politeness','خوش‌رفتاری']]],
+   ['Fairness','انصاف',[['Equality','برابری'],['Justice','عدالت']]],['Integrity','درستکاری',[['Truthfulness','راستگویی'],['Honesty','صداقت']]]]]];
+/* Practices. A: the 30-day programme [practice en, fa, evening en, fa, competencies] */
+const CX_A=[
+ ['In one ordinary conversation, only listen. Practise silence.','در یک مکالمهٔ ساده فقط گوش بده (تمرین سکوت).','How did listening without hurry feel?','از گوش دادن بدون عجله چه حسی داشتم؟',[5,6]],
+ ['While walking, simply notice the sensations in your body.','هنگام قدم زدن، فقط حس بدنت را رصد کن.','How many times today did I lose touch with my body?','امروز چند بار از بدنم غافل شدم؟',[5,2]],
+ ['In one conversation, make no judgments in your head. Just be there.','در یک مکالمه هیچ قضاوت ذهنی نکن؛ فقط باش.','Which of my thoughts need my attention now, though I ignore or push them down?','به کدام افکارم نیاز دارم الان گوش بدهم، ولی نادیده‌شان می‌گیرم یا سرکوبشان می‌کنم؟',[5,4]],
+ ['In a conversation, take three breaths before each reply.','در یک گفت‌وگو، پیش از هر پاسخ سه نفس مکث کن.','What did the pause add to the conversation?','مکث چه چیزی به گفت‌وگو اضافه کرد؟',[5,6]],
+ ['Three times today, do a one-minute body scan.','سه بار در طول روز یک اسکن بدنی یک‌دقیقه‌ای انجام بده.','Which body sensation came back most often?','کدام حس بدنی بیش از همه تکرار شد؟',[5,2]],
+ ['In one situation, let the other person lead the conversation.','در یک موقعیت، مسیر گفت‌وگو را به طرف مقابل بسپار.','What happened when I let go of control?','وقتی کنترل را رها کردم چه شد؟',[2,5]],
+ ['Write or draw what you lived and noticed this week.','تجربه و برداشت‌های این هفته را بنویس یا طراحی کن.','What grew calmer in me this week?','این هفته چه چیزی در من آرام‌تر شد؟',[2,5]],
+ ['Ask yourself one coaching question and sit with it for five minutes, with no quick answer.','از خودت یک سؤال کوچینگی بپرس و ۵ دقیقه مکث کن، بدون پاسخ فوری.','What inside me is still unanswered?','چه چیزهایی درون من هنوز بی‌پاسخ مانده‌اند؟',[7,2]],
+ ['Listen to what your fear is saying, and talk with it.','به صحبت‌های ترس درونت گوش بده و با آن گفت‌وگو کن.','Which needs were heard?','چه نیازهایی شنیده شد؟',[6,7]],
+ ['Let your doubts be heard, with openness.','به شک‌هایت با گشودگی اجازهٔ شنیده شدن بده.','Was accepting them easy?','آیا پذیرش آسان بود؟',[4,2]],
+ ['Express one feeling you usually hold back.','یک احساس سرکوب‌شده را ابراز کن.','How did the people around me respond?','واکنش اطرافیان چه بود؟',[4,2]],
+ ['Pause, without judging.','مکث کن، بدون قضاوت.','What became clear?','چه چیزی آشکار شد؟',[5,7]],
+ ['Run a self-coaching session on what is on your mind. First, get clear on what you want from it.','یک جلسهٔ سلف‌کوچینگ روی دغدغه‌ات: اول روشن کن از این جلسه چه می‌خواهی.','What did I become aware of?','چه آگاهی‌ای کسب کردم؟',[3,7]],
+ ['Continue self-coaching and set one concrete, time-bound step.','سلف‌کوچینگ را ادامه بده و یک قدم مشخص و زمان‌دار برای خودت تعیین کن.','What action do I choose?','چه اقدامی می‌خواهم انجام دهم؟',[8,3]],
+ ['Have a deep conversation with a friend or family member, with no aim to fix or change.','یک گفت‌وگوی عمیق با دوست یا یکی از اعضای خانواده، بدون نیت راه‌حل دادن یا تغییر.','What did I receive?','چه دریافت‌هایی داشتم؟',[2,6]],
+ ['Accompany without rescuing: just listen, offer no solutions.','همراهی بدون نجات دادن: فقط گوش بده، بدون پیشنهاد راهکار.','When I gave no solution, where did the other person get to on their own?','وقتی راهکار ندادم، طرف مقابل خودش به کجا رسید؟',[2,6]],
+ ['Define yourself by your values: “I am curious” rather than a degree or job.','خودت را با ارزش‌هایت تعریف کن؛ مثلاً «من کنجکاوم» به جای مدرک و شغل.','Which value felt most like me?','کدام ارزش بیشتر از همه «من» بود؟',[2,1]],
+ ['Write the story of your inner coach: how did you grow this part of you?','داستان «کوچ درونت» را بنویس: این بخش از وجودت را چگونه پرورش دادی؟','What new thing did I see in this story?','در این داستان چه چیز تازه‌ای دیدم؟',[2,7]],
+ ['In a group, just be, without trying to steer or impress.','در یک جمع فقط «باش»، بدون تلاش برای کنترل موقعیت یا اثرگذاری.','When I stopped trying, what of me was seen?','وقتی تلاش نکردم، چه چیزی از من دیده شد؟',[5,2]],
+ ['Have an inner conversation with the part of you that needs attention.','با آن بخش از وجودت که توجه می‌خواهد یک گفت‌وگوی درونی داشته باش.','What did that part want?','آن بخش از من چه می‌خواست؟',[7,4]],
+ ['Review your personal values and match them against today’s actions.','ارزش‌های شخصی‌ات را مرور کن و با رفتارهای روزانه تطبیق بده.','Where was the widest gap between value and behaviour?','بزرگ‌ترین فاصلهٔ ارزش و رفتارم کجا بود؟',[1,2]],
+ ['Live today as your ideal coach.','امروز نقش کوچ ایده‌آل خودت را زندگی کن.','Which side of myself did I see more of today?','کدام بخش از خودم را امروز بیشتر دیدم؟',[2,5]],
+ ['Ten minutes of silence, doing nothing.','ده دقیقه سکوت و هیچ کاری نکردن.','What grew louder in the silence?','در سکوت چه چیزی بلندتر شد؟',[5,2]],
+ ['Write a letter to your past, uncoached self.','نامه‌ای به خودِ کوچ‌نشدهٔ گذشته‌ات بنویس.','How did writing this letter feel?','نوشتن این نامه چه حسی داشت؟',[2,7]],
+ ['Record yourself talking about coaching and listen back once, carefully.','صدای خودت را هنگام صحبت از کوچینگ ضبط کن و یک بار با دقت گوش بده.','What did I hear in my tone and words?','در لحن و کلماتم چه شنیدم؟',[2,6]],
+ ['Ten minutes of silence, then write one sentence: “I am a coach who…”','ده دقیقه سکوت، سپس یک جمله بنویس: «من کوچی هستم که…»','How close did that sentence feel?','این جمله چقدر به من نزدیک بود؟',[2,1]],
+ ['In one conversation, ask only open questions and respect the other person’s silence.','در یک گفت‌وگو فقط سؤال باز بپرس و به سکوت طرف مقابل احترام بگذار.','Which of my questions opened space?','کدام سؤالم فضا باز کرد؟',[7,6]],
+ ['Before an important conversation, take two minutes to arrive: breath, body, intention.','پیش از یک جلسه یا گفت‌وگوی مهم، دو دقیقه حضور بگیر: نفس، بدن، نیت.','What difference did arriving first make?','حضور پیش از گفت‌وگو چه تفاوتی ساخت؟',[5,4]],
+ ['Re-read your notes from the last week.','یادداشت‌های هفتهٔ گذشته را دوباره بخوان.','Which insight is here to stay?','کدام بینش ماندنی است؟',[2,8]],
+ ['Ten minutes of silence, then write your coaching signature in one sentence.','ده دقیقه سکوت، سپس «امضای کوچینگ» خودت را در یک جمله بنویس.','Which practice do I keep from tomorrow on?','از فردا کدام تمرین را با خودم نگه می‌دارم؟',[2,8]]];
+/* C: new practices [practice en, fa, evening en, fa, competencies] */
+const CX_C=[
+ ['Three-breath doorway: before entering any room or call, take three breaths and set one intention.','درگاه سه نفس: پیش از ورود به هر اتاق یا تماس، سه نفس بکش و یک نیت بگذار.','Which doorway changed the conversation behind it?','کدام درگاه، گفت‌وگوی پس از خودش را تغییر داد؟',[5]],
+ ['Mirror first: in two conversations, sum up what you heard before you reply.','اول آینه: در دو گفت‌وگو، پیش از پاسخ، خلاصهٔ آنچه شنیدی را بازگو کن.','How did people respond to being mirrored?','آدم‌ها به بازتاب شدن چه واکنشی نشان دادند؟',[6]],
+ ['Curiosity over judgment: each time you judge, add “I wonder…” and finish the sentence.','کنجکاوی به جای قضاوت: هر بار قضاوت کردی، بگو «کنجکاوم بدانم…» و جمله را کامل کن.','What did “I wonder” open that judgment had closed?','«کنجکاوم بدانم» چه دری را باز کرد که قضاوت بسته بود؟',[2,5]],
+ ['Question diet: no “why” today. Turn every why into a what or a how.','رژیم سؤال: امروز «چرا» ممنوع. هر چرا را به «چه» یا «چطور» تبدیل کن.','Which what or how question worked best?','کدام سؤال «چه» یا «چطور» بهتر از همه جواب داد؟',[7]],
+ ['Strength spotting: name, out loud, one strength you see in three different people.','شکار نقطهٔ قوت: نقطهٔ قوت سه نفر را با صدای بلند به خودشان بگو.','What happened in them when their strength was named?','وقتی قوتشان نام برده شد، در آن‌ها چه اتفاقی افتاد؟',[4,8]],
+ ['Not-knowing hour: for one hour, say “I don’t know yet, let’s explore” instead of giving answers.','ساعت ندانستن: یک ساعت به جای جواب دادن بگو «هنوز نمی‌دانم، بیا کشفش کنیم».','How did not knowing feel in my body?','ندانستن در بدنم چه حسی داشت؟',[5,2]],
+ ['Precise feelings: three times today, name what you feel with an exact word from the wheel.','احساس دقیق: سه بار امروز احساست را با یک کلمهٔ دقیق از چرخه نام ببر.','Which feeling surprised me once I named it?','کدام احساس وقتی نامش را بردم غافلگیرم کرد؟',[2,5]],
+ ['Tiny agreement: before one conversation, ask what the other person wants from it.','توافق کوچک: پیش از یک گفت‌وگو بپرس طرف مقابل از آن چه می‌خواهد.','How did agreeing first change the talk?','توافق اولیه گفت‌وگو را چطور تغییر داد؟',[3]],
+ ['Gift of silence: in one conversation, let a silence run for seven seconds.','هدیهٔ سکوت: در یک گفت‌وگو بگذار سکوتی هفت ثانیه طول بکشد.','What came into the silence?','چه چیزی وارد سکوت شد؟',[5,7]],
+ ['Values compass: pick one value at breakfast; check at noon and at night how you lived it.','قطب‌نمای ارزش: سر صبحانه یک ارزش انتخاب کن؛ ظهر و شب ببین چقدر زندگی‌اش کردی.','Where did the value guide me, and where did I forget it?','کجا ارزشم راهنمایم شد و کجا فراموشش کردم؟',[1,2]],
+ ['Metaphor hunt: describe your day to yourself as weather or a landscape.','شکار استعاره: روزت را برای خودت مثل وضعیت هوا یا یک منظره توصیف کن.','What did the metaphor show that plain words did not?','استعاره چه چیزی را نشان داد که کلمات ساده نشان نمی‌دادند؟',[7]],
+ ['Ask for feedback: ask one person, “What is one thing I could do better when I listen to you?”','بازخورد بخواه: از یک نفر بپرس «وقتی به تو گوش می‌دهم، چه کاری را می‌توانم بهتر انجام دهم؟»','What did I hear, and how did I receive it?','چه شنیدم و چطور دریافتش کردم؟',[2,6]],
+ ['Celebrate progress: notice three small wins of someone close and tell them one.','جشن پیشرفت: سه موفقیت کوچک یک نزدیک را ببین و یکی را به او بگو.','How did acknowledging progress land?','تصدیق پیشرفت چطور دریافت شد؟',[8,4]],
+ ['Energy shifts: notice when someone’s energy rises or drops as they talk, and gently name it.','تغییر انرژی: ببین انرژی کسی هنگام صحبت کجا بالا یا پایین می‌رود و آرام نامش را ببر.','What opened up when I named the shift?','وقتی تغییر را نام بردم چه چیزی باز شد؟',[6]],
+ ['Permission first: when you want to advise, ask “May I share a thought?” first.','اول اجازه: وقتی خواستی نصیحت کنی، اول بپرس «اجازه می‌دهی نظری بگویم؟»','What changed when I asked before advising?','وقتی قبل از نصیحت اجازه گرفتم چه تغییری کرد؟',[1,4]],
+ ['Accountability pair: tell someone one thing you will do today and ask them to check tonight.','همراه پاسخگویی: یک کار امروز را به کسی بگو و بخواه شب از تو بپرسد.','Did saying it out loud change my follow-through?','بلند گفتنش روی پیگیری‌ام اثر گذاشت؟',[8,3]],
+ ['Reframe it: take one annoying event and find two other ways to see it.','چارچوب تازه: یک اتفاق آزاردهنده را بردار و دو نگاه دیگر به آن پیدا کن.','Which new frame made me lighter?','کدام چارچوب تازه سبک‌ترم کرد؟',[7]],
+ ['Body bells: set three alarms; at each, notice body, breath and emotion.','زنگ بدن: سه زنگ بگذار؛ هر بار بدن، نفس و احساست را ببین.','What pattern did the bells reveal?','زنگ‌ها چه الگویی را آشکار کردند؟',[2,5]],
+ ['Unsaid listening: in one conversation, listen for what is not being said.','شنیدن ناگفته: در یک گفت‌وگو به آنچه گفته نمی‌شود گوش بده.','What did I sense beneath the words?','زیر کلمات چه چیزی حس کردم؟',[6,7]],
+ ['Close well: end three conversations by asking “What are you taking from this?”','پایان خوب: سه گفت‌وگو را با این سؤال تمام کن: «از این گفت‌وگو چه با خودت می‌بری؟»','What did people take away, in their own words?','آدم‌ها با کلمات خودشان چه با خود بردند؟',[8,3]]];
+/* the evening question bank: Amir's questions [en, fa, category] */
+const CX_CATS=[['Inquiry','پرسشگری'],['Inner dialogue','گفت‌وگوی درونی'],['Self','خود'],['Listening','گوش دادن'],['Patterns','الگوها'],
+  ['Learning','یادگیری'],['Growth','رشد'],['Compassion','شفقت'],['Presence','حضور'],['My own','سؤال‌های خودم']];
+const CX_Q=[
+ ['How many times today did I look at myself with a questioning mind?','امروز چند بار با ذهن پرسشگر به خودم نگاه کردم؟','Inquiry'],
+ ['Which questions did I ask myself today that led to a new thought and helped me?','امروز چه سؤالاتی از خودم پرسیدم که باعث کشف و خلق فکر جدید شد و کمکم کرد؟','Inquiry'],
+ ['Which questions did I ask myself today that tore me down?','امروز چه سؤالاتی از خودم پرسیدم که باعث تخریبم شد؟','Inquiry'],
+ ['What share of my questions were constructive, and what share destructive?','درصد فراوانی هر کدام از سؤالات سازنده یا ویرانگر چقدر بود؟','Inquiry'],
+ ['How safe was I with myself today?','امروز چقدر با خودم امن بودم؟','Inner dialogue'],
+ ['What was my limiting thought today, and how can I rewrite it?','فکر محدودکنندهٔ امروزم چه بود و چطور می‌توانم بازنویسی‌اش کنم؟','Patterns'],
+ ['How many times today did I think I already know and have nothing to learn?','امروز چند بار فکر کردم که می‌دانم و نیاز به یادگیری ندارم؟','Learning'],
+ ['How healthy was my inner dialogue today?','گفت‌وگوی درونی امروزم با خودم چقدر سالم بود؟','Inner dialogue'],
+ ['Where, and with what, did I drift away from myself today? (No self-blame.)','امروز کجا و با چه چیزی از خودم دور شدم؟ (بدون خودتخریبگری)','Self'],
+ ['Where, and with what, did I come closer to myself today?','امروز کجا و با چه چیزی به خودم نزدیک شدم؟','Self'],
+ ['How can I listen to myself more, and better?','چگونه بیشتر و بهتر به خودم گوش دهم؟','Listening'],
+ ['How much did I listen to others today, and how much did I want to steer them?','به اطرافیان چقدر گوش دادم و چقدر می‌خواستم هدایت کنم؟','Listening'],
+ ['What does my inner dialogue sound like when I face failure?','گفت‌وگوی ذهنی من در مواجهه با شکست چگونه است؟','Inner dialogue'],
+ ['How many times did I see myself as the victim or the one who is right, and step out of it?','چند بار خودم را در نقش قربانی و خودمحق‌بینی دیدم و از آن خارج شدم؟','Patterns'],
+ ['What could I do that would make me proud of myself?','چه کاری هست که اگر انجام بدهم به خودم افتخار می‌کنم؟','Growth'],
+ ['How can I use my strengths to solve problems?','از نقاط قوتم چطور می‌توانم در حل مشکلات بهره ببرم؟','Growth'],
+ ['What can I learn from this situation or problem?','در این موقعیت و مشکل چه چیزی هست که می‌توانم بیاموزم؟','Learning'],
+ ['What is alive in me today?','امروز چه چیزی در من زنده است؟','Self'],
+ ['Which of my behaviour patterns do I want to see and rewrite today?','امروز کدام الگوی رفتاری خود را می‌خواهم ببینم و بازنویسی کنم؟','Patterns'],
+ ['How can I look at today’s issues through a coaching lens?','امروز چطور می‌توانم با نگاه کوچ‌محور به مسائل بنگرم؟','Growth'],
+ ['How did my mind give its old answers?','چطور مغزم پاسخ‌های قدیمی را داد؟','Patterns'],
+ ['In the middle of challenges, how safe was my inner dialogue?','در دل چالش‌ها گفت‌وگوی درونی‌ام چقدر امن بود؟','Inner dialogue'],
+ ['How much did I use the skill of containment?','چقدر از مهارت نگهداشت (containment) بهره گرفتم؟','Presence'],
+ ['With what question can I change the path of my mind tomorrow?','با چه سؤالی می‌توانم مسیر ذهنم را فردا تغییر بدهم؟','Inquiry'],
+ ['Inside which challenge today was there a chance to learn something new?','در دل چه چالشی امروز امکان یادگیری جدیدی بود؟','Learning'],
+ ['What valuable thing do I have today that I paid less attention to yesterday?','چه چیز باارزشی امروز در اختیارم است که دیروز کمتر به آن توجه کردم؟','Self'],
+ ['How do I deal with everyday disorder?','چگونه با بی‌نظمی‌های روزمره برخورد می‌کنم؟','Patterns'],
+ ['In a stressful moment, could I pause ten seconds and ask: is this my aware self, or my wounded mind reacting?','آیا توانستم در شرایط استرس‌زا فقط ده ثانیه توقف کنم و از خود بپرسم: پاسخ فعلی من انعکاس خودآگاه من است یا واکنش ذهن آسیب‌دیدهٔ من؟','Presence'],
+ ['In the situation on my mind: why did it turn out this way? What was behind that behaviour?','در موقعیتی که در ذهنم است، چرا این‌طور شد؟ چه چیزی پشت آن رفتار بود؟','Inquiry'],
+ ['In today’s conversations, what did I feel that went unheard?','در مکالمات امروز چه چیزی حس کردم که شنیده نشد؟','Listening'],
+ ['Whom or what did I judge quickly today?','امروز دربارهٔ چه کسی یا چه چیزی قضاوت سریع داشتم؟','Patterns'],
+ ['What happened, or would have, if I had been curious? How could I have understood better?','چه شد یا چه می‌شد اگر کنجکاو بودم؟ چطور می‌توانستم بهتر بفهمم؟','Inquiry'],
+ ['How compassionate was I with myself today, when I made a mistake or was tired?','امروز هنگام اشتباه یا خستگی چقدر با خودم همدل بودم؟','Compassion'],
+ ['How respectfully did I treat myself today?','امروز چقدر با خودم در اوج ادب رفتار کردم؟','Compassion'],
+ ['How much did I listen to my unpleasant feelings, and how much did I run from or deny them?','چقدر احساسات نامطلوبم را شنیدم و چقدر از آن‌ها فرار کردم و انکارشان کردم؟','Compassion'],
+ ['What was the key question of my day?','سؤال کلیدی روزم چه بود؟','Inquiry'],
+ ['What did I understand today that I could not see before?','امروز چه چیزی را درک کردم که قبلاً نمی‌دیدم؟','Learning']];
+/* ── state ── */
+let CXD=null,CXT='today',CXH=null,CXW={f:null,n:null},CXPQ='';
+function CX(){const c=S.cx=S.cx||{};c.days=c.days||{};
+  if(!c.bank)c.bank=CX_Q.map(([en,fa,cat],i)=>({id:'q'+(i+1),en,fa,cat}));return c}
+const cxGet=ds=>CX().days[ds]||{};
+const cxW=ds=>{const c=CX();return c.days[ds]=c.days[ds]||{}};
+const cxQ=id=>CX().bank.find(q=>q.id===id);
+const cxAdd=(ds,n)=>{const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()+n);return iso(d)};
+const cxDoy=ds=>Math.round((new Date(ds+'T12:00:00')-new Date(ds.slice(0,4)+'-01-01T12:00:00'))/864e5);
+const cxLong=ds=>new Intl.DateTimeFormat('en-GB',{weekday:'long',day:'numeric',month:'long'}).format(new Date(ds+'T12:00:00'));
+const cxFaDate=ds=>{try{return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long'}).format(new Date(ds+'T12:00:00'))}catch(e){return ''}};
+/* the month's plan: 30 groups of related sub-competencies, folded for
+   shorter months; a 31st day is for integration.                        */
+function cxPlan(ym){const [y,m]=ym.split('-').map(Number),D=new Date(y,m,0).getDate();
+  const G=CX_GROUPS.map(([c,s])=>({c,s:s.slice()}));
+  if(D<30){G[28].s=G[28].s.concat(G[29].s);G.splice(29,1)}
+  if(D<29){G[10].s=G[10].s.concat(G[11].s);G.splice(11,1)}
+  if(D>30)G.push({c:0,s:[]});
+  return G}
+function cxRateOf(ym,c){let t=0,n=0;Object.keys(CX().days).forEach(ds=>{if(ds.slice(0,7)!==ym)return;
+  const d=CX().days[ds];if(d.cc===c&&d.cr){t+=d.cr;n++}});return n?t/n:null}
+function cxDay(ds){const ym=ds.slice(0,7),g=cxPlan(ym)[+ds.slice(8)-1];
+  if(g.c)return {c:g.c,s:g.s,int:false};
+  let low=null,lc=2;for(let c=1;c<=8;c++){const r=cxRateOf(ym,c);if(r!==null&&(low===null||r<low)){low=r;lc=c}}
+  return {c:lc,s:CX_COMP[lc].s.map((x,i)=>i+1),int:true}}
+/* practices */
+function cxPrac(id){if(!id)return null;const [k,v]=id.split(':');
+  if(k==='a'){const x=CX_A[+v];return x&&{en:x[0],fa:x[1],een:x[2],efa:x[3],tag:['30-day programme','برنامهٔ ۳۰ روزه']}}
+  if(k==='c'){const x=CX_C[+v];return x&&{en:x[0],fa:x[1],een:x[2],efa:x[3],tag:['New practice','تمرین تازه']}}
+  if(k==='q'){const q=cxQ(v);return q&&{en:'Carry this question through the day: '+(q.en||q.fa),fa:'این سؤال را در طول روز با خودت همراه کن: '+(q.fa||q.en),
+    een:q.en||q.fa,efa:q.fa||q.en,tag:['Your question','سؤال خودت']}}
+  return null}
+function cxSuggest(ds){const d=cxGet(ds),c=cxDay(ds).c,seed=cxDoy(ds)+(d.shuf||0)*7;
+  const pick=(arr,k)=>{let cand=arr.map((x,i)=>i).filter(i=>arr[i][4].includes(c));if(cand.length<2)cand=arr.map((x,i)=>i);
+    return k+':'+cand[(seed+(d.shuf||0))%cand.length]};
+  const b=CX().bank;return [pick(CX_A,'a'),pick(CX_C,'c'),'q:'+b[(seed*5+3)%b.length].id]}
+function cxEve30(ds,pid){let i=cxDoy(ds)%30;if(pid==='a:'+i)i=(i+1)%30;return CX_A[i]}
+function cxSel(ds){const d=cxGet(ds);if(d.qsel)return d.qsel.filter(cxQ);
+  const ks=Object.keys(CX().days).filter(k=>k<ds&&CX().days[k].qsel).sort();
+  return ks.length?CX().days[ks[ks.length-1]].qsel.filter(cxQ):[]}
+/* ── edits ── */
+const cxD=()=>CXD||TODAY;
+function cxSet(f,v){const d=cxW(cxD());d[f]=v;d.at=Date.now();save()}
+function cxTick(f){const d=cxW(cxD());mark(f);d[f]=!d[f];if(f==='did'&&!d.did)delete d.qs;d.at=Date.now();save();paint();
+  if(f==='am'&&d.am)toastMsg('Morning held · صبح بسته شد');if(f==='pm'&&d.pm)toastMsg('Day closed · روز بسته شد')}
+function cxRate(f,v){const d=cxW(cxD());if(f==='qs'&&!d.did){toastMsg('Tick “I did it” first · اول تیک انجام را بزن');return}
+  mark('rate');d[f]=d[f]===v?0:v;if(f==='cr')d.cc=cxDay(cxD()).c;save();paint()}
+function cxSub(n){const d=cxW(cxD());mark('sub');d.subs=d.subs||{};d.subs[n]=!d.subs[n];d.cc=cxDay(cxD()).c;save();paint()}
+function cxPickP(id){const d=cxW(cxD());mark('practice');d.pick=d.pick===id?null:id;save();paint()}
+function cxShuffle(){const d=cxW(cxD());d.shuf=(d.shuf||0)+1;save();paint()}
+function cxGo(ds){CXD=ds;paint()}
+function cxHalf(h){CXH=h;paint()}
+function cxTab(t){CXT=t;paint()}
+function cxWheelTog(k){CXW[k]=!cxWOpen(k);paint()}
+const cxWOpen=k=>CXW[k]!==false;
+function cxToggle(k,p){const d=cxW(cxD()),f=k==='f'?'feel':'need',a=(d[f]||[]).slice(),i=a.indexOf(p);
+  if(i>=0)a.splice(i,1);else a.push(p);d[f]=a;d.at=Date.now();save();paint()}
+/* ── question bank ── */
+const cxQT=q=>q.en&&q.fa?'<span dir="ltr">'+esc(q.en)+'</span><span class="fa" dir="rtl">'+esc(q.fa)+'</span>':'<span dir="auto">'+esc(q.en||q.fa)+'</span>';
+function cxPick(){CXPQ='';modal.classList.add('cowide');veil.classList.add('on');drawCxPick()}
+function drawCxPick(){const sel=cxSel(cxD()),q=CXPQ.toLowerCase(),b=CX().bank;
+  const groups=CX_CATS.map(([cat,cfa])=>{const qs=b.filter(x=>x.cat===cat&&(!q||(x.en+' '+x.fa).toLowerCase().includes(q)));
+    return qs.length?'<div class="cogh"><span>'+cat+'</span><span class="fa">'+cfa+'</span></div>'+qs.map(x=>
+      '<button class="copq'+(sel.includes(x.id)?' on':'')+'" onclick="cxToggleQ(\''+x.id+'\')">'+
+      '<span class="copc">'+(sel.includes(x.id)?'&#10003;':'')+'</span><span class="cxqt">'+cxQT(x)+'</span></button>').join(''):''}).join('');
+  modal.innerHTML='<h3>Tonight’s questions · سؤال‌های امشب</h3>'+
+    '<p class="askmsg">Your set carries over to the next evenings until you change it. · <span dir="rtl">انتخاب‌ها برای شب‌های بعد هم می‌مانند.</span></p>'+
+    '<input class="coin" id="cxpSearch" placeholder="Search · جست‌وجو" value="'+esc(CXPQ)+'" oninput="CXPQ=this.value;drawCxPick();const s=document.getElementById(\'cxpSearch\');s.focus();s.setSelectionRange(s.value.length,s.value.length)">'+
+    '<div class="copl">'+(groups||'<div class="empty">No question matches</div>')+'</div>'+
+    '<div class="coadd"><input class="coin" id="cxpNew" dir="auto" placeholder="Add your own · سؤال خودت را اضافه کن" onkeydown="if(event.key===\'Enter\')cxAddQ(true)">'+
+    '<button class="cobtn" onclick="cxAddQ(true)">Add</button></div>'+
+    '<div class="mact"><span class="cocount">'+sel.length+' chosen · انتخاب شده</span><button class="save" onclick="closeModal();paint()">Done</button></div>'}
+function cxToggleQ(id){const d=cxW(cxD()),s=cxSel(cxD()).slice(),i=s.indexOf(id);
+  if(i>=0)s.splice(i,1);else s.push(id);d.qsel=s;save();drawCxPick()}
+function cxAddQ(pick){const el=document.getElementById(pick?'cxpNew':'cxbNew'),t=(el&&el.value||'').trim();if(!t)return;
+  mark('add question');const fa=/[؀-ۿ]/.test(t);
+  const q={id:uid('q'),en:fa?'':t,fa:fa?t:'',cat:pick?'My own':((document.getElementById('cxbCat')||{}).value||'My own'),own:true};
+  CX().bank.push(q);
+  if(pick){const d=cxW(cxD()),s=cxSel(cxD()).slice();s.push(q.id);d.qsel=s;save();drawCxPick();const n=document.getElementById('cxpNew');if(n)n.focus()}
+  else{save();paint();const n=document.getElementById('cxbNew');if(n)n.focus()}}
+function cxFav(id){const q=cxQ(id);if(!q)return;mark('star');q.fav=!q.fav;save();paint()}
+function cxEditQ(id){const q=cxQ(id);if(!q)return;
+  modalForm('Edit question · ویرایش سؤال',[['en','English','text',null,q.en||''],['fa','فارسی','text',null,q.fa||'']],v=>{
+    if(!v.en.trim()&&!v.fa.trim())return;mark('edit question');q.en=v.en.trim();q.fa=v.fa.trim();save();paint()})}
+function cxDelQ(id){const q=cxQ(id);if(!q)return;
+  askConfirm('Delete question','“'+esc(q.en||q.fa)+'” leaves the bank. Answers you wrote stay in your journal.',
+    ()=>{mark('delete question');const b=CX().bank;b.splice(b.indexOf(q),1);save();paint()},'Delete',true)}
+function cxAns(id,v){const d=cxW(cxD());if(!d.qsel)d.qsel=cxSel(cxD()).slice();d.ans=d.ans||{};d.ans[id]=v;d.at=Date.now();
+  d.qdone=d.qdone||{};if(v.trim()&&!d.qdone[id]){d.qdone[id]=true;save();paint();return}   /* writing counts as done */
+  save()}
+function cxQDone(id){const d=cxW(cxD());if(!d.qsel)d.qsel=cxSel(cxD()).slice();mark('question done');d.qdone=d.qdone||{};d.qdone[id]=!d.qdone[id];save();paint()}
+function cxAnswers(id){return Object.keys(CX().days).sort().reverse().map(ds=>({ds,a:((CX().days[ds].ans||{})[id]||'').trim()})).filter(x=>x.a)}
+function cxHistory(id){const q=cxQ(id),a=cxAnswers(id);modal.classList.add('cowide');
+  modal.innerHTML='<h3>Your answers · پاسخ‌های تو</h3><p class="coqh cxqt">'+(q?cxQT(q):'')+'</p>'+
+    (a.length?'<div class="cohist">'+a.map(x=>'<div class="cohi"><div class="cohd">'+cxLong(x.ds)+'</div><div dir="auto">'+esc(x.a).replace(/\n/g,'<br>')+'</div></div>').join('')+'</div>'
+      :'<p class="askmsg">No answers yet · هنوز پاسخی ثبت نشده</p>')+
+    '<div class="mact"><button class="save" onclick="closeModal()">Close</button></div>';veil.classList.add('on')}
+/* ── journal export ── */
+function cxWords(arr,W){return (arr||[]).map(p=>{const n=cxNode(W,p);return n?n.en+' ('+n.fa+')':p}).join(', ')}
+function cxNode(W,p){const [a,b,c]=p.split('/');const x=W.find(z=>z[0]===a);if(!x)return null;if(!b)return {en:x[0],fa:x[1],col:x[2]};
+  const y=x[3].find(z=>z[0]===b);if(!y)return null;if(!c)return {en:y[0],fa:y[1],col:x[2]};const z=y[2].find(q=>q[0]===c);return z?{en:z[0],fa:z[1],col:x[2]}:null}
+function cxReport(){let o='# Coaching journal · ژورنال کوچینگ\n\n';
+  Object.keys(CX().days).sort().forEach(ds=>{const d=CX().days[ds],P=cxDay(ds),C=CX_COMP[P.c],pr=cxPrac(d.pick);
+    o+='## '+cxLong(ds)+'\n\n';
+    if(d.word||d.e1)o+='Word: '+(d.word||'')+(d.e1?' · energy '+d.e1+'/5':'')+'\n';
+    if((d.feel||[]).length)o+='Feelings: '+cxWords(d.feel,CX_FEEL)+'\n';if((d.need||[]).length)o+='Needs: '+cxWords(d.need,CX_NEED)+'\n';
+    if(pr)o+='\nPractice: '+pr.en+'\n'+pr.fa+(d.plan?'\nWhen: '+d.plan:'')+(d.did?'\nDone'+(d.qs?', quality '+d.qs+'/5':''):'')+'\n';
+    if(d.pref)o+='\n'+pr.een+'\n'+d.pref+'\n';
+    o+='\nCompetency '+P.c+': '+C.en+' · '+C.fa+'\n'+P.s.filter(n=>(d.subs||{})[n]).map(n=>'- '+P.c+'.'+n+' '+C.s[n-1][0]).join('\n')+'\n'+
+      (d.cr?'Rating '+d.cr+'/5\n':'')+(d.cint?'Intention: '+d.cint+'\n':'')+(d.cnote?'Lived: '+d.cnote+'\n':'');
+    if(d.r30)o+='\n'+cxEve30(ds,d.pick)[2]+'\n'+d.r30+'\n';
+    (d.qsel||[]).forEach(id=>{const a=(d.ans||{})[id],q=cxQ(id);if(a&&q)o+='\n'+(q.en||q.fa)+'\n'+a+'\n'});o+='\n'});
+  dl('coaching-journal-'+TODAY+'.md',o,'text/markdown')}
+function cxClearMonth(){const ym=cxD().slice(0,7);
+  askConfirm('Clear this month','Every note of '+ym+' will be removed. Undo can bring it back.',
+    ()=>{mark('clear month');Object.keys(CX().days).forEach(ds=>{if(ds.slice(0,7)===ym)delete CX().days[ds]});save();paint()},'Clear',true)}
+/* ── drawing ── */
+const bi=(en,fa,cls)=>'<div class="bi'+(cls?' '+cls:'')+'"><div class="en">'+en+'</div><div class="fa" dir="rtl">'+fa+'</div></div>';
+const cxH3=(en,fa)=>'<div class="cxh3"><span>'+en+'</span><span class="fa" dir="rtl">'+fa+'</span></div>';
+function cxMix(hex,p){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=v=>Math.round(v+(255-v)*p);
+  return 'rgb('+m(r)+','+m(g)+','+m(b)+')'}
+function cxWheel(k){const W=k==='f'?CX_FEEL:CX_NEED,sel=cxGet(cxD())[k==='f'?'feel':'need']||[],C=400,RT=CXR[k]||0,F=CXF[k];
+  const P=(r,a)=>{const t=(a-90)*Math.PI/180;return [C+r*Math.cos(t),C+r*Math.sin(t)]};
+  const seg=(ri,ro,a0,a1)=>{if(a1-a0>=359.99)a1=a0+359.99;const [x0,y0]=P(ro,a0),[x1,y1]=P(ro,a1),[x2,y2]=P(ri,a1),[x3,y3]=P(ri,a0),lg=a1-a0>180?1:0;
+    return 'M'+x0+' '+y0+'A'+ro+' '+ro+' 0 '+lg+' 1 '+x1+' '+y1+'L'+x2+' '+y2+'A'+ri+' '+ri+' 0 '+lg+' 0 '+x3+' '+y3+'Z'};
+  /* label size follows the room the segment has */
+  const lab=(en,fa,ri,ro,a0,a1,on,fmax)=>{const a=(a0+a1)/2,rm=(ri+ro)/2,[x,y]=P(rm,a),aa=((a+RT)%360+360)%360;let rot=a-90;if(aa>180)rot+=180;
+    const arc=Math.PI*rm*(a1-a0)/180,len=Math.max(en.length,fa.length*.9),f=Math.max(8,Math.min(fmax,arc/2.3,(ro-ri-14)/(len*.56)));
+    return '<g transform="translate('+x+' '+y+') rotate('+rot+')" class="cxwl'+(on?' on':'')+'"><text text-anchor="middle" y="'+(-f*.2)+'" font-size="'+f.toFixed(1)+'">'+esc(en)+'</text>'+
+      '<text text-anchor="middle" y="'+(f*.98).toFixed(1)+'" font-size="'+(f*.96).toFixed(1)+'" class="fa">'+esc(fa)+'</text></g>'};
+  const q=p=>p.replace(/'/g,"\\'");
+  let s='',a=0,centre='';
+  if(!F){const R=[46,150,262,398],leaves=W.reduce((t,x)=>t+x[3].reduce((b,y)=>b+y[2].length,0),0),step=360/leaves;
+    W.forEach(([ce,cf,col,mids])=>{const a0=a;
+      mids.forEach(([me,mf,outs])=>{const m0=a;
+        outs.forEach(([oe,of])=>{const p=ce+'/'+me+'/'+oe,on=sel.includes(p);
+          s+='<path d="'+seg(R[2],R[3],a,a+step)+'" fill="'+(on?col:cxMix(col,.55))+'" class="cxws'+(on?' on':'')+'" onclick="cxSeg(\''+k+'\',\''+q(p)+'\')"><title>'+esc(oe)+' · '+esc(of)+'</title></path>'+
+            lab(oe,of,R[2],R[3],a,a+step,on,11);a+=step});
+        const p=ce+'/'+me,on=sel.includes(p);
+        s+='<path d="'+seg(R[1],R[2],m0,a)+'" fill="'+(on?col:cxMix(col,.3))+'" class="cxws'+(on?' on':'')+'" onclick="cxSeg(\''+k+'\',\''+q(p)+'\')"><title>'+esc(me)+' · '+esc(mf)+'</title></path>'+
+          lab(me,mf,R[1],R[2],m0,a,on,13)});
+      const on=sel.includes(ce);
+      s+='<path d="'+seg(R[0],R[1],a0,a)+'" fill="'+(on?col:cxMix(col,.08))+'" class="cxws core'+(on?' on':'')+'" onclick="cxOpenCore(\''+k+'\',\''+q(ce)+'\')"><title>'+esc(ce)+' · '+esc(cf)+' — open</title></path>'+
+        lab(ce,cf,R[0],R[1],a0,a,on,16)});
+    centre='<circle cx="'+C+'" cy="'+C+'" r="44" fill="var(--card)"/>'+
+      '<text x="'+C+'" y="'+(C-3)+'" text-anchor="middle" class="cxwc">'+(k==='f'?'Feelings':'Needs')+'</text>'+
+      '<text x="'+C+'" y="'+(C+14)+'" text-anchor="middle" class="cxwc fa">'+(k==='f'?'احساسات':'نیازها')+'</text>'}
+  else{const x=W.find(z=>z[0]===F),[ce,cf,col,mids]=x,R=[124,124,282,398],n=mids.reduce((t,m)=>t+m[2].length,0),step=360/n;
+    mids.forEach(([me,mf,outs])=>{const m0=a;
+      outs.forEach(([oe,of])=>{const p=ce+'/'+me+'/'+oe,on=sel.includes(p);
+        s+='<path d="'+seg(R[2],R[3],a,a+step)+'" fill="'+(on?col:cxMix(col,.55))+'" class="cxws'+(on?' on':'')+'" onclick="cxSeg(\''+k+'\',\''+q(p)+'\')"><title>'+esc(oe)+' · '+esc(of)+'</title></path>'+
+          lab(oe,of,R[2],R[3],a,a+step,on,26);a+=step});
+      const p=ce+'/'+me,on=sel.includes(p);
+      s+='<path d="'+seg(R[1],R[2],m0,a)+'" fill="'+(on?col:cxMix(col,.3))+'" class="cxws'+(on?' on':'')+'" onclick="cxSeg(\''+k+'\',\''+q(p)+'\')"><title>'+esc(me)+' · '+esc(mf)+'</title></path>'+
+        lab(me,mf,R[1],R[2],m0,a,on,28)});
+    const on=sel.includes(ce);
+    centre='<g class="cxcore'+(on?' on':'')+'" onclick="cxSeg(\''+k+'\',\''+q(ce)+'\')"><circle cx="'+C+'" cy="'+C+'" r="120" fill="'+(on?col:cxMix(col,.08))+'"/>'+
+      '<text x="'+C+'" y="'+(C-14)+'" text-anchor="middle" font-size="34" class="cxwct">'+esc(ce)+'</text>'+
+      '<text x="'+C+'" y="'+(C+26)+'" text-anchor="middle" font-size="32" class="cxwct fa">'+esc(cf)+'</text>'+
+      '<text x="'+C+'" y="'+(C+60)+'" text-anchor="middle" font-size="13" class="cxwch">'+(on?'✓ chosen · انتخاب شد':'tap to choose · برای انتخاب بزن')+'</text></g>'}
+  s='<g class="cxrot" transform="rotate('+RT+' '+C+' '+C+')">'+s+'</g>'+centre;
+  return '<div class="cxwtools">'+
+      (F?'<button class="cobtn on" onclick="cxOpenCore(\''+k+'\',null)">&#8592; Whole wheel · کل چرخه</button>':'')+
+      '<button class="cobtn" onclick="cxSpin(\''+k+'\',-30)" title="Turn left">&#10226;</button><button class="cobtn" onclick="cxSpin(\''+k+'\',30)" title="Turn right">&#10227;</button>'+
+      (RT?'<button class="cobtn" onclick="cxWReset(\''+k+'\')">Reset · بازنشانی</button>':'')+
+      '<span class="cohint">'+(F?'Tap to choose, as many as you like; drag to turn. · <span dir="rtl">برای انتخاب بزن، هر چند تا که خواستی؛ برای چرخاندن بکش.</span>'
+        :'Tap a centre slice to open it large; tap any outer ring to choose; drag to turn. · <span dir="rtl">روی بخش‌های مرکز بزن تا بزرگ باز شود؛ برای انتخاب روی حلقه‌های بیرونی بزن؛ برای چرخاندن بکش.</span>')+'</span></div>'+
+    '<div class="cxwheel'+(F?' focus':'')+(CXANIM===k?' anim':'')+'"><svg viewBox="0 0 800 800" data-k="'+k+'" onpointerdown="cxDown(event,\''+k+'\')" onpointermove="cxMove(event)" onpointerup="cxUp(event)" onpointercancel="cxUp(event)">'+s+'</svg></div>'}
+/* turning the wheels: drag with mouse or finger; a tap chooses */
+let CXR={f:0,n:0},CXF={f:null,n:null},CXDG=null,CXDRAGGED=false;
+function cxCentre(svg){const M=svg.getScreenCTM();if(!M)return null;const p=svg.createSVGPoint();p.x=400;p.y=400;return p.matrixTransform(M)}
+const cxAng=(c,x,y)=>Math.atan2(y-c.y,x-c.x)*180/Math.PI;
+function cxDown(e,k){const svg=e.currentTarget,c=cxCentre(svg);if(!c)return;
+  CXDG={k,svg,c,x:e.clientX,y:e.clientY,a0:cxAng(c,e.clientX,e.clientY),r0:CXR[k]||0,id:e.pointerId,moved:false}}
+function cxMove(e){const g=CXDG;if(!g||e.pointerId!==g.id)return;
+  if(!g.moved){if(Math.hypot(e.clientX-g.x,e.clientY-g.y)<6)return;g.moved=true;try{g.svg.setPointerCapture(g.id)}catch(x){}}
+  e.preventDefault();CXR[g.k]=g.r0+cxAng(g.c,e.clientX,e.clientY)-g.a0;
+  const r=g.svg.querySelector('.cxrot');if(r)r.setAttribute('transform','rotate('+CXR[g.k]+' 400 400)')}
+function cxUp(e){const g=CXDG;CXDG=null;if(!g||!g.moved)return;
+  CXR[g.k]=((CXR[g.k]%360)+360)%360;CXDRAGGED=true;setTimeout(()=>{CXDRAGGED=false;paint()},0)}
+function cxSeg(k,p){if(CXDRAGGED)return;cxToggle(k,p)}
+let CXANIM=null;
+function cxOpenCore(k,c){if(CXDRAGGED)return;CXF[k]=c;CXR[k]=0;CXANIM=k;paint();CXANIM=null}
+function cxSpin(k,d){CXR[k]=(((CXR[k]||0)+d)%360+360)%360;paint()}
+function cxWReset(k){CXR[k]=0;paint()}
+function cxChips(k){const W=k==='f'?CX_FEEL:CX_NEED,sel=cxGet(cxD())[k==='f'?'feel':'need']||[];
+  return sel.map(p=>{const n=cxNode(W,p);if(!n)return '';
+    return '<button class="cxchip" style="--cc:'+n.col+'" onclick="cxToggle(\''+k+'\',\''+p.replace(/'/g,"\\'")+'\')" title="Remove">'+esc(n.en)+' <span class="fa">'+esc(n.fa)+'</span> <i>&#10005;</i></button>'}).join('')}
+function cxWheelBlock(k){const open=cxWOpen(k),n=(cxGet(cxD())[k==='f'?'feel':'need']||[]).length;
+  return '<div class="copart">'+(k==='f'?cxH3('How do I feel?','چه احساسی دارم؟'):cxH3('What do I need?','به چه نیازی دارم؟'))+
+    '<div class="cxsel">'+(n?cxChips(k):'<span class="cohint">'+(k==='f'?'Tap any ring of the wheel, from the centre outwards. \u00b7 <span dir="rtl">روی هر حلقه از چرخه بزن، از مرکز به بیرون.</span>':'Choose the needs alive in you this morning. \u00b7 <span dir="rtl">نیازهایی را که امروز صبح در تو زنده‌اند انتخاب کن.</span>')+'</span>')+
+    (open?'':'<button class="cobtn cxwt" onclick="cxWheelTog(\''+k+'\')">Open wheel \u00b7 باز کردن چرخه</button>')+'</div>'+
+    (open?cxWheel(k)+'<div class="cxwclose"><button class="cobtn" onclick="cxWheelTog(\''+k+'\')">&#9650; Close wheel \u00b7 بستن چرخه</button></div>':'')+'</div>'}
+function cxDots(f,v){let h='<div class="codots">';for(let i=1;i<=5;i++)h+='<button class="'+(v>=i?'on':'')+'" onclick="cxRate(\''+f+'\','+i+')"></button>';return h+'</div>'}
+const cxTA=(f,v,ph,cls)=>'<textarea class="cota'+(cls?' '+cls:'')+'" dir="auto" data-ck="'+f+'" placeholder="'+ph+'" oninput="cxSet(\''+f+'\',this.value)">'+esc(v||'')+'</textarea>';
+const cxIN=(f,v,ph)=>'<input class="coin" dir="auto" data-ck="'+f+'" placeholder="'+ph+'" value="'+esc(v||'')+'" oninput="cxSet(\''+f+'\',this.value)">';
+const CXC=['','#6B7FA6','#5F8A6E','#A9812F','#B5533C','#3E7F87','#7C6BB0','#8B5578','#4F8F4A'];
+function cxCompCard(ds,eve){const P=cxDay(ds),C=CX_COMP[P.c],d=cxGet(ds);
+  return '<div class="cxcomp" style="--cc:'+CXC[P.c]+'"><div class="cxcn">'+P.c+'</div>'+
+    bi(esc(C.en),esc(C.fa),'cxct')+(P.int?bi('Integration day: revisit the competency that needs you most this month.','روز یکپارچه‌سازی: صلاحیتی را که این ماه بیشترین نیاز را دارد مرور کن.','cohint'):'')+
+    bi(esc(C.den),esc(C.dfa),'cxdef')+
+    '<div class="cxsubs">'+P.s.map(n=>'<div class="cxsub'+(eve&&(d.subs||{})[n]?' on':'')+'">'+
+      (eve?'<button class="hit" onclick="cxSub('+n+')" title="Practised \u00b7 تمرین شد">'+chk(!!(d.subs||{})[n])+'</button>':'<span class="cxsn">'+P.c+'.'+n+'</span>')+
+      bi(esc(C.s[n-1][0]),esc(C.s[n-1][1]))+'</div>').join('')+'</div></div>'}
+function cxPracCard(id,picked){const p=cxPrac(id);if(!p)return '';
+  return '<button class="cxprac'+(picked?' on':'')+'" onclick="cxPickP(\''+id+'\')"><span class="cxtag">'+p.tag[0]+' \u00b7 <span class="fa">'+p.tag[1]+'</span></span>'+
+    bi(esc(p.en),esc(p.fa))+(picked?'<span class="cxok">&#10003; Today’s practice \u00b7 تمرین امروز</span>':'')+'</button>'}
+function cxCard(){const ds=cxD(),d=cxGet(ds),half=CXH||(new Date().getHours()<15?'am':'pm'),isT=ds===TODAY;
+  let h='<div class="cohead"><div><div class="codate">'+(isT?'Today \u00b7 امروز':'')+'</div>'+
+      '<h2>'+cxLong(ds)+'</h2><div class="cxfad" dir="rtl">'+cxFaDate(ds)+'</div></div>'+
+    '<div class="conav"><button onclick="cxGo(cxAdd(cxD(),-1))">&#8249;</button><button onclick="cxGo(TODAY)">Today</button><button onclick="cxGo(cxAdd(cxD(),1))">&#8250;</button></div></div>'+
+    '<div class="cohalf"><button class="'+(half==='am'?'on':'')+'" onclick="cxHalf(\'am\')">&#9728; Morning \u00b7 صبح'+(d.am?' <i>&#10003;</i>':'')+'</button>'+
+      '<button class="'+(half==='pm'?'on':'')+'" onclick="cxHalf(\'pm\')">&#9790; Evening \u00b7 شب'+(d.pm?' <i>&#10003;</i>':'')+'</button></div>';
+  if(half==='am'){const sug=cxSuggest(ds),picked=d.pick&&!sug.includes(d.pick)?[d.pick].concat(sug):sug;
+    h+='<div class="copart">'+cxH3('Check in','حال امروز')+
+        '<div class="corow"><span class="colab">Energy \u00b7 انرژی</span>'+cxDots('e1',d.e1||0)+'</div>'+cxIN('word',d.word,'One word for today \u00b7 یک کلمه برای امروز')+'</div>'+
+      cxWheelBlock('f')+cxWheelBlock('n')+
+      '<div class="copart"><div class="cohrow">'+cxH3('Today’s coaching practice','تمرین کوچینگ امروز')+'<button class="cobtn" onclick="cxShuffle()">&#8635; Three others \u00b7 سه پیشنهاد دیگر</button></div>'+
+        '<div class="cxpracs">'+picked.map(id=>cxPracCard(id,d.pick===id)).join('')+'</div>'+
+        (d.pick?cxIN('plan',d.plan,'When and where will I do it? \u00b7 کی و کجا انجامش می‌دهم؟'):'')+'</div>'+
+      '<div class="copart">'+cxH3('Competency of the day','صلاحیت امروز')+cxCompCard(ds,false)+
+        cxIN('cint',d.cint,'How will I live it today, with myself and others? \u00b7 امروز چطور با خودم و دیگران زندگی‌اش می‌کنم؟')+'</div>'+
+      '<button class="codone'+(d.am?' on':'')+'" onclick="cxTick(\'am\')">'+(d.am?'&#10003; Morning held \u00b7 صبح بسته شد':'&#9728; Close the morning \u00b7 بستن صبح')+'</button>'}
+  else{const pr=cxPrac(d.pick),e30=cxEve30(ds,d.pick),sel=cxSel(ds);
+    h+=(d.word||(d.feel||[]).length?'<div class="coquote"><small>This morning \u00b7 امروز صبح</small><div>'+(d.word?'<b dir="auto">'+esc(d.word)+'</b> ':'')+
+        ((d.feel||[]).length?'<span class="cxmini">'+cxChips('f')+'</span>':'')+'</div></div>':'')+
+      '<div class="copart">'+cxH3('The practice','تمرین')+
+        (pr?bi(esc(pr.en),esc(pr.fa),'cxpr')+
+          '<div class="corow" style="margin-top:8px"><button class="cotick'+(d.did?' on':'')+'" onclick="cxTick(\'did\')">'+chk(!!d.did)+'<span>I did it \u00b7 انجامش دادم</span></button>'+
+          '<span class="colab'+(d.did?'':' off')+'">Quality \u00b7 کیفیت</span>'+cxDots('qs',d.qs||0)+'</div>'+
+          bi('<b>'+esc(pr.een)+'</b>','<b>'+esc(pr.efa)+'</b>','cxq')+cxTA('pref',d.pref,'\u2026','sm')
+          :'<p class="cohint">No practice was picked this morning. \u00b7 <span dir="rtl">امروز صبح تمرینی انتخاب نشد.</span> <button class="cobtn" onclick="cxHalf(\'am\')">Pick one</button></p>')+'</div>'+
+      '<div class="copart">'+cxH3('The competency','صلاحیت')+'<p class="cohint">Tick what you practised today. \u00b7 <span dir="rtl">آنچه امروز تمرین کردی را تیک بزن.</span></p>'+cxCompCard(ds,true)+
+        '<div class="corow" style="margin-top:10px"><span class="colab">How fully \u00b7 چقدر کامل</span>'+cxDots('cr',d.cr||0)+'</div>'+
+        cxTA('cnote',d.cnote,'Where did I live it today? \u00b7 امروز کجا زندگی‌اش کردم؟','sm')+'</div>'+
+      '<div class="copart">'+cxH3('Reflection','بازتاب')+bi('<b>'+esc(e30[2])+'</b>','<b>'+esc(e30[3])+'</b>','cxq')+cxTA('r30',d.r30,'Before sleep \u00b7 پیش از خواب','sm')+'</div>'+
+      '<div class="copart"><div class="cohrow">'+cxH3('My questions tonight','سؤال‌های امشب من')+'<button class="cobtn" onclick="cxPick()">'+(sel.length?'Change \u00b7 تغییر':'Choose \u00b7 انتخاب')+'</button></div>'+
+        (sel.length?sel.map(id=>{const q=cxQ(id);if(!q)return '';
+          const dn=!!(d.qdone||{})[id];
+          return '<div class="cxqrow'+(dn?' on':'')+'"><button class="hit" onclick="cxQDone(\''+id+'\')" title="Done \u00b7 انجام شد">'+chk(dn)+'</button>'+
+            bi('<b>'+esc(q.en||'')+'</b>','<b>'+esc(q.fa||'')+'</b>','cxq')+'</div>'+
+            '<textarea class="cota sm" dir="auto" data-ck="ans:'+id+'" placeholder="\u2026" oninput="cxAns(\''+id+'\',this.value)">'+esc((d.ans||{})[id]||'')+'</textarea>'}).join('')
+          :'<p class="cohint">Pick questions from your bank; they stay chosen for the next evenings. \u00b7 <span dir="rtl">از بانک سؤال‌ها انتخاب کن؛ برای شب‌های بعد هم می‌مانند.</span></p>')+'</div>'+
+      '<button class="codone pm'+(d.pm?' on':'')+'" onclick="cxTick(\'pm\')">'+(d.pm?'&#10003; Day closed \u00b7 روز بسته شد':'&#9790; Close the day \u00b7 بستن روز')+'</button>'}
+  return h}
+function cxMonth(){const ds=cxD(),ym=ds.slice(0,7),[y,m]=ym.split('-').map(Number),D=new Date(y,m,0).getDate(),plan=cxPlan(ym);
+  const ws=(S.prefs&&S.prefs.weekStart)==='mon'?1:6,first=new Date(y,m-1,1).getDay(),pad=(first-ws+7)%7;
+  const names=[];for(let i=0;i<7;i++)names.push(new Intl.DateTimeFormat('en-GB',{weekday:'short'}).format(new Date(2024,0,7+(ws+i)%7)));
+  let cells='';for(let i=0;i<pad;i++)cells+='<div class="cxmc off"></div>';
+  const done={};for(let c=1;c<=8;c++)done[c]=new Set();const fc={},nc={};
+  for(let n=1;n<=D;n++){const k=ym+'-'+String(n).padStart(2,'0'),d=cxGet(k),P=cxDay(k);
+    Object.keys(d.subs||{}).forEach(s=>{if(d.subs[s])done[P.c].add(+s)});
+    (d.feel||[]).forEach(p=>fc[p]=(fc[p]||0)+1);(d.need||[]).forEach(p=>nc[p]=(nc[p]||0)+1);
+    cells+='<button class="cxmc'+(k===TODAY?' today':'')+(k===ds?' sel':'')+'" style="--cc:'+CXC[P.c]+'" onclick="CXT=\'today\';cxGo(\''+k+'\')">'+
+      '<span class="cxmn">'+n+'</span><span class="cxmb">'+(plan[n-1].c?'C'+P.c+' · '+P.s.join(','):'\u221E')+'</span>'+
+      '<span class="cxmd"><i class="'+(d.am?'on':'')+'"></i><i class="'+(d.pm?'on':'')+'"></i></span></button>'}
+  const tot=Object.values(done).reduce((a,s)=>a+s.size,0);
+  const top=(o,W)=>Object.keys(o).sort((a,b)=>o[b]-o[a]).slice(0,8).map(p=>{const n=cxNode(W,p);return n?'<span class="cxchip" style="--cc:'+n.col+'">'+esc(n.en)+' <span class="fa">'+esc(n.fa)+'</span> <em>'+o[p]+'</em></span>':''}).join('')||'<span class="cohint">\u2014</span>';
+  return '<div class="card cocard"><div class="cohead"><div><h2>'+new Intl.DateTimeFormat('en-GB',{month:'long',year:'numeric'}).format(new Date(y,m-1,1))+'</h2>'+
+      '<div class="codate">'+tot+' of 68 sub-competencies practised \u00b7 <span dir="rtl">'+tot+' از ۶۸ زیرصلاحیت تمرین شد</span></div></div>'+
+      '<div class="conav"><button onclick="cxGo(cxAdd(cxD().slice(0,7)+\'-01\',-1).slice(0,7)+\'-01\')">&#8249;</button><button onclick="cxGo(TODAY)">This month</button>'+
+      '<button onclick="cxGo(cxAdd(cxD().slice(0,7)+\'-28\',5).slice(0,7)+\'-01\')">&#8250;</button></div></div>'+
+    '<div class="cxmw">'+names.map(n=>'<span>'+n+'</span>').join('')+'</div><div class="cxmg">'+cells+'</div></div>'+
+    '<div class="cogrid2"><div class="card cocard">'+cxH3('Competencies this month','صلاحیت‌های این ماه')+
+      Object.keys(CX_COMP).map(c=>{const n=CX_COMP[c].s.length,k=done[c].size,r=cxRateOf(ym,+c);
+        return '<div class="cobar"><span title="'+esc(CX_COMP[c].fa)+'">'+c+'. '+esc(CX_COMP[c].en)+'</span><div class="cotrack"><div style="width:'+(k/n*100)+'%;background:'+CXC[c]+'"></div></div><em>'+k+'/'+n+(r?' \u00b7 '+r.toFixed(1):'')+'</em></div>'}).join('')+'</div>'+
+    '<div class="card cocard">'+cxH3('Feelings this month','احساسات این ماه')+'<div class="cxsel">'+top(fc,CX_FEEL)+'</div>'+
+      cxH3('Needs this month','نیازهای این ماه')+'<div class="cxsel">'+top(nc,CX_NEED)+'</div></div></div>'}
+function cxBank(){const b=CX().bank,cnt={};
+  Object.values(CX().days).forEach(d=>Object.keys(d.ans||{}).forEach(id=>{if((d.ans[id]||'').trim())cnt[id]=(cnt[id]||0)+1}));
+  return '<div class="card cocard">'+cxH3('Question bank','بانک سؤال‌ها')+
+    '<p class="cohint">Star the ones you love; tap the count to read every answer. \u00b7 <span dir="rtl">به سؤال‌های محبوبت ستاره بده؛ روی عدد بزن تا همهٔ پاسخ‌ها را ببینی.</span></p>'+
+    '<div class="coadd"><input class="coin" id="cxbNew" dir="auto" placeholder="A new question \u00b7 سؤال تازه" onkeydown="if(event.key===\'Enter\')cxAddQ(false)">'+
+    '<select class="coin cosel" id="cxbCat">'+CX_CATS.map(([c,f])=>'<option value="'+c+'"'+(c==='My own'?' selected':'')+'>'+c+' \u00b7 '+f+'</option>').join('')+'</select>'+
+    '<button class="cobtn" onclick="cxAddQ(false)">Add</button></div>'+
+    CX_CATS.map(([cat,cfa])=>{const qs=b.filter(q=>q.cat===cat).sort((x,y)=>(y.fav?1:0)-(x.fav?1:0));
+      return qs.length?'<div class="cogh"><span>'+cat+'</span><span class="fa">'+cfa+'</span></div>'+qs.map(q=>'<div class="cobq">'+
+        '<button class="costar'+(q.fav?' on':'')+'" onclick="cxFav(\''+q.id+'\')">'+(q.fav?'&#9733;':'&#9734;')+'</button>'+
+        '<span class="cxqt" onclick="cxEditQ(\''+q.id+'\')" title="Edit">'+cxQT(q)+'</span>'+
+        '<button class="cocnt" onclick="cxHistory(\''+q.id+'\')">'+(cnt[q.id]||0)+'</button>'+
+        '<button class="mini dots" onclick="cxDelQ(\''+q.id+'\')" title="Delete">&#10005;</button></div>').join(''):''}).join('')+'</div>'}
+function cxGuide(){
+  return '<div class="card cocard coguide">'+cxH3('How it works','چطور کار می‌کند')+
+    bi('<b>Morning.</b> Energy and one word. Then the two wheels: what you feel, and what you need. Pick one of three coaching practices, and read the competency of the day with its two or three sub-competencies.',
+       '<b>صبح.</b> انرژی و یک کلمه. بعد دو چرخه: چه احساسی داری و به چه نیازی داری. از سه تمرین کوچینگ یکی را انتخاب کن و صلاحیت امروز را با دو یا سه زیرصلاحیتش بخوان.')+
+    bi('<b>Evening.</b> Tick the practice and rate it, answer its reflection, tick the sub-competencies you lived, write the 30-day reflection and the questions you chose from your bank.',
+       '<b>شب.</b> تمرین را تیک بزن و امتیاز بده، به سؤال بازتابش پاسخ بده، زیرصلاحیت‌هایی را که زندگی کردی تیک بزن، سؤال بازتابی برنامهٔ ۳۰ روزه و سؤال‌هایی را که از بانک انتخاب کردی بنویس.')+
+    bi('<b>The month.</b> The eight ICF competencies run with the calendar month, so all 68 sub-competencies are practised once each month. Shorter months fold two days together; a 31st day is for integration.',
+       '<b>ماه.</b> هشت صلاحیت ICF با ماه میلادی جلو می‌روند تا هر ماه همهٔ ۶۸ زیرصلاحیت یک بار تمرین شوند. در ماه‌های کوتاه‌تر دو روز با هم یکی می‌شوند و روز ۳۱ روز یکپارچه‌سازی است.')+
+    '<div class="corow" style="margin-top:14px"><button class="cobtn" onclick="cxReport()">&#8681; Download journal \u00b7 دانلود ژورنال</button>'+
+    '<button class="cobtn warn" onclick="cxClearMonth()">Clear this month \u00b7 پاک کردن این ماه</button></div></div>'}
+function renderCoach(){const box=document.getElementById('coachBox');if(!box)return;
+  const ae=document.activeElement,ck=ae&&ae.dataset&&box.contains(ae)?ae.dataset.ck:null,sel=ck&&ae.setSelectionRange?[ae.selectionStart,ae.selectionEnd]:null;
+  const seg=document.getElementById('coSeg');
+  if(seg)seg.innerHTML=[['today','Today','امروز'],['month','Month','ماه'],['bank','Questions','سؤال‌ها'],['guide','Guide','راهنما']]
+    .map(([k,t,f])=>'<button class="'+(CXT===k?'on':'')+'" onclick="cxTab(\''+k+'\')">'+t+' <span class="fa">'+f+'</span></button>').join('');
+  box.innerHTML=CXT==='month'?cxMonth():CXT==='bank'?cxBank():CXT==='guide'?cxGuide():'<div class="card cocard coday">'+cxCard()+'</div>';
+  box.querySelectorAll('textarea.cota').forEach(coFit);
+  if(ck){const el=box.querySelector('[data-ck="'+ck+'"]');if(el){el.focus();try{sel&&el.setSelectionRange(sel[0],sel[1])}catch(e){}}}}
+function coFit(el){el.style.height='auto';el.style.height=Math.max(el.scrollHeight+2,el.classList.contains('sm')?58:84)+'px'}
+document.addEventListener('input',e=>{if(e.target.classList&&e.target.classList.contains('cota'))coFit(e.target)});
 
 /* ── Habit actions ── */
 function hit(id,ds){if(ds>TODAY)return;const h=S.habits.find(x=>x.id===id);if(!sched(h,ds))return;mark('check-in');pulse={i:id,d:ds};
@@ -3570,8 +4322,8 @@ function taskMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
     /* when it happens */
     ['&#9728;&nbsp; '+(today?'Remove from today':'Plan for today'),
       today?'unplan(\''+id+'\')':'planToday(\''+id+'\')'],
-    ['&#128197;&nbsp; '+wkLabel(false),'planWeek(\''+id+'\',false)'],
-    ['&#128467;&nbsp; '+wkLabel(true),'planWeek(\''+id+'\',true)'],
+    [IC_WK+'&nbsp; '+wkLabel(false),'planWeek(\''+id+'\',false)'],
+    [IC_NWK+'&nbsp; '+wkLabel(true),'planWeek(\''+id+'\',true)'],
     [(t.mini?'&#9679;&nbsp; Out of mini tasks':'&#9702;&nbsp; Make it a mini task'),'toggleMini(\''+id+'\')'],
     ['&#9200;&nbsp; Schedule…','scheduleTask(\''+id+'\')'],
     null,
@@ -3952,8 +4704,13 @@ function pickEmj(el,e){mVals.icon=e;const i=document.getElementById('mf-icon');i
   el.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));el.classList.add('on')}
 function pickCol(el,c){mVals.color=c;el.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));el.classList.add('on')}
 function submitModal(){mfCollect();const cb=mCb,v=mVals;closeModal();cb&&cb(v)}
-function closeModal(){veil.classList.remove('on');mCb=null;mFields=null}
-veil.addEventListener('click',e=>{if(e.target===veil)closeModal()});
+function closeModal(){veil.classList.remove('on');modal.classList.remove('cowide');mCb=null;mFields=null}
+/* Close only on a real click on the backdrop. Selecting text in a field
+   and letting go outside the box must not count as one.                */
+let veilDown=false;
+veil.addEventListener('mousedown',e=>{veilDown=e.target===veil});
+veil.addEventListener('touchstart',e=>{veilDown=e.target===veil},{passive:true});
+veil.addEventListener('click',e=>{const ok=veilDown&&e.target===veil;veilDown=false;if(ok)closeModal()});
 
 /* ── Task actions ── */
 function doneTask(id){const t=S.tasks.find(x=>x.id===id);mark(t.done?'reopen':'complete');t.done=!t.done;t.at=t.done?TODAY:null;save();paint()}
@@ -4471,7 +5228,7 @@ const dmName=ds=>new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short'}).
 /* The week holds things you can actually do. A task with open subtasks is a
    container, so planning it plans its open leaves instead.              */
 function wkLeaves(id){const ds=descendants(id);
-  return S.tasks.filter(x=>x.id!==id&&ds.has(x.id)&&!x.done&&!isProj(x)&&
+  return S.tasks.filter(x=>x.id!==id&&ds.has(x.id)&&!x.done&&!isProj(x)&&!x.mini&&
     !S.tasks.some(k=>k.parent===x.id&&!k.done))}
 /* A task can also be planned ahead for next week (t.wfrom = that week's
    first day). It stays out of this week and joins the plan when its week
@@ -4480,7 +5237,7 @@ const NWK=()=>weekDays(1)[0];
 const isNext=t=>!!(t.wk&&t.wfrom&&t.wfrom>weekDays(0)[0]);
 const onWeek=(t,nxt)=>!!t.wk&&(nxt?isNext(t):!isNext(t));
 function unWeek(x){delete x.wk;delete x.wko;delete x.day;delete x.dord;delete x.wfrom}
-function toWeek(x,nxt){x.wk=true;
+function toWeek(x,nxt){x.wk=true;delete x.mini;delete x.mdue;
   if(nxt){x.wfrom=NWK();if(x.day&&x.day<x.wfrom){delete x.day;delete x.dord}}
   else{delete x.wfrom;if(x.day&&x.day>weekDays(0)[6]){delete x.day;delete x.dord}}}
 function wkFits(x,nxt){const o=nxt?1:0,all=weekTasks(null,o);if(all.includes(x))return true;
@@ -4488,6 +5245,9 @@ function wkFits(x,nxt){const o=nxt?1:0,all=weekTasks(null,o);if(all.includes(x))
 function wkState(id,nxt){const L=wkLeaves(id);if(!L.length)return null;
   const on0=L.filter(x=>onWeek(x,false)).length,on1=L.filter(x=>onWeek(x,true)).length;
   return {leaves:L,on:nxt?on1:on0,on0,on1}}
+/* line icons for the two week entries, drawn to match each other */
+const IC_WK='<svg class="mic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2.2" y="3.2" width="11.6" height="10.6" rx="2"/><path d="M2.2 6.6h11.6M5.4 1.8v2.6M10.6 1.8v2.6"/><path d="M5.6 10.2l1.6 1.5 3.2-3.1"/></svg>';
+const IC_NWK='<svg class="mic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2.2" y="3.2" width="11.6" height="10.6" rx="2"/><path d="M2.2 6.6h11.6M5.4 1.8v2.6M10.6 1.8v2.6"/><path d="M5.8 8.6l2 1.6-2 1.6M8.8 8.6l2 1.6-2 1.6"/></svg>';
 function planWeek(id,nxt){nxt=!!nxt;const t=S.tasks.find(x=>x.id===id);if(!t)return;hideMenu();
   const W=nxt?'next week':'this week',st=wkState(id,nxt);
   if(st){
@@ -4501,18 +5261,48 @@ function planWeek(id,nxt){nxt=!!nxt;const t=S.tasks.find(x=>x.id===id);if(!t)ret
       const was=x.wk;toWeek(x,nxt);if(!was)x.wko=n++;added++});
     save();paint();
     toastMsg(added+' subtask'+(added===1?'':'s')+' of “'+t.title+'” planned for '+W+
-      (left?' — '+left+' left out, the week or role is full':''));
+      (left?' — '+left+' left out: '+capMsg(t.list,nxt):''));
     return}
   if(onWeek(t,nxt)){mark('off '+W);unWeek(t);save();paint();return}
-  if(!wkFits(t,nxt)){
-    toastMsg(weekTasks(null,nxt?1:0).length>=WKMAX?(nxt?'Next week':'This week')+' already holds '+WKMAX:
-      'This role already has '+ROLESLOT+' for '+W);return}
+  if(!wkFits(t,nxt)){toastMsg(capMsg(t.list,nxt));return}
   const moving=!!t.wk;mark('plan for '+W);toWeek(t,nxt);if(!moving)t.wko=Date.now();save();paint();
   if(moving)toastMsg('“'+t.title+'” moved to '+W)}
 function offWeek(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('off the week');unWeek(t);save();paint()}
+/* One goal per role per week, kept by the week's first day. */
+const goalOf=(wk,lid)=>((S.rgoal||{})[wk]||{})[lid]||null;
+function setGoal(wk,lid,v){S.rgoal=S.rgoal||{};const g=S.rgoal[wk]=S.rgoal[wk]||{};
+  v=(v||'').trim();
+  if(!v&&!(g[lid]&&g[lid].done)){delete g[lid];if(!Object.keys(g).length)delete S.rgoal[wk]}
+  else g[lid]=Object.assign(g[lid]||{},{t:v});
+  save()}
+function tickGoal(wk,lid){const g=goalOf(wk,lid);
+  if(!g||!g.t){toastMsg('Write this week’s goal first');return}
+  mark(g.done?'goal reopened':'goal reached');g.done=!g.done;save();paint()}
+function fitGoal(el){el.style.height='auto';el.style.height=el.scrollHeight+'px'}
+function capMsg(lid,nxt){const o=nxt?1:0,W=nxt?'Next week':'This week',
+    all=weekTasks(null,o).length,mine=weekTasks(lid,o).length,name=(S.lists.find(l=>l.id===lid)||{}).name||'This role';
+  return all>=WKMAX?W+' is full ('+all+'/'+WKMAX+')'
+    :'\u201C'+name+'\u201D is full for '+W.toLowerCase()+' ('+mine+'/'+ROLESLOT+') \u2014 the week still has '+(WKMAX-all)+' free'}
 function wkGo(o){WKOFF=o;paint();go('today')}
 
+/* A date on a task means it is that day's work: it joins the week plan
+   and sits among that day's priorities, even past the three slots.
+   t.dsync remembers the date last placed, so a task moved by hand in
+   Weekly stays where it was put until its date changes again.          */
+const wkStartOf=ds=>{const o=Math.round((new Date(ds+'T12:00:00')-new Date(weekDays(0)[0]+'T12:00:00'))/864e5);
+  return weekDays(Math.floor(o/7))[0]};
+function syncDue(){let ch=0;
+  S.tasks.forEach(t=>{
+    if(t.done||t.mini||t.rep)return;
+    const d=t.due||null,was=t.dsync||null;if(d===was)return;ch++;
+    if(d){const ds=d<TODAY?TODAY:d;
+      if(!t.wk){t.wk=true;t.wko=Date.now()}
+      const w=wkStartOf(ds);if(w>weekDays(0)[0])t.wfrom=w;else delete t.wfrom;
+      if(t.day!==ds){t.day=ds;t.dord=Math.max(0,...S.tasks.filter(x=>x!==t&&x.wk&&x.day===ds).map(x=>x.dord||0))+1}
+      t.dsync=d}
+    else{if(t.day&&t.day===was){delete t.day;delete t.dord}delete t.dsync}});
+  if(ch)save();return ch}
 /* ── a day's contents ── */
 const dayTasks=ds=>S.tasks.filter(t=>t.wk&&t.day===ds&&liveList(t.list)&&(!t.done||t.at>=ds))
   .sort((a,b)=>(a.dord||0)-(b.dord||0));
@@ -4522,20 +5312,39 @@ const dayTrail=ds=>S.tasks.filter(t=>t.day!==ds&&liveList(t.list)&&trailOf(t,ds)
 const dayProjects=ds=>S.tasks.filter(t=>isProj(t)&&liveList(t.list)&&repeatsOn(t,ds));
 const unlockN=ds=>(S.unlock&&S.unlock[ds])||0;
 const openSlots=ds=>3+unlockN(ds);
-const finishedOn=ds=>dayTasks(ds).filter(t=>t.done).length;
+/* a day's priority counts as ticked when it was finished or worked on */
+const finishedOn=ds=>dayTasks(ds).concat(ds<TODAY?dayTrail(ds):[])
+  .filter(t=>(t.done&&(ds>=TODAY||t.at===ds))||(t.wlog&&t.wlog[ds])).length+
+  dayProjects(ds).filter(t=>dayDone(t,ds)).length;      /* a project's tick for the day counts too */
 /* What is still open today will be at the top of tomorrow \u2014 show it there
    now, worked-on first, exactly as the overnight carry will place it.   */
 const incoming=ds=>ds!==TOMORROW?[]:dayTasks(TODAY).filter(t=>!t.done).sort((a,b)=>
   ((a.wlog&&a.wlog[TODAY])?0:1)-((b.wlog&&b.wlog[TODAY])?0:1)||((a.dord||0)-(b.dord||0)));
-const roomOn=ds=>ds>=TODAY&&incoming(ds).length+dayTasks(ds).length+dayProjects(ds).length<openSlots(ds);
+const roomOn=ds=>ds<TODAY
+  ?dayTasks(ds).length+dayTrail(ds).length+dayProjects(ds).length<openSlots(ds)
+  :incoming(ds).length+dayTasks(ds).length+dayProjects(ds).length<openSlots(ds);
 function assignDay(id,ds){const t=S.tasks.find(x=>x.id===id);if(!t)return false;
   if(!roomOn(ds)){toastMsg('No open priority left on '+wdName(ds));return false}
   mark('put on a day');
   if(t.wfrom&&ds<t.wfrom)delete t.wfrom;
+  if(ds<TODAY)return carryFrom(t,ds);
+  if(t.due&&t.dsync){t.due=ds;t.dsync=ds}
   t.day=ds;t.dord=Math.max(0,...dayTasks(ds).filter(x=>x!==t).map(x=>x.dord||0))+1;
   save();paint();return true}
+/* Added to a day already gone: it sits on that day and on every day
+   since, as if it had been carried, and lands at the end of today.     */
+function carryFrom(t,ds){const add=[];let d=ds;
+  while(d<TODAY){const n=dayTasks(d).length+dayTrail(d).filter(x=>x!==t).length+1;add.push({d,o:n});
+    const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+1);d=iso(x)}
+  t.trail=(t.trail||[]).filter(x=>!add.some(a=>a.d===x.d)).concat(add).sort((a,b)=>a.d<b.d?-1:1).slice(-21);
+  if(t.day!==TODAY){t.day=TODAY;t.dord=Math.max(0,...dayTasks(TODAY).filter(x=>x!==t).map(x=>x.dord||0))+1}
+  if(t.due&&t.dsync){t.due=TODAY;t.dsync=TODAY}
+  save();paint();return true}
 function unassignDay(id){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
-  mark('off the day');delete t.day;delete t.dord;save();paint()}
+  mark('off the day');
+  if(t.due&&t.dsync){t.due=null;delete t.dsync;delete t.rfrom}   /* no longer that day's work */
+  delete t.day;delete t.dord;save();paint();
+  toastMsg('\u201C'+t.title+'\u201D is back in the week box')}
 function dayMove(id,dir){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t||!t.day)return;
   const arr=dayTasks(t.day),i=arr.indexOf(t),j=i+dir;if(j<0||j>=arr.length)return;
   mark('reorder day');const o=arr[j].dord;arr[j].dord=t.dord;t.dord=o;save();paint()}
@@ -4548,9 +5357,11 @@ function finishOn(id,ds){const t=S.tasks.find(x=>x.id===id);if(!t)return;
 function workedOn(id,ds){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark('worked on it');t.wlog=t.wlog||{};
   if(t.wlog[ds])delete t.wlog[ds];else t.wlog[ds]=1;save();paint()}
-function unlockSlot(ds){if(ds<TODAY)return;const n=unlockN(ds);if(n>=2)return;
+function lockSlot(ds){const n=unlockN(ds);if(!n)return;
+  mark('lock again');S.unlock[ds]=n-1;if(!S.unlock[ds])delete S.unlock[ds];save();paint()}
+function unlockSlot(ds){const n=unlockN(ds);if(n>=2)return;
   const need=n===0?2:3;
-  if(finishedOn(ds)<need){toastMsg('Finish '+need+' of this day’s priorities to open this one');return}
+  if(finishedOn(ds)<need){toastMsg('Tick '+need+' of this day’s priorities (done or worked on) to open this one');return}
   mark('unlock');S.unlock=S.unlock||{};S.unlock[ds]=n+1;save();paint()}
 /* run once on load: open work from earlier days moves to today, the ones
    already worked on first, then the rest in their old order            */
@@ -4573,14 +5384,15 @@ function rollDays(){
 
 /* ── pickers ── */
 let PD=null,PR=null,PM=null;
-function pickDay(ds){if(ds<TODAY)return;if(!roomOn(ds)){toastMsg('No open priority left on '+wdName(ds));return}
+function pickDay(ds){if(!roomOn(ds)){toastMsg('No open priority left on '+wdName(ds));return}
   PD=ds;modal.innerHTML='<h3>'+wdName(ds)+' '+dmName(ds)+'</h3>'+
-    '<p class="askmsg">Pick from this week’s tasks. The order you pick them in is their priority.</p>'+
+    '<p class="askmsg">Pick from this week’s tasks. The order you pick them in is their priority.'+
+      (ds<TODAY?' A day already gone: what you add here carries on to today until it is finished.':'')+'</p>'+
     '<div class="flist" id="pdList"></div>'+
     '<div class="mact"><button class="cancel" onclick="closeModal()">Done</button></div>';
   veil.classList.add('on');drawPickDay()}
 function drawPickDay(){const box=document.getElementById('pdList');if(!box)return;
-  const pool=S.tasks.filter(t=>t.wk&&!t.done&&liveList(t.list)&&(!t.wfrom||t.wfrom<=PD)&&t.day!==PD)
+  const pool=S.tasks.filter(t=>t.wk&&!t.done&&liveList(t.list)&&(!t.wfrom||t.wfrom<=PD)&&t.day!==PD&&!(PD<TODAY&&trailOf(t,PD)))
     .sort((x,y)=>(x.wko||0)-(y.wko||0));
   box.innerHTML=pool.length?pool.map(t=>{const l=listOf(t.list);
     return '<button class="fitem" onclick="pdPick(\''+t.id+'\')">'+
@@ -4717,18 +5529,40 @@ function weekMenu(ev,id){ev.stopPropagation();const t=S.tasks.find(x=>x.id===id)
     (isNext(t)?['&#8617;&nbsp; Bring into this week','planWeek(\''+id+'\',false)']
       :['&#8618;&nbsp; Push to next week','planWeek(\''+id+'\',true)']),
     ['&#9998;&nbsp; Rename','renameTask(\''+id+'\')'],
+    ['&#8942;&nbsp; All task options','taskMenu(event,\''+id+'\')'],
     null,
-    ['<span class="warn">Take off '+(isNext(t)?'next week':'this week')+'</span>','offWeek(\''+id+'\')']])}
-function prioMenu(ev,id){ev.stopPropagation();
+    ['<span class="warn">Take off '+(isNext(t)?'next week':'this week')+'</span>','offWeek(\''+id+'\')'],
+    ['<span class="warn">Delete task</span>','delTask(\''+id+'\')']])}
+/* kind: 1 = a row that is not the task's own current day (carried or
+   preview), so reordering does not apply. ds: the day the row sits on. */
+function prioMenu(ev,id,kind,ds){ev.stopPropagation();ds=ds||TODAY;const past=ds<TODAY;
   showMenu(ev,[
-    ['&#8593;&nbsp; Higher priority','dayMove(\''+id+'\',-1)'],
-    ['&#8595;&nbsp; Lower priority','dayMove(\''+id+'\',1)'],
+    (past?['&#8617;&nbsp; Remove from this day onward','offFrom(\''+id+'\',\''+ds+'\')']
+         :['&#8617;&nbsp; Back to the week box','offFrom(\''+id+'\',\''+ds+'\')']),
     ['&#128197;&nbsp; Move to another day…','dayPickFor(\''+id+'\')'],
-    ['&#8617;&nbsp; Back to the week box','unassignDay(\''+id+'\')'],
-    ['&#9998;&nbsp; Rename','renameTask(\''+id+'\')']])}
+    ...(kind||past?[]:[null,['&#8593;&nbsp; Higher priority','dayMove(\''+id+'\',-1)'],
+      ['&#8595;&nbsp; Lower priority','dayMove(\''+id+'\',1)']]),
+    null,
+    ['&#9998;&nbsp; Rename','renameTask(\''+id+'\')'],
+    ['&#8942;&nbsp; All task options','taskMenu(event,\''+id+'\')'],
+    null,
+    ['<span class="warn">Delete task</span>','delTask(\''+id+'\')']])}
+/* Taking a task off a day takes it off every day after it too: the
+   earlier days keep their history, the rest is as if it never came.  */
+function offFrom(id,ds){hideMenu();const t=S.tasks.find(x=>x.id===id);if(!t)return;
+  mark('off the day');
+  t.trail=(t.trail||[]).filter(x=>x.d<ds);if(!t.trail.length)delete t.trail;
+  if(t.wlog)Object.keys(t.wlog).forEach(d=>{if(d>=ds)delete t.wlog[d]});
+  if(t.day&&t.day>=ds){
+    if(t.due&&t.dsync){t.due=null;delete t.dsync;delete t.rfrom}
+    delete t.day;delete t.dord}
+  save();paint();
+  toastMsg('“'+t.title+'” '+(ds<TODAY?'taken off from '+wdName(ds)+' on — back in the week box':'is back in the week box'))}
 function miniMenu(ev,id){ev.stopPropagation();
   showMenu(ev,[['&#9998;&nbsp; Rename','renameTask(\''+id+'\')'],
-    ['<span class="warn">Out of mini tasks</span>','toggleMini(\''+id+'\')']])}
+    ['&#8942;&nbsp; All task options','taskMenu(event,\''+id+'\')'],null,
+    ['<span class="warn">Out of mini tasks</span>','toggleMini(\''+id+'\')'],
+    ['<span class="warn">Delete task</span>','delTask(\''+id+'\')']])}
 
 /* ── drawing ── */
 function roleCell(t){
@@ -4743,7 +5577,7 @@ function prioRow(t,ds,k){const w=!!(t.wlog&&t.wlog[ds]);
     '<div class="pmain">'+crumbHTML(t,'wkcrumb',true)+'<span class="pt" dir="auto">'+esc(t.title)+'</span></div>'+
     (t.done?'':'<button class="wtick'+(w?' on':'')+'" onclick="workedOn(\''+t.id+'\',\''+ds+'\')" '+
       'title="Worked on it today — not finished, goes to the top of tomorrow">'+(w?'&#10003;':'')+'</button>')+
-    '<button class="mini dots" onclick="prioMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}
+    '<button class="mini dots" onclick="prioMenu(event,\''+t.id+'\',0,\''+ds+'\')" title="Options">&#8942;</button></div>'}
 /* a day that is over still shows what was on it, exactly as it stood */
 function trailRow(t,ds,k){const w=!!(t.wlog&&t.wlog[ds]),fin=t.done&&t.at===ds;
   return '<div class="wrow'+(fin?' done':'')+'"><span class="pn">'+k+'</span>'+
@@ -4751,7 +5585,8 @@ function trailRow(t,ds,k){const w=!!(t.wlog&&t.wlog[ds]),fin=t.done&&t.at===ds;
     '<div class="pmain">'+crumbHTML(t,'wkcrumb',true)+'<span class="pt" dir="auto">'+esc(t.title)+'</span></div>'+
     (fin?'':'<button class="wtick'+(w?' on':'')+'" onclick="workedOn(\''+t.id+'\',\''+ds+'\')" '+
       'title="Worked on it this day">'+(w?'&#10003;':'')+'</button>')+
-    (fin?'':'<span class="carry" title="Still open \u2014 carried to the next day">&#8618;</span>')+'</div>'}
+    (fin?'':'<span class="carry" title="Still open \u2014 carried to the next day">&#8618;</span>')+
+    '<button class="mini dots" onclick="prioMenu(event,\''+t.id+'\',1,\''+ds+'\')" title="Options">&#8942;</button></div>'}
 function projRow(t,ds,k){const on=dayDone(t,ds),b=t.block&&blockOf(t.block);
   return '<div class="wrow proj'+(t.done?' done':'')+(on?' dayon':'')+'"><span class="pn">'+k+'</span>'+
     '<button class="ptick'+(on?' on':'')+'" onclick="toggleDay(\''+t.id+'\',\''+ds+'\')" '+
@@ -4759,14 +5594,15 @@ function projRow(t,ds,k){const on=dayDone(t,ds),b=t.block&&blockOf(t.block);
       (on?'&#10003;':'')+'</button>'+
     '<div class="pmain">'+crumbHTML(t,'wkcrumb',true)+'<span class="pt" dir="auto">'+esc(t.title)+'</span>'+
       '<span class="ptime">'+(b?esc(b.name)+' · '+b.start:(t.time||'All day'))+'</span></div>'+
-    '<span class="ptag" title="Project">&#8635;</span></div>'}
+    '<span class="ptag" title="Project">&#8635;</span>'+
+    '<button class="mini dots" onclick="taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}
 function incomingRow(t,k){
   return '<div class="wrow coming"><span class="pn">'+k+'</span>'+
     '<div class="hit" onclick="finishOn(\''+t.id+'\',TODAY)" title="Finish it (counts for today)">'+chk(false)+'</div>'+
     '<div class="pmain">'+crumbHTML(t,'wkcrumb',true)+'<span class="pt" dir="auto">'+esc(t.title)+'</span></div>'+
     (t.wlog&&t.wlog[TODAY]?'<span class="wtick on" title="Worked on it today">&#10003;</span>':'')+
     '<span class="carry" title="Still open today \u2014 it will carry over here">&#8617;</span>'+
-    '<button class="mini dots" onclick="prioMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}
+    '<button class="mini dots" onclick="prioMenu(event,\''+t.id+'\',1,TODAY)" title="Options">&#8942;</button></div>'}
 function dayCol(ds){
   const past=ds<TODAY,ts=dayTasks(ds),tr=past?dayTrail(ds):[],pj=dayProjects(ds),inc=incoming(ds);
   const open=openSlots(ds),un=unlockN(ds),fin=finishedOn(ds);
@@ -4775,17 +5611,16 @@ function dayCol(ds){
   ts.forEach(t=>{p+=prioRow(t,ds,++k)});
   tr.forEach(t=>{p+=trailRow(t,ds,++k)});
   const empties=Math.max(0,open-inc.length-ts.length-tr.length-pj.length);
-  for(let i=0;i<empties;i++)p+=past
-    ?'<div class="pslot off"><span class="pn">'+(++k)+'</span></div>'
-    :'<button class="pslot" onclick="pickDay(\''+ds+'\')"><span class="pn">'+(++k)+'</span>&#43; Add</button>';
+  for(let i=0;i<empties;i++)p+='<button class="pslot" onclick="pickDay(\''+ds+'\')"><span class="pn">'+(++k)+'</span>&#43; Add</button>';
   pj.forEach(t=>{p+=projRow(t,ds,++k)});
-  for(let i=un;i<2;i++){const need=i===0?2:3,can=!past&&i===un&&fin>=need;
-    p+='<button class="plock'+(can?' can':'')+'"'+(past?' disabled':'')+' onclick="unlockSlot(\''+ds+'\')">'+
-      '<span class="pn">'+(++k)+'</span>'+(can?'&#128275; Tap to open':'&#128274; Finish '+need)+'</button>'}
+  if(un)p+='<button class="prelock" onclick="lockSlot(\''+ds+'\')" title="Close the last opened slot again">&#128274; Lock again</button>';
+  for(let i=un;i<2;i++){const need=i===0?2:3,can=i===un&&fin>=need;
+    p+='<button class="plock'+(can?' can':'')+'" onclick="unlockSlot(\''+ds+'\')">'+
+      '<span class="pn">'+(++k)+'</span>'+(can?'&#128275; Tap to open':'&#128274; Tick '+need)+'</button>'}
   const mi=dayMini(ds);let m=mi.map(t=>{const fin=t.done&&t.at===ds;
     return '<div class="mrow2'+(fin?' done':'')+'">'+
     '<div class="hit" onclick="finishOn(\''+t.id+'\',\''+ds+'\')">'+chk(fin)+'</div>'+
-    '<span class="pt" dir="auto">'+esc(t.title)+'</span>'+
+    '<span class="pt" dir="auto">'+esc(t.title)+'</span>'+miniPar(t)+
     (!fin&&ds<TODAY?'<span class="carry" title="Still open \u2014 carried to the next day">&#8618;</span>':'')+
     (ds===TOMORROW&&(t.mdue||TODAY)<=TODAY?'<span class="carry" title="Still open today \u2014 it will carry over here">&#8617;</span>':'')+
     '<button class="mini dots" onclick="miniMenu(event,\''+t.id+'\')" title="Options">&#8942;</button></div>'}).join('');
@@ -4808,8 +5643,16 @@ function dayCol(ds){
     '<div class="wlab">Mini</div><div class="dsec">'+m+'</div>'+
     '<div class="wlab">Habits <small>'+hd+'/'+hs.length+'</small></div>'+
     '<div class="dhab" data-ds="'+ds+'">'+(hh||'<div class="empty">No habits</div>')+'</div></div>'}
+function goalBox(wk,lid){const g=goalOf(wk,lid)||{};
+  return '<div class="rgoal'+(g.done?' done':'')+'">'+
+    '<textarea rows="1" dir="auto" class="'+(FA_RE.test(g.t||'')?'fa':'')+'" placeholder="This week’s goal…" data-gk="'+wk+'|'+lid+'" '+
+      'oninput="this.classList.toggle(\'fa\',FA_RE.test(this.value));fitGoal(this);setGoal(\''+wk+'\',\''+lid+'\',this.value)" '+
+      'onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();this.blur()}">'+esc(g.t||'')+'</textarea>'+
+    '<div class="hit" onclick="tickGoal(\''+wk+'\',\''+lid+'\')" title="Goal reached">'+chk(!!g.done)+'</div></div>'}
+const FA_RE=/[\u0600-\u06FF]/;
 function renderWeekly(){
   const rg=document.getElementById('roleGrid'),dg=document.getElementById('dayGrid');if(!rg||!dg)return;
+  const ae=document.activeElement,gk=ae&&ae.dataset&&ae.dataset.gk,sel=gk?[ae.selectionStart,ae.selectionEnd]:null;
   const days=weekDays(WKOFF),all=weekTasks(null,WKOFF),past=WKOFF<0;
   const r=document.getElementById('wkRange');if(r)r.textContent=dmName(days[0])+' – '+dmName(days[6]);
   const tt=document.getElementById('wkTitle');
@@ -4831,9 +5674,12 @@ function renderWeekly(){
         ?'<button class="rslot" onclick="newWeekTask(\''+l.id+'\')" title="Add a new task to this role and to the week">&#43;</button>':'<div class="rslot off"></div>';
       return '<div class="rcol"><div class="rhead"><span class="bdot" style="background:'+l.color+'"></span>'+
         '<span class="rn" dir="auto">'+(l.icon?esc(l.icon)+' ':'')+esc(l.name)+'</span>'+
-        '<small>'+ts.length+'/'+ROLESLOT+'</small></div>'+cells+'</div>'}).join('')
+        '<small>'+ts.length+'/'+ROLESLOT+'</small></div>'+goalBox(days[0],l.id)+cells+'</div>'}).join('')
     :'<div class="empty">Add a role in Roles to start planning your week</div>';
-  dg.innerHTML=days.map(dayCol).join('')}
+  dg.innerHTML=days.map(dayCol).join('');
+  rg.querySelectorAll('.rgoal textarea').forEach(fitGoal);
+  if(gk){const el=rg.querySelector('[data-gk="'+gk+'"]');           /* keep typing where you were */
+    if(el){el.focus();try{el.setSelectionRange(sel[0],sel[1])}catch(e){}}}}
 
 function renderWeek(){
   const box=document.getElementById('weekGrid');if(!box)return;
@@ -4865,7 +5711,7 @@ function miniAdd(){const v=mAdd.value.trim();if(!v)return;
   mAdd.value='';save();paint()}
 function toggleMini(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;
   mark(t.mini?'off mini':'to mini');
-  if(t.mini){delete t.mini;delete t.mdue}else{t.mini=true;t.mdue=PM||dvDay('mini')}
+  if(t.mini){delete t.mini;delete t.mdue}else{unWeek(t);t.mini=true;t.mdue=PM||dvDay('mini')}
   save();paint();hideMenu()}
 function miniPick(ev){if(ev)ev.stopPropagation();
   const pool=S.tasks.filter(t=>!t.done&&!t.mini&&liveList(t.list)
@@ -4897,7 +5743,7 @@ function renderMini(){
   box.innerHTML=ts.length?ts.map(t=>
     '<div class="row mrow">'+
     '<div class="hit" onclick="event.stopPropagation();doneTask(\''+t.id+'\')">'+chk(t.done)+'</div>'+
-    '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</span></span>'+
+    '<span class="t" dir="auto"><span class="nameclick" onclick="taskMenu(event,\''+t.id+'\')">'+esc(t.title)+'</span>'+miniPar(t)+'</span>'+
     '<button class="mini dots" onclick="event.stopPropagation();taskMenu(event,\''+t.id+'\')" title="Options">&#8942;</button>'+
     '</div>').join('')
     :'<div class="empty">Nothing small waiting \u2014 type one in, or pull one across</div>'}
